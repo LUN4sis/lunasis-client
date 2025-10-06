@@ -1,0 +1,43 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Exit immediately if a command exits with a non-zero status.
+set -e
+
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+BLUE='\033[0;34m'
+NC='\033[0m' # No Color
+
+echo "${BLUE}🚀 Running pre-commit checks...${NC}"
+
+# 1. Lint & Format (ESLint + Prettier)
+echo "🎨 Running lint-staged..."
+npx lint-staged --concurrent false
+echo "${GREEN}✓ Lint-staged passed${NC}"
+echo ""
+
+# 2. Typescript Type Check
+echo "🧩 Checking TypeScript types..."
+npx tsc --noEmit
+echo "${GREEN}✓ TypeScript types are valid${NC}"
+echo ""
+
+# 3. Test (Run only if there are staged changes to testable files)
+echo "🧪 Checking for files to test..."
+STAGED_TEST_FILES=$(git diff --cached --name-only --diff-filter=ACM -- "*.js" "*.jsx" "*.ts" "*.tsx")
+
+if [ -n "$STAGED_TEST_FILES" ]; then
+  echo "🔬 Running related tests..."
+  # --bail: 첫 실패 시 즉시 중단
+  # --findRelatedTests: 변경된 파일과 관련된 테스트만 실행
+  # --passWithNoTests: 테스트 파일이 없어도 통과
+  npx jest --bail --findRelatedTests --passWithNoTests $STAGED_TEST_FILES
+  echo "${GREEN}✓ All related tests passed${NC}"
+  echo ""
+else
+  echo "🤷 No testable files staged. Skipping tests.${NC}"
+  echo ""
+fi
+
+echo "${GREEN}✅ All pre-commit checks passed! Commit authorized.${NC}"

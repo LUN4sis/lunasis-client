@@ -1,0 +1,33 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Exit immediately if a command exits with a non-zero status.
+set -e
+
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+BLUE='\033[0;34m'
+NC='\033[0m' # No Color
+
+echo "${BLUE}🚀 Running pre-push checks... This may take a few minutes.${NC}"
+echo ""
+
+# 1. TypeScript Type Check
+echo "🧩 Checking TypeScript types..."
+npx tsc --noEmit --skipLibCheck
+echo "${GREEN}✓ TypeScript check passed${NC}"
+echo ""
+
+# 2. Test
+echo "🧪 Running full test suite..."
+npx jest --coverage --passWithNoTests
+echo "${GREEN}✓ All tests passed${NC}"
+echo ""
+
+# 3. Build
+echo "🏗️ Building project for verification..."
+npx next build
+echo "${GREEN}✓ Build successful${NC}"
+echo ""
+
+echo "${GREEN}✅ All pre-push checks passed. Ready to push!${NC}"
