@@ -45,9 +45,10 @@ export const metadata: Metadata = {
   formatDetection: {
     telephone: false,
   },
-  viewport:
-    'minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, user-scalable=no, viewport-fit=cover',
 };
+
+export const viewport =
+  'minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, user-scalable=no, viewport-fit=cover';
 
 export default function RootLayout({
   children,
