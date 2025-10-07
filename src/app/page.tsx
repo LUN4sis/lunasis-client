@@ -1,5 +1,8 @@
 import Image from 'next/image';
+import Link from 'next/link';
 import styles from './page.module.scss';
+import InstallPrompt from '@/components/ui/InstallPrompt';
+import { ROUTES } from '@/lib/constants';
 
 export default function Home() {
   return (
@@ -13,6 +16,29 @@ export default function Home() {
           height={38}
           priority
         />
+
+        <h1 style={{ marginBottom: '20px' }}>Lunasis PWA</h1>
+
+        <InstallPrompt />
+
+        <div style={{ marginTop: '20px', marginBottom: '20px' }}>
+          <Link
+            href={ROUTES.TEST}
+            style={{
+              display: 'inline-block',
+              padding: '10px 20px',
+              backgroundColor: '#0070f3',
+              color: 'white',
+              textDecoration: 'none',
+              borderRadius: '8px',
+              fontWeight: '500',
+              transition: 'background-color 0.2s',
+            }}
+          >
+            🔔 푸시 알림 테스트 페이지
+          </Link>
+        </div>
+
         <ol>
           <li>
             Get started by editing <code>src/app/page.tsx</code>.
