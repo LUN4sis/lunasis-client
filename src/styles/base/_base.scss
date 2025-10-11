@@ -1,0 +1,39 @@
+@use '../design/typography' as *;
+
+html {
+  font-size: 16px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: $font-weight-bold;
+  line-height: 1.2;
+}
+
+h1 {
+  font-size: $font-size-5xl;
+}
+
+h2 {
+  font-size: $font-size-4xl;
+}
+
+h3 {
+  font-size: $font-size-3xl;
+}
+
+h4 {
+  font-size: $font-size-2xl;
+}
+
+h5 {
+  font-size: $font-size-xl;
+}
+
+h6 {
+  font-size: $font-size-lg;
+}
