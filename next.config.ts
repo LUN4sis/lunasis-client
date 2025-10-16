@@ -8,10 +8,19 @@ const nextConfig: NextConfig = {
   },
   allowedDevOrigins: devOrigin ? [devOrigin] : [],
   async rewrites() {
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080/api';
     return [
       {
         source: '/api/:path*',
-        destination: `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080'}/api/:path*`,
+        destination: `${apiUrl}/:path*`,
+      },
+      {
+        source: '/login/oauth2/:path*',
+        destination: `${apiUrl}/login/oauth2/:path*`,
+      },
+      {
+        source: '/oauth2/:path*',
+        destination: `${apiUrl}/oauth2/:path*`,
       },
     ];
   },
