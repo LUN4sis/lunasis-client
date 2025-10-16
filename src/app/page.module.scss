@@ -114,6 +114,47 @@ a.secondary {
   }
 }
 
+.title {
+  margin-bottom: 20px;
+}
+
+.linkContainer {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.testLink {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #0070f3;
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: 500;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: #005bb5;
+  }
+}
+
+.loginButton {
+  appearance: none;
+  border-radius: 8px;
+  padding: 10px 20px;
+  border: 1px solid transparent;
+  background: var(--foreground);
+  color: var(--background);
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+
+  &:hover {
+    background: var(--button-primary-hover);
+  }
+}
+
 @media (max-width: 600px) {
   .page {
     padding: 32px;
