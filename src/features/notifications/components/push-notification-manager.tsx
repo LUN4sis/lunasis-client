@@ -1,71 +1,53 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { subscribeUser, unsubscribeUser, sendNotification } from '@/app/actions/notifications';
+import { subscribeUser, unsubscribeUser, sendNotification } from '../actions/notifications.actions';
 import { NOTIFICATION_CONFIG, MESSAGES } from '@/lib/constants';
-
-function urlBase64ToUint8Array(base64String: string) {
-  const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
-  const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
-
-  const rawData = window.atob(base64);
-  const outputArray = new Uint8Array(rawData.length);
-
-  for (let i = 0; i < rawData.length; ++i) {
-    outputArray[i] = rawData.charCodeAt(i);
-  }
-  return outputArray;
-}
+import { logger } from '@/lib/utils/logger';
+import {
+  isIOS,
+  isStandalone,
+  isPushNotificationSupported,
+  urlBase64ToUint8Array,
+} from '@/features/pwa/utils/pwa.utils';
 
 function PushNotificationManager() {
   const [mounted, setMounted] = useState(false);
   const [isSupported, setIsSupported] = useState(false);
-  const [isIOS, setIsIOS] = useState(false);
-  const [isStandalone, setIsStandalone] = useState(false);
+  const [iOS, setIOS] = useState(false);
+  const [standalone, setStandalone] = useState(false);
   const [subscription, setSubscription] = useState<PushSubscription | null>(null);
   const [message, setMessage] = useState('');
 
   useEffect(() => {
     setMounted(true);
 
-    // iOS 감지
-    const iOS =
-      /iPad|iPhone|iPod/.test(navigator.userAgent) &&
-      !(window as unknown as { MSStream?: unknown }).MSStream;
-    setIsIOS(iOS);
+    const iOSDevice = isIOS();
+    const standaloneMode = isStandalone();
+    const pushSupported = isPushNotificationSupported();
 
-    // 홈 화면에 추가된 PWA인지 확인
-    const standalone =
-      window.matchMedia('(display-mode: standalone)').matches ||
-      (window.navigator as unknown as { standalone?: boolean }).standalone === true;
-    setIsStandalone(standalone);
+    setIOS(iOSDevice);
+    setStandalone(standaloneMode);
+    setIsSupported(pushSupported);
 
-    // 푸시 알림 지원 여부 확인
-    // iOS의 경우 Safari + 홈 화면 추가 상태에서만 지원
-    if ('serviceWorker' in navigator && 'PushManager' in window) {
-      if (iOS) {
-        // iOS는 standalone 모드(홈 화면 추가)에서만 푸시 알림 지원
-        setIsSupported(standalone);
-      } else {
-        setIsSupported(true);
-      }
-
-      if (!iOS || standalone) {
-        registerServiceWorker();
-      }
+    // Initialize service worker and get subscription
+    if (pushSupported) {
+      initializePushNotification();
     }
   }, []);
 
-  async function registerServiceWorker() {
+  async function initializePushNotification() {
     try {
-      const registration = await navigator.serviceWorker.register('/sw.js', {
-        scope: '/',
-        updateViaCache: 'none',
-      });
-      const sub = await registration.pushManager.getSubscription();
-      setSubscription(sub);
+      const { registerServiceWorker } = await import(
+        '@/features/pwa/services/register-service-worker'
+      );
+      const registration = await registerServiceWorker();
+      if (registration) {
+        const sub = await registration.pushManager.getSubscription();
+        setSubscription(sub);
+      }
     } catch (error) {
-      console.error('Service Worker registration failed:', error);
+      logger.error('[PushNotification] Failed to initialize:', error);
     }
   }
 
@@ -74,13 +56,15 @@ function PushNotificationManager() {
       const registration = await navigator.serviceWorker.ready;
       const sub = await registration.pushManager.subscribe({
         userVisibleOnly: true,
-        applicationServerKey: urlBase64ToUint8Array(NOTIFICATION_CONFIG.vapidPublicKey),
+        applicationServerKey: urlBase64ToUint8Array(
+          NOTIFICATION_CONFIG.vapidPublicKey,
+        ) as BufferSource,
       });
       setSubscription(sub);
       const subscriptionJSON = sub.toJSON() as PushSubscriptionJSON;
       await subscribeUser(subscriptionJSON as unknown as PushSubscription);
     } catch (error) {
-      console.error('Failed to subscribe to push notifications:', error);
+      logger.error('[PushNotification] Failed to subscribe:', error);
     }
   }
 
@@ -90,7 +74,7 @@ function PushNotificationManager() {
       setSubscription(null);
       await unsubscribeUser();
     } catch (error) {
-      console.error('Failed to unsubscribe from push notifications:', error);
+      logger.error('[PushNotification] Failed to unsubscribe:', error);
     }
   }
 
@@ -117,13 +101,11 @@ function PushNotificationManager() {
     }
   }
 
-  // 마운트되기 전까지는 아무것도 렌더링하지 않음
   if (!mounted) {
     return null;
   }
 
-  // iOS인데 홈 화면에 추가되지 않은 경우
-  if (isIOS && !isStandalone) {
+  if (iOS && !standalone) {
     return (
       <div
         style={{
@@ -167,7 +149,7 @@ function PushNotificationManager() {
   return (
     <div style={{ padding: '20px', maxWidth: '500px', margin: '0 auto' }}>
       <h3>푸시 알림 관리</h3>
-      {isIOS && isStandalone && (
+      {iOS && standalone && (
         <p style={{ fontSize: '12px', color: '#28a745', marginBottom: '10px' }}>
           ✅ iOS PWA 모드: 푸시 알림 사용 가능
         </p>
