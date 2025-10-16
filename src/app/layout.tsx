@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { APP_CONFIG } from '@/lib/constants';
 import { DM_Sans } from 'next/font/google';
+import { Providers } from '@/components/layouts';
 import './globals.scss';
 
 const dmSans = DM_Sans({
@@ -52,8 +53,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={dmSans.variable}>{children}</body>
+    <html lang="en" suppressHydrationWarning>
+      <body className={dmSans.variable}>
+        <Providers>{children}</Providers>
+      </body>
     </html>
   );
 }
