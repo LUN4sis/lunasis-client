@@ -1,20 +1,25 @@
 'use client';
 
 import { ROUTES } from '@/lib/constants/routes';
+import { Button } from '@/components/ui/button';
+import Image from 'next/image';
+import styles from './login-button.module.scss';
 
-interface LoginButtonProps {
-  className?: string;
-  children?: React.ReactNode;
-}
-
-export function LoginButton({ className, children = '로그인' }: LoginButtonProps) {
+export function LoginButton() {
   const handleLogin = () => {
     window.location.href = ROUTES.OAUTH_REDIRECT;
   };
 
   return (
-    <button onClick={handleLogin} className={className}>
-      {children}
-    </button>
+    <Button
+      onClick={handleLogin}
+      className={styles.loginButton}
+      variant="outline"
+      colorScheme="white"
+      fullWidth={true}
+    >
+      <Image src="/google.svg" alt="google" width={24} height={24} />
+      <span>Start with Google</span>
+    </Button>
   );
 }
