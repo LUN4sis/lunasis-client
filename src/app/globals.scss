@@ -1,4 +1,6 @@
 @use '@/styles' as *;
+@use '@/styles/base/reset';
+@use '@/styles/base/base';
 
 :root {
   color-scheme: light;
@@ -6,6 +8,7 @@
 
 body {
   color: $black;
-  background: $gray-50;
+  background: $gray-100;
   font-family: $font-family-sans;
+  position: relative;
 }
