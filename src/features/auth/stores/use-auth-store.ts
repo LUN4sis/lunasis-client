@@ -1,23 +1,9 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { logger } from '@/lib/utils/logger';
+import { isLocalStorageAvailable } from '@/lib/utils/storage';
 
 import type { AuthStoreState } from '../types/auth.type';
-
-/**
- * check if localStorage is available
- */
-function isLocalStorageAvailable(): boolean {
-  if (typeof window === 'undefined') return false;
-  try {
-    const testKey = '__test__';
-    window.localStorage.setItem(testKey, 'test');
-    window.localStorage.removeItem(testKey);
-    return true;
-  } catch {
-    return false;
-  }
-}
 
 export const useAuthStore = create<AuthStoreState>()(
   persist(
