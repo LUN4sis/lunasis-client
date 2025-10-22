@@ -1,6 +1,6 @@
 import { ComponentPropsWithoutRef, ReactNode } from 'react';
 
-export type ButtonVariant = 'solid' | 'outline' | 'ghost' | 'link';
+export type ButtonVariant = 'solid' | 'outline' | 'ghost' | 'link' | 'selection';
 export type ButtonColorScheme = 'purple' | 'pink' | 'orange' | 'white' | 'gray';
 
 export interface ButtonProps extends ComponentPropsWithoutRef<'button'> {
