@@ -24,7 +24,6 @@ export const metadata: Metadata = {
     'Luna',
   ],
   manifest: '/manifest.json',
-  themeColor: '#e9e9e9',
   appleWebApp: {
     capable: true,
     title: 'LUNAsis',
@@ -39,6 +38,9 @@ export const metadata: Metadata = {
       { url: '/icons/icon-152x152.png', sizes: '152x152', type: 'image/png' },
       { url: '/icons/icon-192x192.png', sizes: '192x192', type: 'image/png' },
     ],
+  },
+  formatDetection: {
+    telephone: false,
   },
 };
 
