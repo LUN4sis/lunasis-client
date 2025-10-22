@@ -1,0 +1,19 @@
+@use '@/styles' as *;
+
+.loginButton {
+  width: 80%;
+  @include flex-center;
+  background-color: $white;
+  border-radius: $radius-3xl;
+  box-shadow: $box-shadow-md;
+
+  img {
+    position: absolute;
+    left: $spacing-3;
+  }
+
+  span {
+    font-size: $font-size-lg;
+    font-weight: $font-weight-regular;
+  }
+}
