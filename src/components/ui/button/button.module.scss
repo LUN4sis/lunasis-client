@@ -13,6 +13,9 @@ $color-schemes: (
     'border': colors.$red,
     'outline-text': colors.$red,
     'ghost-hover': rgba(colors.$red, 0.1),
+    'selection-text': colors.$black,
+    'selection-border': colors.$black,
+    'selection-bg': colors.$red-300,
   ),
   'purple': (
     'bg': colors.$purple-500,
@@ -22,6 +25,9 @@ $color-schemes: (
     'border': colors.$purple-500,
     'outline-text': colors.$purple-500,
     'ghost-hover': rgba(colors.$purple-500, 0.1),
+    'selection-text': colors.$purple-500,
+    'selection-border': colors.$gray-400,
+    'selection-bg': colors.$purple-500,
   ),
   'orange': (
     'bg': colors.$orange,
@@ -31,6 +37,9 @@ $color-schemes: (
     'border': colors.$orange,
     'outline-text': colors.$orange,
     'ghost-hover': rgba(colors.$orange, 0.1),
+    'selection-text': colors.$orange,
+    'selection-border': colors.$gray-400,
+    'selection-bg': colors.$orange,
   ),
   'white': (
     'bg': colors.$white,
@@ -40,6 +49,12 @@ $color-schemes: (
     'border': colors.$gray-400,
     'outline-text': colors.$black,
     'ghost-hover': colors.$gray-100,
+    'selection-text': colors.$gray-900,
+    'selection-border': colors.$gray-400,
+    'selection-bg': colors.$white,
+  ),
+  'black': (
+    'bg': colors.$red-300,
   ),
 );
 
@@ -137,27 +152,18 @@ $color-schemes: (
         }
       }
 
-      // selection 변형 (사진에서 본 특별한 스타일)
       &.button--selection {
         background-color: transparent;
         color: map.get($colors, 'selection-text');
         border: 1px solid map.get($colors, 'selection-border');
 
         &:hover:not(:disabled) {
-          background-color: rgba(map.get($colors, 'bg'), 0.05);
-          border-color: map.get($colors, 'bg');
+          background-color: map.get($colors, 'selection-bg');
         }
 
-        &:active:not(:disabled) {
-          background-color: rgba(map.get($colors, 'bg'), 0.15);
-          border-color: map.get($colors, 'bg');
-          transform: translateY(1px);
-        }
-
-        // 선택된 상태
         &.button--selected {
           background-color: map.get($colors, 'selection-bg');
-          color: colors.$white;
+          color: map.get($colors, 'selection-text');
           border-color: map.get($colors, 'selection-border');
         }
       }
@@ -168,11 +174,6 @@ $color-schemes: (
     opacity: 0.6;
     cursor: not-allowed;
     pointer-events: none;
-  }
-
-  &--visually-disabled {
-    opacity: 0.6;
-    cursor: pointer;
   }
 
   &--full-width {
