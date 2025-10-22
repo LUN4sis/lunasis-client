@@ -32,10 +32,15 @@ const enqueuePendingRequest = (cb: (newToken: string) => void) => {
   pendingRequests.push(cb);
 };
 
-const BASE_URL = '/api';
+const getBaseURL = (): string => {
+  if (typeof window === 'undefined') {
+    return process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080/api';
+  }
+  return '/api';
+};
 
 const apiClient: AxiosInstance = axios.create({
-  baseURL: BASE_URL,
+  baseURL: getBaseURL(),
   timeout: 10000,
   headers: { 'Content-Type': 'application/json' },
 });

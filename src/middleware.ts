@@ -2,7 +2,12 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { ROUTES } from '@/lib/constants/routes';
 
-const protectedPaths = [ROUTES.HOME, ROUTES.ONBOARDING];
+const protectedPaths = [
+  ROUTES.HOME,
+  ROUTES.ONBOARDING_NAME,
+  ROUTES.ONBOARDING_AGE,
+  ROUTES.ONBOARDING_INTERESTS,
+];
 
 // paths that require authentication after login
 const authPaths = [ROUTES.OAUTH_REDIRECT];

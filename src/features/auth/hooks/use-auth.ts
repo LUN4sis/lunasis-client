@@ -77,7 +77,7 @@ export function useLogin() {
 
       await new Promise((resolve) => setTimeout(resolve, STATE_UPDATE_DELAY));
 
-      const redirectPath = data.firstLogin ? ROUTES.ONBOARDING : ROUTES.HOME;
+      const redirectPath = data.firstLogin ? ROUTES.ONBOARDING_NAME : ROUTES.HOME;
       router.replace(redirectPath);
     },
   });
