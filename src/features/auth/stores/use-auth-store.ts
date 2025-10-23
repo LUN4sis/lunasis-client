@@ -1,41 +1,38 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { logger } from '@/lib/utils/logger';
+import { isLocalStorageAvailable } from '@/lib/utils/storage';
 
 import type { AuthStoreState } from '../types/auth.type';
-
-/**
- * check if localStorage is available
- */
-function isLocalStorageAvailable(): boolean {
-  if (typeof window === 'undefined') return false;
-  try {
-    const testKey = '__test__';
-    window.localStorage.setItem(testKey, 'test');
-    window.localStorage.removeItem(testKey);
-    return true;
-  } catch {
-    return false;
-  }
-}
 
 export const useAuthStore = create<AuthStoreState>()(
   persist(
     (set) => ({
       accessToken: null,
       refreshToken: null,
+      accessTokenIssuedAt: null,
+      refreshTokenIssuedAt: null,
       isLoggedIn: false,
       nickname: null,
       privateChat: null,
       firstLogin: null,
 
       updateTokens: (tokens) => {
-        set((state) => ({
-          ...state,
-          accessToken: tokens.accessToken ?? state.accessToken,
-          refreshToken: tokens.refreshToken ?? state.refreshToken,
-          isLoggedIn: !!(tokens.accessToken ?? state.accessToken),
-        }));
+        const now = Date.now();
+        set((state) => {
+          const hasNewAccessToken = tokens.accessToken !== undefined;
+          const hasNewRefreshToken = tokens.refreshToken !== undefined;
+
+          return {
+            ...state,
+            accessToken: tokens.accessToken ?? state.accessToken,
+            refreshToken: tokens.refreshToken ?? state.refreshToken,
+            // update timestamp only when new token is provided
+            accessTokenIssuedAt: hasNewAccessToken ? now : state.accessTokenIssuedAt,
+            refreshTokenIssuedAt: hasNewRefreshToken ? now : state.refreshTokenIssuedAt,
+            isLoggedIn: !!(tokens.accessToken ?? state.accessToken),
+          };
+        });
       },
 
       setProfile: (profile) => {
@@ -51,6 +48,8 @@ export const useAuthStore = create<AuthStoreState>()(
         set({
           accessToken: null,
           refreshToken: null,
+          accessTokenIssuedAt: null,
+          refreshTokenIssuedAt: null,
           isLoggedIn: false,
           nickname: null,
           privateChat: null,
@@ -65,6 +64,8 @@ export const useAuthStore = create<AuthStoreState>()(
       partialize: (state) => ({
         accessToken: state.accessToken,
         refreshToken: state.refreshToken,
+        accessTokenIssuedAt: state.accessTokenIssuedAt,
+        refreshTokenIssuedAt: state.refreshTokenIssuedAt,
         nickname: state.nickname,
         privateChat: state.privateChat,
         firstLogin: state.firstLogin,

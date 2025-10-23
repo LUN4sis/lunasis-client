@@ -1,0 +1,240 @@
+@use 'sass:map';
+@use '../../../styles/design/colors' as colors;
+@use '../../../styles/design/typography' as typography;
+@use '../../../styles/design/spacing' as spacing;
+@use '../../../styles/mixins/breakpoints' as breakpoints;
+
+$color-schemes: (
+  'pink': (
+    'bg': colors.$red,
+    'hover': colors.$red-300,
+    'active': colors.$red,
+    'text': colors.$white,
+    'border': colors.$red,
+    'outline-text': colors.$red,
+    'ghost-hover': rgba(colors.$red, 0.1),
+    'selection-text': colors.$black,
+    'selection-border': colors.$black,
+    'selection-bg': colors.$red-300,
+  ),
+  'purple': (
+    'bg': colors.$purple-500,
+    'hover': colors.$purple-700,
+    'active': colors.$purple-700,
+    'text': colors.$white,
+    'border': colors.$purple-500,
+    'outline-text': colors.$purple-500,
+    'ghost-hover': rgba(colors.$purple-500, 0.1),
+    'selection-text': colors.$purple-500,
+    'selection-border': colors.$gray-400,
+    'selection-bg': colors.$purple-500,
+  ),
+  'orange': (
+    'bg': colors.$orange,
+    'hover': colors.$orange,
+    'active': colors.$orange,
+    'text': colors.$white,
+    'border': colors.$orange,
+    'outline-text': colors.$orange,
+    'ghost-hover': rgba(colors.$orange, 0.1),
+    'selection-text': colors.$orange,
+    'selection-border': colors.$gray-400,
+    'selection-bg': colors.$orange,
+  ),
+  'white': (
+    'bg': colors.$white,
+    'hover': colors.$gray-100,
+    'active': colors.$gray-200,
+    'text': colors.$gray-900,
+    'border': colors.$gray-400,
+    'outline-text': colors.$black,
+    'ghost-hover': colors.$gray-100,
+    'selection-text': colors.$gray-900,
+    'selection-border': colors.$gray-400,
+    'selection-bg': colors.$white,
+  ),
+  'black': (
+    'bg': colors.$red-300,
+  ),
+);
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: spacing.$spacing-2;
+  padding: spacing.$spacing-2 spacing.$spacing-4;
+  border-radius: spacing.$radius-md;
+  font-family: typography.$font-family-sans;
+  font-size: typography.$font-size-base;
+  font-weight: typography.$font-weight-medium;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  border: none;
+  outline: none;
+  position: relative;
+  overflow: hidden;
+  user-select: none;
+
+  &:focus-visible {
+    outline: 2px solid colors.$purple-500;
+    outline-offset: 2px;
+  }
+
+  &:focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  @include breakpoints.respond(mobile) {
+    padding: spacing.$spacing-2 spacing.$spacing-3;
+  }
+
+  @each $name, $colors in $color-schemes {
+    &--#{$name} {
+      &.button--solid {
+        background-color: map.get($colors, 'bg');
+        color: map.get($colors, 'text');
+        border: 1px solid map.get($colors, 'border');
+
+        &:hover:not(:disabled) {
+          background-color: map.get($colors, 'hover');
+        }
+
+        &:active:not(:disabled) {
+          background-color: map.get($colors, 'active');
+          transform: translateY(1px);
+        }
+      }
+
+      &.button--outline {
+        background-color: transparent;
+        color: map.get($colors, 'outline-text');
+        border: 1px solid map.get($colors, 'border');
+
+        &:hover:not(:disabled) {
+          background-color: rgba(map.get($colors, 'bg'), 0.05);
+        }
+
+        &:active:not(:disabled) {
+          background-color: rgba(map.get($colors, 'bg'), 0.15);
+          border-color: map.get($colors, 'active');
+          transform: translateY(1px);
+        }
+      }
+
+      &.button--ghost {
+        background-color: transparent;
+        color: map.get($colors, 'outline-text');
+
+        &:hover:not(:disabled) {
+          background-color: rgba(map.get($colors, 'bg'), 0.05);
+        }
+
+        &:active:not(:disabled) {
+          background-color: rgba(map.get($colors, 'bg'), 0.15);
+          transform: translateY(1px);
+        }
+      }
+
+      &.button--link {
+        background-color: transparent;
+        padding: 0;
+        color: map.get($colors, 'outline-text');
+        text-decoration: underline;
+
+        &:hover:not(:disabled) {
+          text-decoration: none;
+        }
+
+        &:active:not(:disabled) {
+          color: map.get($colors, 'active');
+          transform: translateY(1px);
+        }
+      }
+
+      &.button--selection {
+        background-color: transparent;
+        color: map.get($colors, 'selection-text');
+        border: 1px solid map.get($colors, 'selection-border');
+
+        &:hover:not(:disabled) {
+          background-color: map.get($colors, 'selection-bg');
+        }
+
+        &.button--selected {
+          background-color: map.get($colors, 'selection-bg');
+          color: map.get($colors, 'selection-text');
+          border-color: map.get($colors, 'selection-border');
+        }
+      }
+    }
+  }
+
+  &--disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  &--full-width {
+    width: 100%;
+  }
+
+  &--loading {
+    cursor: wait;
+    pointer-events: none;
+
+    .button__content {
+      visibility: hidden;
+    }
+  }
+
+  &__content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__icon-left,
+  &__icon-right {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 0;
+  }
+
+  &__icon-left {
+    margin-right: spacing.$spacing-1;
+  }
+
+  &__icon-right {
+    margin-left: spacing.$spacing-1;
+  }
+
+  &__loader {
+    position: absolute;
+    width: 1rem;
+    height: 1rem;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top-color: currentColor;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+}
+
+// expand touch target on mobile
+@media (hover: none) {
+  .button {
+    min-height: 2.5rem;
+    padding: spacing.$spacing-2 spacing.$spacing-5;
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

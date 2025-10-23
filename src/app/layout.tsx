@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import { APP_CONFIG } from '@/lib/constants';
 import { DM_Sans } from 'next/font/google';
 import { Providers } from '@/components/layouts';
 import './globals.scss';
@@ -11,8 +10,9 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
-  title: APP_CONFIG.name,
-  description: APP_CONFIG.description,
+  title: 'LUNAsis',
+  description:
+    "LUNAsis PWA Your personal guide to women's health. Compare prices on feminine products, find trusted clinics, track your cycle, and get instant answers from our AI companion, Luna.",
   keywords: [
     'Lunasis',
     'PWA',
@@ -24,6 +24,11 @@ export const metadata: Metadata = {
     'Luna',
   ],
   manifest: '/manifest.json',
+  appleWebApp: {
+    capable: true,
+    title: 'LUNAsis',
+    statusBarStyle: 'black-translucent',
+  },
   icons: {
     icon: [
       { url: '/icons/icon-192x192.png', sizes: '192x192', type: 'image/png' },
@@ -34,18 +39,20 @@ export const metadata: Metadata = {
       { url: '/icons/icon-192x192.png', sizes: '192x192', type: 'image/png' },
     ],
   },
-  appleWebApp: {
-    capable: true,
-    statusBarStyle: 'default',
-    title: APP_CONFIG.name,
-  },
   formatDetection: {
     telephone: false,
   },
 };
 
-export const viewport =
-  'minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, user-scalable=no, viewport-fit=cover';
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  minimumScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  viewportFit: 'cover',
+  themeColor: '#e9e9e9',
+};
 
 export default function RootLayout({
   children,
@@ -54,7 +61,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={dmSans.variable}>
+      <body className={dmSans.variable} style={{ backgroundColor: '#e9e9e9' }}>
         <Providers>{children}</Providers>
       </body>
     </html>

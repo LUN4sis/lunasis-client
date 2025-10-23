@@ -1,11 +1,25 @@
 @use '@/styles' as *;
+@use '@/styles/base/reset';
+@use '@/styles/base/base';
 
 :root {
   color-scheme: light;
 }
 
+html {
+  background: darken($gray-100, 5%);
+}
+
 body {
   color: $black;
-  background: $gray-50;
+  background: $gray-100;
   font-family: $font-family-sans;
+  position: relative;
+  min-height: 100vh;
+  min-height: 100dvh;
+
+  @include pwa-container();
+  @supports not (min-height: 100dvh) {
+    min-height: -webkit-fill-available;
+  }
 }
