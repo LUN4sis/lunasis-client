@@ -5,6 +5,11 @@ export interface Tokens {
   refreshToken: string | null;
 }
 
+export interface TokenTimeStamps {
+  accessTokenIssuedAt: number | null;
+  refreshTokenIssuedAt: number | null;
+}
+
 export interface UserProfile {
   nickname?: string | null;
   privateChat?: boolean | null;
@@ -29,10 +34,10 @@ export interface ServerActionResponse<T = unknown> {
 
 export type ExchangeTokenResult = ServerActionResponse<ExchangeResponse>;
 
-export interface AuthStoreState extends Tokens, UserProfile {
+export interface AuthStoreState extends Tokens, TokenTimeStamps, UserProfile {
   isLoggedIn: boolean;
   firstLogin?: boolean | null;
-  updateTokens: (tokens: Partial<Tokens>) => void;
+  updateTokens: (tokens: Partial<Tokens & TokenTimeStamps>) => void;
   setProfile: (profile: Partial<UserProfile> & { firstLogin?: boolean }) => void;
   clearAuth: () => void;
 }

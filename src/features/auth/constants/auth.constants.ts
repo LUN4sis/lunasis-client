@@ -1,8 +1,14 @@
 import { ErrorCode } from '@/types/error';
 
-/**
- * Authentication error codes that require logout
- */
+export const TOKEN_EXPIRATION = {
+  /** Access token expiration in milliseconds (24 hours) */
+  ACCESS_TOKEN_MS: 24 * 60 * 60 * 1000,
+  /** Refresh token expiration in milliseconds (720 hours / 30 days) */
+  REFRESH_TOKEN_MS: 720 * 60 * 60 * 1000,
+  /** Buffer time before expiration to trigger early refresh (5 minutes) */
+  REFRESH_BUFFER_MS: 5 * 60 * 1000,
+} as const;
+
 export const AUTH_ERROR_CODES: readonly ErrorCode[] = [
   ErrorCode.TOKEN_EXPIRED,
   ErrorCode.TOKEN_INVALID,
@@ -12,9 +18,7 @@ export const AUTH_ERROR_CODES: readonly ErrorCode[] = [
   ErrorCode.FORBIDDEN,
 ] as const;
 
-/**
- * Check if error code requires logout
- */
+// check if error code requires logout
 export function isAuthError(errorCode: ErrorCode): boolean {
   return AUTH_ERROR_CODES.includes(errorCode);
 }
