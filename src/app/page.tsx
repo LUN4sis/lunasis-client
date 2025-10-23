@@ -28,6 +28,12 @@ export default function Home() {
           </Link>
         </div>
 
+        <div>
+          <Link href={ROUTES.LOGIN} className={styles.testLink}>
+            로그인 테스트 페이지
+          </Link>
+        </div>
+
         <LoginButton />
 
         <ol>
