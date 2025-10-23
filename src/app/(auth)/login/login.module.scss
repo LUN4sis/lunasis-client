@@ -1,7 +1,6 @@
 @use '@/styles' as *;
 
 .container {
-  @include container(100%, 0);
   @include full-screen-container;
   @include flex-column-center;
   @include hide-scrollbar;
@@ -10,8 +9,7 @@
 
   gap: $spacing-6;
   background-color: $gray-50;
-  position: fixed;
-  margin: 0;
+  width: 100%;
 }
 
 .logoContainer {
