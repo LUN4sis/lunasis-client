@@ -1,5 +1,9 @@
-// box shadow
-$box-shadow-sm: -1px 7px 8.5px 0 rgba(0, 0, 0, 0.25);
-$box-shadow-md: 0 4px 11.7px -5px rgba(0, 0, 0, 0.25);
-$box-shadow-lg: 0 1px 2px 0 rgba(0, 0, 0, 0.25);
-$box-shadow-xl: 0 10px 11.8px -6px rgba(0, 0, 0, 0.25);
+@use 'sass:math';
+
+$box-shadow-sm: math.div(-1, 16) + rem math.div(7, 16) + rem math.div(8.5, 16) + rem 0
+  rgba(0, 0, 0, 0.25);
+$box-shadow-md: 0 math.div(4, 16) + rem math.div(11.7, 16) + rem math.div(-5, 16) + rem
+  rgba(0, 0, 0, 0.25);
+$box-shadow-lg: 0 math.div(1, 16) + rem math.div(2, 16) + rem 0 rgba(0, 0, 0, 0.25);
+$box-shadow-xl: 0 math.div(10, 16) + rem math.div(11.8, 16) + rem math.div(-6, 16) + rem
+  rgba(0, 0, 0, 0.25);
