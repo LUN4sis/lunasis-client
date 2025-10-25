@@ -1,0 +1,134 @@
+@use '@/styles/' as *;
+
+.container {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 9999;
+  @include flex-column;
+  gap: 12px;
+  pointer-events: none;
+  max-width: 500px;
+
+  > * {
+    pointer-events: auto;
+  }
+
+  @media (max-width: 640px) {
+    left: 16px;
+    right: 16px;
+    top: 16px;
+    max-width: none;
+  }
+}
+
+.toast {
+  position: relative;
+  width: 100%;
+  min-width: 300px;
+  padding: $spacing-3 $spacing-4;
+  border-radius: 8px;
+  box-shadow: $box-shadow-lg;
+  background-color: $white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $spacing-2;
+
+  @include slideInFromRight;
+
+  @media (max-width: 640px) {
+    min-width: auto;
+  }
+}
+
+.content {
+  display: flex;
+  align-items: center;
+  gap: $spacing-2;
+  flex: 1;
+}
+
+.icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  font-weight: 600;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.message {
+  margin: 0;
+  color: $gray-800;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  padding: $spacing-1;
+  cursor: pointer;
+  color: $gray-500;
+  font-size: 18px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+
+  &:hover {
+    background-color: $gray-100;
+    color: $gray-700;
+  }
+
+  &:focus {
+    outline: 2px solid $purple-500;
+    outline-offset: 2px;
+  }
+}
+
+// Toast types
+.success {
+  border-left: 4px solid #10b981;
+
+  .icon {
+    background-color: #d1fae5;
+    color: #059669;
+  }
+}
+
+.error {
+  border-left: 4px solid $red;
+
+  .icon {
+    background-color: $red-300;
+    color: $red;
+  }
+}
+
+.warning {
+  border-left: 4px solid $orange;
+
+  .icon {
+    background-color: $orange-300;
+    color: $orange;
+  }
+}
+
+.info {
+  border-left: 4px solid $purple;
+
+  .icon {
+    background-color: $purple-300;
+    color: $purple;
+  }
+}

@@ -1,0 +1,222 @@
+@use '@/styles' as *;
+
+// Variables
+$input-height: 2.68rem;
+$button-height: 2.68rem;
+$toggle-size: 1.25rem;
+$border-width: 2px;
+
+.container {
+  @include full-screen-container;
+  @include hide-scrollbar;
+  @include safe-area-inset(padding, all);
+  @include extend-background-to-status-bar($gray-50);
+  @include flex-column;
+
+  padding: 10% 10%;
+
+  @include respond(mobile) {
+    padding: 10% 5%;
+  }
+}
+
+.content {
+  @include flex-column;
+  @include size(100%, 100%);
+  gap: 1.5rem;
+}
+
+@mixin text-responsive($mobile-size, $tablet-size, $desktop-size) {
+  font-size: $desktop-size;
+  font-weight: $font-weight-regular;
+  font-family: inherit;
+  line-height: normal;
+
+  @include respond(mobile) {
+    font-size: $mobile-size;
+  }
+  @include respond(tablet) {
+    font-size: $tablet-size;
+  }
+}
+
+.title {
+  @include text-responsive($font-size-2xl, $font-size-3xl, $font-size-4xl);
+}
+
+.description {
+  @include text-responsive($font-size-lg, $font-size-xl, $font-size-2xl);
+}
+
+.label {
+  @include text-responsive($font-size-xl, $font-size-2xl, $font-size-3xl);
+  color: $red;
+}
+
+.form {
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  gap: $spacing-3;
+  align-items: flex-start;
+}
+
+.interest {
+  @include flex-column;
+  gap: $spacing-8;
+}
+
+.inputWrapper {
+  align-self: flex-start;
+}
+
+.inputField {
+  border-radius: $radius-3xl;
+  box-shadow: $box-shadow-md !important;
+  height: $input-height;
+}
+
+.submitButton {
+  border-radius: $radius-4xl !important;
+  font-size: $font-size-2xl !important;
+  font-weight: $font-weight-regular !important;
+  box-shadow: $box-shadow-md !important;
+  align-self: flex-start;
+  padding: 0.75rem 0.88rem;
+  height: $button-height;
+
+  @include respond(mobile) {
+    font-size: $font-size-xl !important;
+    padding: 0.75rem 0.88rem;
+    height: $button-height;
+  }
+}
+
+.selectContainer {
+  @include flex-column;
+  @include size(100%, auto);
+  gap: $spacing-2;
+}
+
+.category {
+  @include flex-column;
+  gap: $spacing-3;
+
+  @include respond(mobile) {
+    gap: $spacing-1;
+  }
+  @include respond(tablet) {
+    gap: $spacing-2;
+  }
+}
+
+.options {
+  @include flex(row, flex-start, stretch, $spacing-3);
+  flex-wrap: wrap;
+  gap: $spacing-2;
+
+  @include respond(mobile) {
+    gap: $spacing-1;
+  }
+}
+
+.option {
+  padding: 0.3rem 1rem !important;
+  border-radius: $radius-4xl !important;
+  font-size: $font-size-2xl !important;
+  font-weight: $font-weight-regular !important;
+  min-height: 2rem !important;
+  letter-spacing: -0.01rem;
+
+  @include respond(mobile) {
+    font-size: $font-size-xl !important;
+    padding: 0rem 0.75rem !important;
+  }
+  @include respond(tablet) {
+    font-size: $font-size-2xl !important;
+    padding: 0.3rem 1rem !important;
+  }
+}
+
+.nextButton {
+  --button-width: min(20rem, 80vw);
+  --button-padding-x: 2rem;
+
+  margin: 1rem auto 2rem;
+  border-radius: $radius-5xl !important;
+  font-size: $font-size-3xl !important;
+  font-weight: $font-weight-bold !important;
+  color: $black !important;
+  box-shadow: $box-shadow-md !important;
+  width: var(--button-width);
+  padding: 0.75rem var(--button-padding-x) !important;
+  justify-self: center;
+
+  @include respond(mobile) {
+    --button-width: min(16rem, 50%);
+    --button-padding-x: 1.5rem;
+    font-size: $font-size-xl !important;
+  }
+
+  @include respond(tablet) {
+    --button-width: min(18rem, 85vw);
+    --button-padding-x: 1.75rem;
+    font-size: $font-size-2xl !important;
+  }
+}
+
+// Toggle Section
+.toggleSection {
+  margin-top: -$spacing-5;
+}
+
+.toggleContainer {
+  @include flex-column;
+  gap: 1rem;
+}
+
+.toggleLabel {
+  @include flex(row, flex-start, center, 0.75rem);
+  cursor: pointer;
+  padding: 0.75rem;
+  border-radius: $radius-4xl;
+  @include transition(background-color, 0.2s, ease);
+
+  &:hover {
+    background-color: $gray-100;
+  }
+}
+
+.toggleInput {
+  @include size($toggle-size);
+  accent-color: $red-300;
+  cursor: pointer;
+}
+
+.toggleText {
+  font-size: $font-size-base;
+  font-weight: $font-weight-medium;
+  color: $gray-900;
+}
+
+.subSection {
+  margin-top: $spacing-1;
+  padding-left: 1rem;
+  border-left: $border-width solid $red-300;
+  @include transition(all, 0.3s, cubic-bezier(0.4, 0, 0.2, 1));
+
+  animation: contentFadeIn 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.subQuestion {
+  font-size: $font-size-2xl;
+  font-weight: $font-weight-medium;
+  color: $gray-800;
+  margin-bottom: 0.75rem;
+
+  @include respond(mobile) {
+    font-size: $font-size-lg;
+  }
+  @include respond(tablet) {
+    font-size: $font-size-xl;
+  }
+}
