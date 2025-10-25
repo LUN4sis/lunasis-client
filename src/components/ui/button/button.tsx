@@ -19,6 +19,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       className,
       isSelected = false,
       onClick,
+      onBlur,
       ...props
     },
     ref,
@@ -36,12 +37,25 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       className,
     );
 
+    const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+      if (onClick) {
+        onClick(e);
+      }
+      e.currentTarget.blur();
+    };
+
+    const handleTouchEnd = (e: React.TouchEvent<HTMLButtonElement>) => {
+      e.currentTarget.blur();
+    };
+
     return (
       <button
         ref={ref}
         className={buttonClasses}
         disabled={disabled || isLoading}
-        onClick={onClick}
+        onClick={handleClick}
+        onTouchEnd={handleTouchEnd}
+        onBlur={onBlur}
         {...props}
       >
         {isLoading && <span className={styles['button__loader']} />}
