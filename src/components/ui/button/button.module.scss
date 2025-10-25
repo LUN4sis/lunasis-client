@@ -53,9 +53,6 @@ $color-schemes: (
     'selection-border': colors.$gray-400,
     'selection-bg': colors.$white,
   ),
-  'black': (
-    'bg': colors.$red-300,
-  ),
 );
 
 .button {
@@ -69,12 +66,27 @@ $color-schemes: (
   font-size: typography.$font-size-base;
   font-weight: typography.$font-weight-medium;
   cursor: pointer;
-  transition: all 0.2s ease-in-out;
   border: none;
   outline: none;
   position: relative;
   overflow: hidden;
   user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+
+  @media (hover: hover) and (pointer: fine) {
+    transition:
+      background-color 0.2s ease,
+      border-color 0.2s ease,
+      color 0.2s ease,
+      transform 0.1s ease;
+  }
+
+  @media (hover: none) {
+    transition:
+      background-color 0.1s ease,
+      border-color 0.1s ease;
+  }
 
   &:focus-visible {
     outline: 2px solid colors.$purple-500;
@@ -96,8 +108,10 @@ $color-schemes: (
         color: map.get($colors, 'text');
         border: 1px solid map.get($colors, 'border');
 
-        &:hover:not(:disabled) {
-          background-color: map.get($colors, 'hover');
+        @media (hover: hover) and (pointer: fine) {
+          &:hover:not(:disabled) {
+            background-color: map.get($colors, 'hover');
+          }
         }
 
         &:active:not(:disabled) {
@@ -111,8 +125,10 @@ $color-schemes: (
         color: map.get($colors, 'outline-text');
         border: 1px solid map.get($colors, 'border');
 
-        &:hover:not(:disabled) {
-          background-color: rgba(map.get($colors, 'bg'), 0.05);
+        @media (hover: hover) and (pointer: fine) {
+          &:hover:not(:disabled) {
+            background-color: rgba(map.get($colors, 'bg'), 0.05);
+          }
         }
 
         &:active:not(:disabled) {
@@ -126,8 +142,10 @@ $color-schemes: (
         background-color: transparent;
         color: map.get($colors, 'outline-text');
 
-        &:hover:not(:disabled) {
-          background-color: rgba(map.get($colors, 'bg'), 0.05);
+        @media (hover: hover) and (pointer: fine) {
+          &:hover:not(:disabled) {
+            background-color: rgba(map.get($colors, 'bg'), 0.05);
+          }
         }
 
         &:active:not(:disabled) {
@@ -142,8 +160,10 @@ $color-schemes: (
         color: map.get($colors, 'outline-text');
         text-decoration: underline;
 
-        &:hover:not(:disabled) {
-          text-decoration: none;
+        @media (hover: hover) and (pointer: fine) {
+          &:hover:not(:disabled) {
+            text-decoration: none;
+          }
         }
 
         &:active:not(:disabled) {
@@ -153,18 +173,42 @@ $color-schemes: (
       }
 
       &.button--selection {
-        background-color: transparent;
-        color: map.get($colors, 'selection-text');
-        border: 1px solid map.get($colors, 'selection-border');
+        $selection-bg: map.get($colors, 'selection-bg');
+        $selection-text: map.get($colors, 'selection-text');
+        $selection-border: map.get($colors, 'selection-border');
 
-        &:hover:not(:disabled) {
-          background-color: map.get($colors, 'selection-bg');
+        background-color: transparent;
+        color: $selection-text;
+        border: 1px solid $selection-border;
+
+        @media (hover: hover) and (pointer: fine) {
+          &:hover:not(:disabled):not(.button--selected) {
+            @if $selection-bg {
+              background-color: rgba($selection-bg, 0.3);
+            }
+          }
         }
 
         &.button--selected {
-          background-color: map.get($colors, 'selection-bg');
-          color: map.get($colors, 'selection-text');
-          border-color: map.get($colors, 'selection-border');
+          background-color: $selection-bg;
+          color: $selection-text;
+          border-color: $selection-border;
+
+          @media (hover: hover) and (pointer: fine) {
+            &:hover {
+              background-color: $selection-bg;
+            }
+          }
+        }
+
+        @media (hover: none) {
+          &:active:not(:disabled) {
+            background-color: transparent;
+          }
+
+          &.button--selected:active {
+            background-color: $selection-bg;
+          }
         }
       }
     }

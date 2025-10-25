@@ -14,4 +14,5 @@ export interface ButtonProps extends ComponentPropsWithoutRef<'button'> {
   rightIcon?: ReactNode;
   className?: string;
   isSelected?: boolean;
+  onBlur?: (event: React.FocusEvent<HTMLButtonElement>) => void;
 }

@@ -32,3 +32,74 @@
     opacity: 0.5;
   }
 }
+
+// accordion animations
+@keyframes accordionExpand {
+  from {
+    max-height: 0;
+    opacity: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  to {
+    max-height: 1000px;
+    opacity: 1;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+  }
+}
+
+@keyframes accordionCollapse {
+  from {
+    max-height: 1000px;
+    opacity: 1;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+  }
+  to {
+    max-height: 0;
+    opacity: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+}
+
+@keyframes contentFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// accordion mixins
+@mixin accordion-expand {
+  animation: accordionExpand 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@mixin accordion-collapse {
+  animation: accordionCollapse 0.3s cubic-bezier(0.4, 0, 0.6, 1) forwards;
+}
+
+@mixin content-fade-in {
+  animation: contentFadeIn 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+// slide animations
+@keyframes slideInFromRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@mixin slideInFromRight {
+  animation: slideInFromRight 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
