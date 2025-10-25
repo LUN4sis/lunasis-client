@@ -1,14 +1,41 @@
 'use client';
 
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { withAuth } from '@/features/auth';
+import { useOnboardingStore } from '@/features/onboarding/stores/use-onboarding-store';
+import { ROUTES } from '@/lib/constants/routes';
+import { logger } from '@/lib/utils/logger';
 
 function OnboardingPage() {
-  return (
-    <div>
-      <h1>온보딩 페이지</h1>
-      <p>첫 로그인 사용자를 위한 온보딩 페이지입니다.</p>
-    </div>
-  );
+  const router = useRouter();
+  const isNicknameValidated = useOnboardingStore((s) => s.isNicknameValidated);
+  const age = useOnboardingStore((s) => s.age);
+
+  useEffect(() => {
+    logger.log('[Onboarding Index] Redirecting based on progress:', {
+      isNicknameValidated,
+      age,
+    });
+
+    // early return if all steps are completed
+    if (isNicknameValidated && age) {
+      router.replace(ROUTES.ONBOARDING_INTERESTS);
+      return;
+    }
+
+    // early return if only the nickname is completed
+    if (isNicknameValidated) {
+      router.replace(ROUTES.ONBOARDING_AGE);
+      return;
+    }
+
+    // default: redirect to the name page
+    router.replace(ROUTES.ONBOARDING_NAME);
+  }, [isNicknameValidated, age, router]);
+
+  // optional loading indicator during redirect
+  return null;
 }
 
 export default withAuth(OnboardingPage);
