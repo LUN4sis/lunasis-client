@@ -1,16 +1,18 @@
-/**
- * 애플리케이션 라우트 상수
- */
 const ROUTES = {
   ROOT: '/',
+  LOGIN: '/login',
   OAUTH_CALLBACK: '/oauth/callback',
   OAUTH_REDIRECT: '/oauth2/authorization/google',
+
   ONBOARDING_NAME: '/onboarding/name',
   ONBOARDING_AGE: '/onboarding/age',
   ONBOARDING_INTERESTS: '/onboarding/interests',
-  HOME: '/home',
+
+  HOME: '/',
+  CHAT: '/chat',
+  PRODUCT: '/product',
+  PROFILE: '/profile',
   TEST: '/test',
-  LOGIN: '/login',
 } as const;
 
 export type RouteKey = keyof typeof ROUTES;
