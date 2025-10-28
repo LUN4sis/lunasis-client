@@ -3,7 +3,7 @@ import type { NextRequest } from 'next/server';
 import { ROUTES } from '@/lib/constants/routes';
 
 const protectedPaths = [
-  ROUTES.HOME,
+  ROUTES.ROOT,
   ROUTES.ONBOARDING_NAME,
   ROUTES.ONBOARDING_AGE,
   ROUTES.ONBOARDING_INTERESTS,

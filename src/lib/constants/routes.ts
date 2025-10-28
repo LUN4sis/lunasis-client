@@ -8,11 +8,21 @@ const ROUTES = {
   ONBOARDING_AGE: '/onboarding/age',
   ONBOARDING_INTERESTS: '/onboarding/interests',
 
-  HOME: '/',
+  RANKING: '/ranking',
+  PRODUCTS: '/products',
+  PRODUCT_DETAIL: (category: string, slug: string) => `${ROUTES.PRODUCTS}/${category}/${slug}`,
+  PRODUCT_BUNDLE: (category: string, slug: string, count: number) =>
+    `${ROUTES.PRODUCTS}/${category}/${slug}/bundle/${slug}-bundle-${count}`,
+
   CHAT: '/chat',
-  PRODUCT: '/product',
   PROFILE: '/profile',
   TEST: '/test',
+} as const;
+
+// for bottom navigation(route matching)
+export const NAVIGATION_SEGMENTS = {
+  PRODUCTS: 'products',
+  SHOPPING: 'shopping',
 } as const;
 
 export type RouteKey = keyof typeof ROUTES;
