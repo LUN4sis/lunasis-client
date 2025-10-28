@@ -1,29 +1,74 @@
 'use client';
 
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname, useRouter, useSelectedLayoutSegments } from 'next/navigation';
 import Image from 'next/image';
 import clsx from 'clsx';
 
-import { ROUTES } from '@/lib/constants/routes';
+import { ROUTES, NAVIGATION_SEGMENTS } from '@/lib/constants/routes';
 import { Button } from '@/components/ui/button';
+import { routeUtils } from '@/lib/utils';
+
 import ChatIcon from '@/assets/icons/chat.svg';
 import CalendarIcon from '@/assets/icons/calendar.svg';
 import ProductIcon from '@/assets/icons/keyframes.svg';
 import ProfileIcon from '@/assets/icons/profile.svg';
 
-import type { NavItem } from './types';
+import type { NavItem, NavItemConfig } from './types';
 import styles from './bottom-navigation.module.scss';
+
+const DEFAULT_ICON_SIZE = 24;
+const PRODUCT_ICON_SIZE = 28;
+
+const NAVIGATION_CONFIG: NavItemConfig[] = [
+  {
+    path: ROUTES.CHAT,
+    icon: ChatIcon,
+    label: 'chatbot service',
+  },
+  {
+    path: ROUTES.ROOT,
+    icon: CalendarIcon,
+    label: 'calendar',
+  },
+  {
+    path: ROUTES.RANKING,
+    icon: ProductIcon,
+    label: 'product',
+    iconSize: PRODUCT_ICON_SIZE,
+    hasSpecialIcon: true,
+    activeRoutes: [ROUTES.RANKING, ROUTES.PRODUCTS],
+    activeSegments: [NAVIGATION_SEGMENTS.PRODUCTS, NAVIGATION_SEGMENTS.SHOPPING],
+  },
+  {
+    path: ROUTES.PROFILE,
+    icon: ProfileIcon,
+    label: 'profile',
+  },
+];
 
 function BottomNavigation() {
   const router = useRouter();
   const pathname = usePathname();
+  const segments = useSelectedLayoutSegments();
 
-  const navItems: NavItem[] = [
-    { path: ROUTES.CHAT, icon: ChatIcon, label: 'chatbot service' },
-    { path: ROUTES.HOME, icon: CalendarIcon, label: 'calendar' },
-    { path: ROUTES.PRODUCT, icon: ProductIcon, label: 'product' },
-    { path: ROUTES.PROFILE, icon: ProfileIcon, label: 'profile' },
-  ];
+  const createActiveChecker = (config: NavItemConfig) => (): boolean => {
+    const primaryActive = routeUtils.isRouteMatch(pathname, config.path);
+
+    const routeActive = config.activeRoutes
+      ? routeUtils.isAnyRouteMatch(pathname, config.activeRoutes)
+      : false;
+
+    const segmentActive = config.activeSegments
+      ? routeUtils.hasAnySegment(segments, config.activeSegments)
+      : false;
+
+    return primaryActive || routeActive || segmentActive;
+  };
+
+  const navItems: NavItem[] = NAVIGATION_CONFIG.map((config) => ({
+    ...config,
+    isActive: createActiveChecker(config),
+  }));
 
   const handleNavigate = (path: string) => {
     router.push(path);
@@ -32,8 +77,8 @@ function BottomNavigation() {
   return (
     <nav className={styles.bottomNavigation}>
       {navItems.map((item) => {
-        const isActive =
-          pathname === item.path || (pathname.startsWith(item.path) && item.path !== '/');
+        const isActive = item.isActive!();
+        const iconSize = item.iconSize || DEFAULT_ICON_SIZE;
 
         return (
           <Button
@@ -49,10 +94,10 @@ function BottomNavigation() {
               <Image
                 src={item.icon}
                 alt={item.label}
-                width={item.icon === ProductIcon ? 28 : 24}
-                height={item.icon === ProductIcon ? 28 : 24}
+                width={iconSize}
+                height={iconSize}
                 className={clsx(styles.icon, {
-                  [styles.keyframeIcon]: item.icon === ProductIcon,
+                  [styles.keyframeIcon]: item.hasSpecialIcon,
                 })}
               />
             </div>

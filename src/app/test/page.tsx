@@ -8,7 +8,7 @@ export default function TestPage() {
     <div className={styles.container}>
       <div className={styles.header}>
         <h1>로그인 테스트</h1>
-        <Link href={ROUTES.HOME} className={styles.backLink}>
+        <Link href={ROUTES.ROOT} className={styles.backLink}>
           ← 홈으로 돌아가기
         </Link>
       </div>
