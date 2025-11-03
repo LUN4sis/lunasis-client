@@ -53,6 +53,11 @@ $color-schemes: (
     'selection-border': colors.$gray-400,
     'selection-bg': colors.$white,
   ),
+  'gray': (
+    bg: colors.$gray-300,
+    border: colors.$gray-300,
+    text: colors.$black,
+  ),
 );
 
 .button {
