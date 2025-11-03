@@ -84,14 +84,20 @@ export const mallData: MallData[] = [
   {
     name: 'Amazon',
     url: 'https://amazon.com',
-    image: 'https://images.unsplash.com/photo-1590080875831-fd1a4c9d1a38?w=200',
+    image: '/brands/Amazon.png',
     priceModifier: 0,
   },
   {
     name: 'Walmart',
     url: 'https://walmart.com',
-    image: 'https://images.unsplash.com/photo-1590080875831-fd1a4c9d1a38?w=200',
+    image: '/brands/Walmart.png',
     priceModifier: 0.15,
+  },
+  {
+    name: 'Costco',
+    url: 'https://costco.com',
+    image: '/brands/Costco.png',
+    priceModifier: 0.1,
   },
   {
     name: 'Target',

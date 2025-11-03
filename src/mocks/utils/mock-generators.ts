@@ -41,7 +41,7 @@ export const generateReviews = (reviewCount: number): Review[] => {
 
     reviews.push({
       id: generateReviewId(),
-      profile: profileImages[Math.floor(Math.random() * profileImages.length)],
+      profileImg: profileImages[Math.floor(Math.random() * profileImages.length)],
       nickname: nicknames[Math.floor(Math.random() * nicknames.length)],
       content: template,
       createdAt: generateRandomDate(),
@@ -142,6 +142,7 @@ export const generateMallList = (priceId: string, mallCount: number): Mall[] => 
   const availableMalls = mallData.slice(0, mallCount);
   return availableMalls.map((mall, index) => ({
     id: `${priceId}-m${index + 1}`,
+    name: mall.name,
     image: mall.image,
     url: mall.url,
     price: Number((Math.random() * 50 + 10).toFixed(2)), // 임시 가격

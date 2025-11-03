@@ -21,6 +21,7 @@ export interface ProductDetail {
 
 export interface Mall {
   id: string;
+  name: string;
   image: string;
   url: string;
   price: number;
@@ -28,7 +29,7 @@ export interface Mall {
 
 export interface Review {
   id: string;
-  profile: string;
+  profileImg: string;
   nickname: string;
   content: string;
   createdAt: string;
@@ -38,6 +39,12 @@ export interface Review {
 export interface ReviewResponse {
   name: string;
   reviews: Review[];
+}
+
+export interface ReviewsPageResponse {
+  reviews: Review[];
+  nextCursor: string | null;
+  hasMore: boolean;
 }
 
 export interface MallData {

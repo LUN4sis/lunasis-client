@@ -3,3 +3,4 @@ export * from './logger';
 export * from './server-action';
 export * from './storage';
 export * from './route';
+export * from './dynamic-loader';
