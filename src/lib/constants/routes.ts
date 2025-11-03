@@ -12,7 +12,7 @@ const ROUTES = {
   PRODUCTS: '/products',
   PRODUCT_DETAIL: (category: string, slug: string) => `${ROUTES.PRODUCTS}/${category}/${slug}`,
   PRODUCT_BUNDLE: (category: string, slug: string, count: number) =>
-    `${ROUTES.PRODUCTS}/${category}/${slug}/bundle/${slug}-bundle-${count}`,
+    `${ROUTES.PRODUCTS}/${category}/${slug}/bundle/${count}`,
 
   CHAT: '/chat',
   PROFILE: '/profile',
