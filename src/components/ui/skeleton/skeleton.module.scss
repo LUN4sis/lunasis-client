@@ -1,0 +1,73 @@
+@use '@/styles' as *;
+
+.skeleton {
+  background-color: $gray-200;
+  border-radius: $radius-sm;
+  animation: pulse 1.5s ease-in-out infinite;
+
+  &--text {
+    border-radius: $radius-sm;
+  }
+
+  &--rectangular {
+    border-radius: $radius-md;
+  }
+
+  &--circular {
+    border-radius: 50%;
+  }
+}
+
+// product image skeleton
+.productImageSkeleton {
+  @include size(100%);
+  aspect-ratio: 1/1;
+}
+
+// rating skeleton
+.ratingSkeleton {
+  @include flex(row, start, center);
+  gap: $spacing-2;
+
+  .stars {
+    @include size(6rem, 1.25rem);
+  }
+
+  .count {
+    @include size(3rem, 1rem);
+  }
+}
+
+// tab skeleton
+.tabSkeleton {
+  @include flex-column;
+  gap: $spacing-4;
+
+  .tabHeader {
+    @include flex(row, start, center);
+    gap: $spacing-3;
+    border-bottom: 1px solid $gray-200;
+    padding-bottom: $spacing-2;
+
+    .tabItem {
+      @include size(5rem, 2rem);
+    }
+  }
+
+  .tabContent {
+    @include flex-column;
+    gap: $spacing-3;
+
+    .contentLine {
+      @include size(100%, 1rem);
+
+      &:nth-child(2) {
+        @include size(85%, 1rem);
+      }
+
+      &:last-child {
+        @include size(70%, 1rem);
+      }
+    }
+  }
+}
