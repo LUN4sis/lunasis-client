@@ -1,0 +1,178 @@
+@use './flex' as *;
+@use '../design/colors' as *;
+@use '../design/spacing' as *;
+@use '../design/shadows' as *;
+@use '../design/typography' as *;
+
+// Card base styles
+@mixin card-base(
+  $padding: $spacing-3 $spacing-4,
+  $bg: $white,
+  $radius: $radius-lg,
+  $shadow: $box-shadow-lg
+) {
+  padding: $padding;
+  background-color: $bg;
+  border-radius: $radius;
+  box-shadow: $shadow;
+}
+
+// Interactive card (clickable)
+@mixin card-interactive(
+  $padding: $spacing-3 $spacing-4,
+  $bg: $white,
+  $radius: $radius-lg,
+  $shadow: $box-shadow-lg,
+  $transition: all 0.2s ease-in-out
+) {
+  @include card-base($padding, $bg, $radius, $shadow);
+  cursor: pointer;
+  transition: $transition;
+}
+
+// Card with border
+@mixin card-bordered(
+  $padding: $spacing-3 $spacing-4,
+  $bg: $white,
+  $radius: $radius-lg,
+  $border: 1px solid $gray-200
+) {
+  padding: $padding;
+  background-color: $bg;
+  border-radius: $radius;
+  border: $border;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+// Hover lift effect (transform + shadow)
+@mixin hover-lift($translate: -2px, $shadow: $box-shadow-lg) {
+  &:hover {
+    box-shadow: $shadow;
+    transform: translateY($translate);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+// Hover border color change
+@mixin hover-border($color: $purple-500, $border-width: 2px) {
+  &:hover {
+    border: $border-width solid $color;
+    box-shadow: $box-shadow-lg;
+  }
+}
+
+// Hover opacity change
+@mixin hover-opacity($opacity: 0.7, $transition: opacity 0.2s) {
+  cursor: pointer;
+  transition: $transition;
+
+  &:hover {
+    opacity: $opacity;
+  }
+}
+
+// Image container with common styles
+@mixin image-container-base($position: relative, $object-fit: cover) {
+  position: $position;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: $object-fit;
+  }
+}
+
+// Image with hover zoom effect
+@mixin image-hover-zoom($scale: 1.05, $transition: transform 0.2s ease-in-out) {
+  img {
+    transition: $transition;
+
+    &:hover {
+      transform: scale($scale);
+    }
+  }
+}
+
+// Text ellipsis (single line)
+@mixin text-ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+// Text multiline ellipsis
+@mixin text-multiline-ellipsis($lines: 2) {
+  display: -webkit-box;
+  -webkit-line-clamp: $lines;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  word-break: keep-all;
+}
+
+// Badge/tag base styles
+@mixin badge-base(
+  $padding: 0.17rem 0.75rem,
+  $bg: $gray-100,
+  $color: $gray-600,
+  $radius: $radius-7xl,
+  $font-size: $font-size-base
+) {
+  @include flex-center;
+  min-width: fit-content;
+  padding: $padding;
+  background-color: $bg;
+  border: none;
+  border-radius: $radius;
+  font-family: $font-family-sans;
+  font-size: $font-size;
+  font-weight: $font-weight-regular;
+  color: $color;
+}
+
+// Interactive badge
+@mixin badge-interactive(
+  $padding: 0.17rem 0.75rem,
+  $bg: $gray-100,
+  $color: $gray-600,
+  $radius: $radius-7xl,
+  $font-size: $font-size-base,
+  $hover-bg: $gray-200,
+  $active-bg: $gray-300
+) {
+  @include badge-base($padding, $bg, $color, $radius, $font-size);
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: $hover-bg;
+  }
+
+  &:active {
+    background-color: $active-bg;
+  }
+}
+
+// Price text styling
+@mixin price-text($font-size: $font-size-lg, $color: $purple-500, $weight: $font-weight-bold) {
+  font-size: $font-size;
+  font-weight: $weight;
+  color: $color;
+}
+
+// Content section wrapper
+@mixin content-section(
+  $padding: $spacing-4 $spacing-3,
+  $bg: $white,
+  $radius: $radius-2xl,
+  $gap: $spacing-2
+) {
+  @include flex-column;
+  gap: $gap;
+  padding: $padding;
+  background: $bg;
+  border-radius: $radius;
+}
