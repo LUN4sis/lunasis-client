@@ -7,12 +7,12 @@
 }
 
 html {
-  background: darken($gray-100, 5%);
+  background: $gray-50;
 }
 
 body {
   color: $black;
-  background: $gray-100;
+  background: $gray-50;
   font-family: $font-family-sans;
   position: relative;
   min-height: 100vh;
@@ -22,4 +22,24 @@ body {
   @supports not (min-height: 100dvh) {
     min-height: -webkit-fill-available;
   }
+}
+
+:root {
+  --bottom-nav-height: 6rem;
+}
+
+@include respond(mobile) {
+  :root {
+    --bottom-nav-height: 4.6rem;
+  }
+}
+
+@include respond(tablet) {
+  :root {
+    --bottom-nav-height: 5.6rem;
+  }
+}
+
+.app-content {
+  padding-bottom: calc(var(--bottom-nav-height) + env(safe-area-inset-bottom, 0px));
 }

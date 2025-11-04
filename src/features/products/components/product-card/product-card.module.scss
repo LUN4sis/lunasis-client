@@ -1,0 +1,137 @@
+@use 'sass:map';
+@use '@/styles' as *;
+
+.card {
+  @include flex;
+  @include card-interactive($spacing-3 $spacing-4, $white, $radius-lg, $box-shadow-lg);
+  @include hover-lift(-2px, $box-shadow-lg);
+  position: relative;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.imageWrapper {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.rank {
+  position: absolute;
+  top: -0.2rem;
+  left: -$spacing-2;
+  z-index: 2;
+
+  span {
+    @include flex-center;
+    @include size(1.4rem, 1.75rem);
+    background-color: $purple-500;
+    border-radius: $radius-sm;
+    color: $white;
+    font-family: $font-family-sans;
+    font-size: $font-size-lg;
+    font-weight: $font-weight-bold;
+
+    @include respond(mobile) {
+      @include size(1.3rem, 1.55rem);
+    }
+  }
+}
+
+.imageContainer {
+  @include size(6.3rem);
+  position: relative;
+  top: 0.15rem;
+
+  > img {
+    @include size(100%);
+    object-fit: cover;
+  }
+}
+
+.content {
+  flex: 1;
+  @include flex-column;
+  min-width: 0;
+
+  > h3 {
+    @include text-ellipsis;
+    font-size: $font-size-2xl;
+    font-weight: $font-weight-regular;
+    line-height: normal;
+
+    @include respond(mobile) {
+      font-size: $font-size-xl;
+    }
+  }
+
+  > p {
+    @include text-multiline-ellipsis(2);
+    padding: $spacing-1 0;
+    font-size: $font-size-lg;
+    line-height: normal;
+
+    @include respond(mobile) {
+      font-size: $font-size-base;
+      padding: 0.2rem 0;
+    }
+  }
+}
+
+.ratingPrice {
+  @include flex;
+  gap: $spacing-1;
+  align-items: center;
+
+  .rating {
+    @include flex;
+    align-items: center;
+  }
+
+  .price {
+    @include price-text($font-size-lg, $purple-500);
+    position: relative;
+    top: 0.07rem;
+  }
+}
+
+.price {
+  @include price-text($font-size-lg, $purple-500);
+  position: relative;
+  top: 0.07rem;
+}
+
+.badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-2;
+  margin-top: auto;
+  max-width: 100%;
+
+  @include respond(tablet) {
+    gap: $spacing-1;
+  }
+
+  @include respond(mobile) {
+    gap: $spacing-1;
+  }
+}
+
+.moreBadges {
+  @include badge-interactive(
+    0.17rem 0.75rem,
+    $gray-100,
+    $gray-600,
+    $radius-7xl,
+    $font-size-base,
+    $gray-200,
+    $gray-300
+  );
+
+  @include respond(tablet) {
+    display: none;
+  }
+
+  @include respond(mobile) {
+    display: none;
+  }
+}

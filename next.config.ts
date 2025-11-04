@@ -7,8 +7,40 @@ const nextConfig: NextConfig = {
     root: __dirname,
   },
   allowedDevOrigins: devOrigin ? [devOrigin] : [],
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'plus.unsplash.com',
+      },
+    ],
+    qualities: [75, 85, 90, 100],
+  },
   async rewrites() {
     const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080/api';
+    const isMSWEnabled = process.env.NEXT_PUBLIC_ENABLE_MSW === 'true';
+
+    // TODO: delete this after testing
+    // disable rewrites when msw is enabled
+    if (isMSWEnabled) {
+      return [
+        {
+          source: '/login/oauth2/:path*',
+          destination: `${apiUrl}/login/oauth2/:path*`,
+        },
+        {
+          source: '/oauth2/:path*',
+          destination: `${apiUrl}/oauth2/:path*`,
+        },
+      ];
+    }
+
+    // TODO: delete this after testing
+    // proxy all api requests to the backend when msw is disabled
     return [
       {
         source: '/api/:path*',

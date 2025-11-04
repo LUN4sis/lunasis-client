@@ -51,7 +51,7 @@ export const viewport = {
   maximumScale: 1,
   userScalable: false,
   viewportFit: 'cover',
-  themeColor: '#e9e9e9',
+  themeColor: '#f6f6f6',
 };
 
 export default function RootLayout({
@@ -61,7 +61,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={dmSans.variable} style={{ backgroundColor: '#e9e9e9' }}>
+      <body className={dmSans.variable} style={{ backgroundColor: '#f6f6f6' }}>
         <Providers>{children}</Providers>
       </body>
     </html>

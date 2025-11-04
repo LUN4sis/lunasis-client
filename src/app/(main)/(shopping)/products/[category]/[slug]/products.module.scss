@@ -1,0 +1,159 @@
+@use '@/styles' as *;
+
+.container {
+  @include full-screen-scrollable;
+  @include hide-scrollbar;
+  @include safe-area-inset(padding, all);
+  @include extend-background-to-status-bar($gray-50);
+  @include flex-column;
+  gap: $spacing-4;
+
+  padding: 5% 5% 0;
+
+  @include respond(mobile) {
+    padding: 0 5%;
+  }
+  @include respond(tablet) {
+    padding: 5% 3% 0;
+  }
+}
+
+.productInfo {
+  @include flex(row, start, center);
+  padding: calc($spacing-4) 0 0; // header height + padding
+  gap: $spacing-4;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+
+  &:hover {
+    opacity: 0.8;
+  }
+
+  &:active {
+    opacity: 0.6;
+  }
+
+  @include respond(mobile) {
+    padding: calc($spacing-4 + $spacing-5) 0 0; // mobile header height + padding
+    gap: $spacing-3;
+  }
+}
+
+.imageContainer {
+  @include flex-center;
+  width: 10rem;
+  overflow: hidden;
+
+  @include respond(mobile) {
+    width: 8rem;
+  }
+
+  > img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.productDetails {
+  @include flex-column;
+  align-items: start;
+  gap: $spacing-2;
+
+  > h1 {
+    color: $black;
+    font-size: $font-size-4xl;
+    font-weight: $font-weight-semibold;
+    line-height: normal;
+
+    @include respond(mobile) {
+      font-size: $font-size-3xl;
+    }
+  }
+}
+
+.tabSection {
+  flex: 1;
+  padding: 0 0 $spacing-4;
+
+  @include respond(mobile) {
+    padding: 0 0 $spacing-3;
+  }
+}
+
+.reviewContainer {
+  @include flex-column;
+  gap: $spacing-4;
+  padding: $spacing-5;
+
+  @include respond(mobile) {
+    gap: $spacing-3;
+    padding: $spacing-4 $spacing-2;
+  }
+}
+
+.loading {
+  @include flex-center;
+  padding: $spacing-8;
+}
+
+.loadingContainer {
+  @include flex-center;
+  flex: 1;
+  padding: $spacing-8;
+  color: $gray-600;
+  font-size: $font-size-base;
+}
+
+.skeleton {
+  @include flex-column;
+  align-items: center;
+  gap: $spacing-4;
+  width: 100%;
+  max-width: 400px;
+}
+
+.skeletonHeader {
+  width: 100%;
+  height: 40px;
+  background-color: $gray-200;
+  border-radius: $radius-md;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.skeletonImage {
+  width: 200px;
+  height: 200px;
+  background-color: $gray-200;
+  border-radius: $radius-lg;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.skeletonContent {
+  width: 100%;
+  height: 200px;
+  background-color: $gray-200;
+  border-radius: $radius-md;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.errorState {
+  @include flex-column;
+  align-items: center;
+  justify-content: center;
+  padding: $spacing-8;
+  text-align: center;
+  color: $gray-600;
+
+  h2 {
+    font-size: $font-size-xl;
+    font-weight: $font-weight-semibold;
+    margin: 0 0 $spacing-2 0;
+    color: $gray-900;
+  }
+
+  p {
+    font-size: $font-size-base;
+    margin: 0 0 $spacing-4 0;
+  }
+}

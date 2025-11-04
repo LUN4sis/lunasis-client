@@ -1,0 +1,62 @@
+@use 'sass:map';
+@use '@/styles' as *;
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: $font-weight-regular;
+  border-radius: $radius-7xl;
+  white-space: nowrap;
+  color: $black;
+  letter-spacing: -0.01em;
+  max-width: 100%;
+  text-overflow: ellipsis;
+
+  &--sm {
+    padding: 0.19rem 0.56rem;
+    font-size: $font-size-sm;
+
+    @include respond(mobile) {
+      padding: 0.15rem 0.45rem;
+    }
+  }
+
+  &--md {
+    padding: 0.2rem 0.86rem;
+    font-size: $font-size-base;
+
+    @include respond(mobile) {
+      padding: 0.17rem 0.75rem;
+    }
+  }
+
+  &--lg {
+    padding: 0.29rem 1rem;
+    font-size: $font-size-lg;
+
+    @include respond(mobile) {
+      padding: 0.25rem 0.95rem;
+    }
+  }
+
+  &--purple {
+    background-color: $purple-300;
+  }
+
+  &--orange {
+    background-color: $orange-100;
+  }
+
+  &--pink {
+    background-color: $red-300;
+  }
+
+  &--white {
+    background-color: $white;
+  }
+
+  &--gray {
+    background-color: $gray-100;
+  }
+}

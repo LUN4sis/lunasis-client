@@ -108,7 +108,7 @@ function InterestsPage() {
         // }
 
         logger.log('[Interests Page] Onboarding completed successfully');
-        router.push(ROUTES.HOME);
+        router.push(ROUTES.ROOT);
       } catch (error) {
         logger.error('[Interests Page] Submit error:', error);
         toast.error('Failed to save your preferences. Please try again.');
