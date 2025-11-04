@@ -1,0 +1,99 @@
+@use '@/styles' as *;
+
+.container {
+  @include full-screen-container;
+  @include hide-scrollbar;
+  @include safe-area-inset(padding);
+  @include extend-background-to-status-bar($gray-50);
+  @include flex-column;
+
+  padding: 5% 5% 0;
+
+  @include respond(mobile) {
+    padding: 0 5%;
+  }
+  @include respond(tablet) {
+    padding: 5% 3% 0;
+  }
+}
+
+.content {
+  @include flex(column, start);
+  padding: $spacing-4 0 0; // header height + padding
+  gap: $spacing-4;
+
+  .bestDeal {
+    @include flex-column;
+    gap: $spacing-3;
+
+    > h1 {
+      color: $black;
+      font-size: $font-size-4xl;
+      font-weight: $font-weight-semibold;
+      line-height: normal;
+    }
+
+    .bestDealContent {
+      @include flex(row, start, center);
+      gap: $spacing-3;
+
+      .imageContainer {
+        @include flex-center;
+        @include size(4.5rem);
+      }
+
+      .productInfo {
+        @include flex-column;
+        gap: $spacing-2;
+
+        > h2 {
+          color: $black;
+          font-size: $font-size-3xl;
+          font-weight: $font-weight-semibold;
+          line-height: normal;
+          white-space: wrap;
+          word-break: keep-all;
+          overflow-wrap: break-word;
+        }
+
+        > span {
+          color: $purple-500;
+          font-size: $font-size-2xl;
+          font-weight: $font-weight-semibold;
+          line-height: normal;
+        }
+      }
+    }
+  }
+}
+
+@include respond(mobile) {
+  .container {
+    padding: 0 5%;
+  }
+
+  .content {
+    padding: calc($spacing-4 + $spacing-5) 0 0; // mobile header height + padding
+    gap: $spacing-3;
+  }
+
+  .bestDeal {
+    gap: $spacing-3;
+
+    > h1 {
+      font-size: $font-size-3xl;
+    }
+
+    .bestDealContent {
+      gap: 0;
+
+      .imageContainer {
+        @include size(3.5rem);
+      }
+
+      .productInfo {
+        gap: 0;
+      }
+    }
+  }
+}
