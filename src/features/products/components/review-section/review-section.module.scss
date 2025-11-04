@@ -1,0 +1,89 @@
+@use '@/styles' as *;
+
+.container {
+  @include flex-column;
+  gap: $spacing-4;
+
+  @include respond(mobile) {
+    gap: $spacing-3;
+  }
+}
+
+.moreReviews {
+  @include flex-center;
+  @include hover-opacity(0.7, opacity 0.2s);
+  padding: $spacing-4;
+}
+
+.reviewItem {
+  @include content-section($spacing-4, $white, $radius-2xl, $spacing-4);
+
+  font-size: $font-size-2xl;
+  font-weight: $font-weight-regular;
+
+  .userInfo {
+    @include flex(row, start, center);
+    gap: $spacing-3;
+
+    > img {
+      @include circle(2.5rem);
+      object-fit: cover;
+    }
+  }
+
+  .reviewInfo {
+    @include flex(row, end, center);
+    gap: $spacing-2;
+
+    > img {
+      @include size(5rem, auto);
+      object-fit: cover;
+    }
+  }
+}
+
+@include respond(mobile) {
+  .reviewItem {
+    gap: $spacing-3;
+    font-size: $font-size-xl;
+  }
+
+  .userInfo {
+    gap: $spacing-2;
+
+    > img {
+      @include circle(2rem);
+    }
+
+    > span {
+      font-size: $font-size-lg;
+    }
+  }
+
+  .reviewInfo {
+    gap: $spacing-1;
+
+    > img {
+      @include size(2.9rem, auto);
+      object-fit: cover;
+    }
+  }
+
+  .moreReviews {
+    @include flex-center;
+  }
+}
+
+.empty {
+  @include flex-column;
+  align-items: center;
+  justify-content: center;
+  padding: $spacing-4;
+  text-align: center;
+  color: $gray-600;
+
+  h3 {
+    font-size: $font-size-xl;
+    font-weight: $font-weight-semibold;
+  }
+}
