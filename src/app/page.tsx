@@ -22,12 +22,6 @@ export default function Home() {
 
         <InstallPrompt />
 
-        <div className={styles.linkContainer}>
-          <Link href={ROUTES.TEST} className={styles.testLink}>
-            🔔 푸시 알림 테스트 페이지
-          </Link>
-        </div>
-
         <div>
           <Link href={ROUTES.LOGIN} className={styles.testLink}>
             로그인 테스트 페이지
