@@ -16,7 +16,6 @@ const ROUTES = {
 
   CHAT: '/chat',
   PROFILE: '/profile',
-  TEST: '/test',
 } as const;
 
 // for bottom navigation(route matching)

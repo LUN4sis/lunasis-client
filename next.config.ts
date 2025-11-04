@@ -18,6 +18,7 @@ const nextConfig: NextConfig = {
         hostname: 'plus.unsplash.com',
       },
     ],
+    qualities: [75, 85, 90, 100],
   },
   async rewrites() {
     const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080/api';

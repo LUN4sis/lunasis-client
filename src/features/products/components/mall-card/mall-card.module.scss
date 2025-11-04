@@ -1,0 +1,53 @@
+@use 'sass:map';
+@use '@/styles' as *;
+
+.card {
+  @include card-bordered($spacing-5 $spacing-4, $white, $radius-lg, 2px solid $gray-200);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  min-height: 4.8rem;
+  gap: $spacing-3;
+
+  @include respond(mobile) {
+    padding: $spacing-4 $spacing-3;
+  }
+
+  &:hover {
+    border-color: $purple-500;
+  }
+}
+
+.imageContainer {
+  @include flex-center;
+  flex-shrink: 0;
+  position: relative;
+  height: 3.2rem;
+  max-width: 12rem;
+
+  @include respond(mobile) {
+    height: 2.8rem;
+    max-width: 10rem;
+  }
+}
+
+.image {
+  width: auto !important;
+  height: 3.2rem !important;
+  max-width: 12rem !important;
+  object-fit: contain !important;
+
+  @include respond(mobile) {
+    height: 2.8rem !important;
+    max-width: 10rem !important;
+  }
+}
+
+.price {
+  @include price-text($font-size-4xl, $black, $font-weight-semibold);
+
+  @include respond(mobile) {
+    font-size: $font-size-3xl;
+  }
+}
