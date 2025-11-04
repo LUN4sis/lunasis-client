@@ -1,0 +1,20 @@
+@use '@/styles' as *;
+
+.header {
+  position: absolute;
+  top: $spacing-4;
+  left: 1%;
+  @include flex(row, flex-start, center);
+  @include size(100%, 2rem);
+  background: inherit;
+  z-index: 10;
+
+  @include respond(mobile) {
+    top: 0;
+    left: -1%;
+  }
+  @include respond(tablet) {
+    top: $spacing-2;
+    left: 0;
+  }
+}
