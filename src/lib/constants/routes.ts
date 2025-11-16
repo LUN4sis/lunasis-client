@@ -1,8 +1,10 @@
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080/api';
+
 const ROUTES = {
   ROOT: '/',
   LOGIN: '/login',
   OAUTH_CALLBACK: '/oauth/callback',
-  OAUTH_REDIRECT: '/oauth2/authorization/google',
+  OAUTH_REDIRECT: `${API_URL}/oauth2/authorization/google`,
 
   ONBOARDING_NAME: '/onboarding/name',
   ONBOARDING_AGE: '/onboarding/age',
