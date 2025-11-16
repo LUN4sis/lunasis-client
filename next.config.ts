@@ -21,38 +21,9 @@ const nextConfig: NextConfig = {
     ],
     qualities: [75, 85, 90, 100],
   },
-  async rewrites() {
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080/api';
-    const isMSWEnabled = process.env.NEXT_PUBLIC_ENABLE_MSW === 'true';
-
-    if (isMSWEnabled) {
-      return [
-        {
-          source: '/login/oauth2/:path*',
-          destination: `${apiUrl}/login/oauth2/:path*`,
-        },
-        {
-          source: '/oauth2/:path*',
-          destination: `${apiUrl}/oauth2/:path*`,
-        },
-      ];
-    }
-
-    return [
-      {
-        source: '/api/:path*',
-        destination: `${apiUrl}/:path*`,
-      },
-      {
-        source: '/login/oauth2/:path*',
-        destination: `${apiUrl}/login/oauth2/:path*`,
-      },
-      {
-        source: '/oauth2/:path*',
-        destination: `${apiUrl}/oauth2/:path*`,
-      },
-    ];
-  },
+  // Rewrites removed - now using Route Handlers in /app/api
+  // This prevents ROUTER_EXTERNAL_TARGET_HANDSHAKE_ERROR on Vercel
+  // See: /app/api/[...path]/route.ts for API proxy implementation
   async headers() {
     const backendDomain = apiUrl.replace(/^https?:\/\//, '').replace(/\/.*$/, '');
 
@@ -80,7 +51,8 @@ const nextConfig: NextConfig = {
               "style-src 'self' 'unsafe-inline'",
               "img-src 'self' data: https://images.unsplash.com https://plus.unsplash.com",
               "font-src 'self'",
-              `connect-src 'self' ${apiUrl} https://${backendDomain} https://accounts.google.com https://oauth2.googleapis.com`,
+              // connect-src 'self' is sufficient because Route Handlers proxy external APIs server-side
+              "connect-src 'self'",
               "object-src 'none'",
               "frame-ancestors 'none'",
             ].join('; '),
@@ -110,7 +82,7 @@ const nextConfig: NextConfig = {
               "default-src 'self'",
               "script-src 'self'",
               "img-src 'self' data:",
-              `connect-src 'self' ${apiUrl}`,
+              "connect-src 'self'",
             ].join('; '),
           },
         ],
