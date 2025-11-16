@@ -22,37 +22,23 @@ const nextConfig: NextConfig = {
   },
   async rewrites() {
     const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080/api';
-    const isMSWEnabled = process.env.NEXT_PUBLIC_ENABLE_MSW === 'true';
 
-    // TODO: delete this after testing
-    // disable rewrites when msw is enabled
-    if (isMSWEnabled) {
-      return [
-        {
-          source: '/login/oauth2/:path*',
-          destination: `${apiUrl}/login/oauth2/:path*`,
-        },
-        {
-          source: '/oauth2/:path*',
-          destination: `${apiUrl}/oauth2/:path*`,
-        },
-      ];
-    }
-
-    // TODO: delete this after testing
-    // proxy all api requests to the backend when msw is disabled
     return [
+      // {
+      //   source: '/oauth2/:path*',
+      //   destination: `${apiUrl}/oauth2/:path*`,
+      // },
+      // {
+      //   source: '/login/oauth2/:path*',
+      //   destination: `${apiUrl}/login/oauth2/:path*`,
+      // },
       {
         source: '/api/:path*',
         destination: `${apiUrl}/:path*`,
       },
       {
-        source: '/login/oauth2/:path*',
-        destination: `${apiUrl}/login/oauth2/:path*`,
-      },
-      {
-        source: '/oauth2/:path*',
-        destination: `${apiUrl}/oauth2/:path*`,
+        source: '/oauth/callback/:path*',
+        destination: `${apiUrl}/oauth/callback/:path*`,
       },
     ];
   },
