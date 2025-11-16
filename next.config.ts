@@ -1,6 +1,7 @@
 import type { NextConfig } from 'next';
 
 const devOrigin = process.env.NEXT_PUBLIC_DEV_ORIGIN || '';
+const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080/api';
 
 const nextConfig: NextConfig = {
   turbopack: {
@@ -24,8 +25,6 @@ const nextConfig: NextConfig = {
     const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080/api';
     const isMSWEnabled = process.env.NEXT_PUBLIC_ENABLE_MSW === 'true';
 
-    // TODO: delete this after testing
-    // disable rewrites when msw is enabled
     if (isMSWEnabled) {
       return [
         {
@@ -39,8 +38,6 @@ const nextConfig: NextConfig = {
       ];
     }
 
-    // TODO: delete this after testing
-    // proxy all api requests to the backend when msw is disabled
     return [
       {
         source: '/api/:path*',
@@ -57,6 +54,8 @@ const nextConfig: NextConfig = {
     ];
   },
   async headers() {
+    const backendDomain = apiUrl.replace(/^https?:\/\//, '').replace(/\/.*$/, '');
+
     return [
       {
         source: '/(.*)',
@@ -75,8 +74,16 @@ const nextConfig: NextConfig = {
           },
           {
             key: 'Content-Security-Policy',
-            value:
-              "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; object-src 'none'; frame-ancestors 'none';",
+            value: [
+              "default-src 'self'",
+              "script-src 'self' 'unsafe-eval' 'unsafe-inline'",
+              "style-src 'self' 'unsafe-inline'",
+              "img-src 'self' data: https://images.unsplash.com https://plus.unsplash.com",
+              "font-src 'self'",
+              `connect-src 'self' ${apiUrl} https://${backendDomain} https://accounts.google.com https://oauth2.googleapis.com`,
+              "object-src 'none'",
+              "frame-ancestors 'none'",
+            ].join('; '),
           },
           {
             key: 'Permissions-Policy',
@@ -99,8 +106,12 @@ const nextConfig: NextConfig = {
           },
           {
             key: 'Content-Security-Policy',
-            value:
-              "default-src 'self'; script-src 'self'; img-src 'self' data:; connect-src 'self'",
+            value: [
+              "default-src 'self'",
+              "script-src 'self'",
+              "img-src 'self' data:",
+              `connect-src 'self' ${apiUrl}`,
+            ].join('; '),
           },
         ],
       },
