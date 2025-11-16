@@ -1,6 +1,7 @@
 import type { NextConfig } from 'next';
 
 const devOrigin = process.env.NEXT_PUBLIC_DEV_ORIGIN || '';
+const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080/api';
 
 const nextConfig: NextConfig = {
   turbopack: {
@@ -24,6 +25,8 @@ const nextConfig: NextConfig = {
   // This prevents ROUTER_EXTERNAL_TARGET_HANDSHAKE_ERROR on Vercel
   // See: /app/api/[...path]/route.ts for API proxy implementation
   async headers() {
+    const backendDomain = apiUrl.replace(/^https?:\/\//, '').replace(/\/.*$/, '');
+
     return [
       {
         source: '/(.*)',
