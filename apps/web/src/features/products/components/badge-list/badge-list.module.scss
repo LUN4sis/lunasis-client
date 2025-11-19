@@ -1,0 +1,29 @@
+@use '@/styles' as *;
+
+.badgeList {
+  @include content-section($spacing-4 $spacing-3, $white, $radius-2xl, $spacing-2);
+
+  h2 {
+    font-size: $font-size-2xl;
+    font-weight: $font-weight-regular;
+  }
+
+  ul {
+    @include flex;
+    flex-wrap: wrap;
+    gap: $spacing-2;
+    list-style: none;
+  }
+
+  @include respond(mobile) {
+    padding: $spacing-3 $spacing-2;
+
+    h2 {
+      font-size: $font-size-xl;
+    }
+
+    ul {
+      gap: $spacing-1;
+    }
+  }
+}
