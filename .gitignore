@@ -1,8 +1,8 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
-/node_modules
-/.pnp
+node_modules/
+.pnp
 .pnp.*
 .yarn/*
 !.yarn/patches
@@ -11,14 +11,14 @@
 !.yarn/versions
 
 # testing
-/coverage
+coverage/
 
 # next.js
-/.next/
-/out/
+.next/
+out/
 
 # production
-/build
+build/
 
 # misc
 .DS_Store
@@ -39,6 +39,39 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# turbo
+.turbo/
+
+# expo / react native
+.expo/
+dist/
+*.jks
+*.p8
+*.p12
+*.keystore
+ios/Pods/
+ios/build/
+android/app/build/
+android/.gradle/
+android/local.properties
+
+# pnpm
+.pnpm-store/
+
+# windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# testing
+.nyc_output/
+
+# swc
+.swc/
+
+# logs
+*.log
 
 certificates
 .cursorrules
