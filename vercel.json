@@ -1,0 +1,11 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "version": 2,
+  "buildCommand": "cd ../.. && pnpm build --filter=web",
+  "outputDirectory": ".next",
+  "installCommand": "cd ../.. && pnpm install",
+  "framework": "nextjs",
+  "rootDirectory": "apps/web",
+  "ignoreCommand": "git diff --quiet HEAD^ HEAD ./apps/web ./packages/shared",
+  "regions": ["icn1"]
+}
