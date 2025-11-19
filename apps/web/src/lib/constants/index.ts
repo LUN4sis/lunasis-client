@@ -1,14 +1,13 @@
-// Re-export shared constants
 export {
   ROUTES,
   NAVIGATION_SEGMENTS,
-  getApiUrl,
   type RouteKey,
   type RoutePath,
   type NavigationSegment,
 } from '@lunasis/shared/constants';
+
+export { getApiUrl } from '@lunasis/shared/api';
 export {
-  APP_CONFIG,
   API_CONFIG,
   NOTIFICATION_CONFIG,
   STORAGE_KEYS,
