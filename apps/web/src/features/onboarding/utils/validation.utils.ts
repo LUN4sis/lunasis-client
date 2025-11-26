@@ -1,7 +1,7 @@
 import { z } from 'zod';
-import { ErrorCode } from '@lunasis/shared/types';
-import { createErrorResponse } from '@/lib/utils/server-action';
-import { ServerActionResponse } from '@/features/auth';
+import { ErrorCode } from '@repo/shared/types';
+import { createErrorResponse } from '@web/lib/utils/server-action';
+import { ApiResponse } from '@repo/shared/types';
 
 export interface ValidationResult {
   isValid: boolean;
@@ -79,7 +79,7 @@ export function validate<T>(value: T, schemas: z.ZodType<T> | z.ZodType<T>[]): V
 export function validateForServer<T, R>(
   value: T,
   schemas: z.ZodType<T> | z.ZodType<T>[],
-): ServerActionResponse<R> | null {
+): ApiResponse<R> | null {
   const schemaArray = Array.isArray(schemas) ? schemas : [schemas];
 
   for (const schema of schemaArray) {
@@ -103,7 +103,7 @@ export function validateForServer<T, R>(
  */
 export function validateFieldsForServer<R>(
   validations: Array<{ value: unknown; schema: z.ZodType<unknown> }>,
-): ServerActionResponse<R> | null {
+): ApiResponse<R> | null {
   for (const { value, schema } of validations) {
     const error = validateForServer<unknown, R>(value, schema);
     if (error) return error;

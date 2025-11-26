@@ -22,6 +22,7 @@ export * from './constants/onboarding.constants';
 
 // Types
 export type * from './types/onboarding.type';
+export type { CategorySection as OnboardingCategorySection } from './types/onboarding.type';
 
 // Utils
 export { calculateAge, isBirthValid, validate } from './utils/validation.utils';

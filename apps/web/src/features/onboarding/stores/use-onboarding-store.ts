@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
-import { logger } from '@lunasis/shared/utils';
-import { isLocalStorageAvailable } from '@lunasis/shared/utils';
+import { logger } from '@repo/shared/utils';
+import { isLocalStorageAvailable } from '@repo/shared/utils';
 import type { OnboardingState, BirthDateSelection } from '../types/onboarding.type';
 import { Insurance, ProductCategory } from '../constants/onboarding.constants';
 
