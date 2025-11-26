@@ -1,65 +1,111 @@
 'use server';
 
-import { AppError, ErrorCode, ERROR_MESSAGES } from '@lunasis/shared/types';
-import type { ExchangeTokenResult } from '@lunasis/shared/types';
-import {
-  createSuccessResponse,
-  createErrorResponse,
-  createErrorResponseFromAppError,
-} from '@/lib/utils/server-action';
-import { logger } from '@lunasis/shared/utils';
-import { exchangeTokenAPI, logoutAPI } from '@lunasis/shared/api';
+import type { ExchangeResponse } from '@repo/shared/features/auth';
+import { ErrorCode } from '@repo/shared/types';
+
+interface ActionResponse<T = unknown> {
+  success: boolean;
+  data?: T;
+  error?: {
+    code: string;
+    message: string;
+  };
+}
 
 /**
- * Logout user from server
- * @param accessToken - Current access token
- * @param refreshToken - Current refresh token
- * @returns Logout result
+ * Exchange OAuth code for tokens (Server Action)
+ */
+export async function exchangeAuthToken(code: string): Promise<ActionResponse<ExchangeResponse>> {
+  const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080/api';
+  const url = `${API_BASE_URL}/sessions/exchange`;
+
+  const requestBody = { exchangeToken: code };
+
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(requestBody),
+    });
+
+    if (!response.ok) {
+      return {
+        success: false,
+        error: {
+          code: ErrorCode.EXCHANGE_FAILED,
+          message: `HTTP ${response.status}: ${response.statusText}`,
+        },
+      };
+    }
+
+    const data = await response.json();
+
+    if (!data.success) {
+      return {
+        success: false,
+        error: {
+          code: data.error?.code || ErrorCode.EXCHANGE_FAILED,
+          message: data.error?.message || data.message || 'Token exchange failed',
+        },
+      };
+    }
+
+    if (!data.data) {
+      return {
+        success: false,
+        error: {
+          code: ErrorCode.EXCHANGE_FAILED,
+          message: 'No data in response',
+        },
+      };
+    }
+
+    return {
+      success: true,
+      data: data.data,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      error: {
+        code: ErrorCode.EXCHANGE_FAILED,
+        message: error instanceof Error ? error.message : 'Token exchange failed',
+      },
+    };
+  }
+}
+
+/**
+ * Logout (Server Action)
  */
 export async function logoutUser(
   accessToken: string | null,
   refreshToken: string | null,
 ): Promise<{ success: boolean; error?: string }> {
-  try {
-    // Early return: No tokens
-    if (!accessToken && !refreshToken) {
-      return { success: true };
-    }
+  if (!accessToken && !refreshToken) {
+    return { success: true };
+  }
 
-    await logoutAPI(accessToken, refreshToken);
+  const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080/api';
+  const url = `${API_BASE_URL}/sessions`;
+
+  try {
+    await fetch(url, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        ...(accessToken && { Authorization: `Bearer ${accessToken}` }),
+      },
+      body: JSON.stringify({ refreshToken }),
+    });
 
     return { success: true };
   } catch (error) {
-    logger.error('[Auth] Logout failed:', error instanceof AppError ? error.toJSON() : error);
-    return { success: true, error: 'Server logout failed' };
-  }
-}
-
-/**
- * Exchange OAuth authorization code for access token
- * @param exchangeToken - OAuth authorization code
- * @returns Exchange result (tokens and user information)
- */
-export async function exchangeAuthToken(exchangeToken: string): Promise<ExchangeTokenResult> {
-  try {
-    // Early return: Validation
-    if (!exchangeToken) {
-      throw new AppError(ErrorCode.INVALID_CODE);
-    }
-
-    const data = await exchangeTokenAPI(exchangeToken);
-
-    return createSuccessResponse(data);
-  } catch (error) {
-    // API layer already converted to AppError
-    if (error instanceof AppError) {
-      return createErrorResponseFromAppError(error);
-    }
-
-    // Fallback for unexpected errors
-    return createErrorResponse(
-      ErrorCode.UNKNOWN_ERROR,
-      error instanceof Error ? error.message : ERROR_MESSAGES[ErrorCode.UNKNOWN_ERROR],
-    );
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Logout failed',
+    };
   }
 }

@@ -2,9 +2,9 @@
 
 import { useRouter } from 'next/navigation';
 import { useEffect, useState, ComponentType, ReactNode } from 'react';
-import { useAuthStore } from '@lunasis/shared/stores';
-import { logger } from '@lunasis/shared/utils';
-import { ErrorCode, ERROR_MESSAGES } from '@lunasis/shared/types';
+import { useAuthStore } from '@repo/shared/features/auth';
+import { logger } from '@repo/shared/utils';
+import { ErrorCode, ERROR_MESSAGES } from '@repo/shared/types';
 
 import styles from './with-auth.module.scss';
 
