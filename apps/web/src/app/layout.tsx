@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import { DM_Sans } from 'next/font/google';
-import { Providers } from '@/components/layouts';
+import { Providers } from '@web/components/layouts';
+import { TokenExpirationHandler } from '@web/features/auth/components/token-expiration-handler';
+
 import './globals.scss';
 
 const dmSans = DM_Sans({
@@ -62,7 +64,10 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={dmSans.variable} style={{ backgroundColor: '#f6f6f6' }}>
-        <Providers>{children}</Providers>
+        <Providers>
+          <TokenExpirationHandler />
+          {children}
+        </Providers>
       </body>
     </html>
   );
