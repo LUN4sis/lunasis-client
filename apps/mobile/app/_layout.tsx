@@ -7,6 +7,7 @@ import 'react-native-reanimated';
 
 import { useColorScheme } from '@/components/useColorScheme';
 import { useAuthStore } from '@/src/stores/use-auth-store';
+import type { AuthState } from '@repo/shared/features/auth/types/store.type';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -49,7 +50,7 @@ function RootLayoutNav() {
   const colorScheme = useColorScheme();
   const segments = useSegments();
   const router = useRouter();
-  const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
+  const isLoggedIn = useAuthStore((state: AuthState) => state.isLoggedIn);
   const [isNavigationReady, setIsNavigationReady] = useState(false);
 
   useEffect(() => {
