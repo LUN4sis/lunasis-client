@@ -2,25 +2,32 @@
 
 import { useRouter } from 'next/navigation';
 import { useMutation } from '@tanstack/react-query';
-import { useAuthStore } from '@lunasis/shared/stores';
-import { logoutUser, exchangeAuthToken } from '../actions/auth.actions';
-import { ROUTES } from '@lunasis/shared/constants';
-import type { ExchangeResponse } from '@lunasis/shared/types';
-import { AppError, ErrorCode, ERROR_MESSAGES } from '@lunasis/shared/types';
+
+import { useAuthStore } from '@repo/shared/features/auth';
+import { exchangeAuthToken } from '../actions/auth.actions';
+import { logoutManager } from '../utils';
+
+import { ROUTES } from '@repo/shared/constants';
+import { logger } from '@repo/shared/utils';
+import { AppError, ErrorCode, ERROR_MESSAGES } from '@repo/shared/types';
+import type { ExchangeResponse } from '@repo/shared/features/auth/types';
 
 const STATE_UPDATE_DELAY = 200;
 
 /**
  * Hook for handling user logout with React Query
+ *
+ * Uses LogoutManager for consistent logout behavior
  */
 export function useLogout() {
   const router = useRouter();
-  const { accessToken, refreshToken, clearAuth } = useAuthStore();
+  const { accessToken, refreshToken } = useAuthStore();
 
   const logoutMutation = useMutation({
-    mutationFn: () => logoutUser(accessToken, refreshToken),
+    mutationFn: async () => {
+      await logoutManager.completeLogout(accessToken, refreshToken);
+    },
     onSettled: () => {
-      clearAuth();
       router.push(ROUTES.ROOT);
     },
   });
@@ -33,16 +40,9 @@ export function useLogout() {
 
 /**
  * Synchronous logout for emergency cases (e.g., interceptor)
- * Clears local state immediately and attempts server logout in background
  */
 export function logoutSync() {
-  const { accessToken, refreshToken, clearAuth } = useAuthStore.getState();
-
-  if (accessToken || refreshToken) {
-    logoutUser(accessToken, refreshToken).catch(() => {});
-  }
-
-  clearAuth();
+  logoutManager.logoutSync();
 }
 
 /**
@@ -58,7 +58,7 @@ export function useLogin() {
 
       // Validate result
       if (!result.success || !result.data) {
-        const errorCode = result.error?.code || ErrorCode.EXCHANGE_FAILED;
+        const errorCode = (result.error?.code as ErrorCode) || ErrorCode.EXCHANGE_FAILED;
         const errorMessage = result.error?.message || ERROR_MESSAGES[errorCode];
         throw new AppError(errorCode, errorMessage);
       }
@@ -77,17 +77,18 @@ export function useLogin() {
         privateChat: data.privateChat,
       });
 
+      // wait for Zustand persist to complete
       await new Promise((resolve) => setTimeout(resolve, STATE_UPDATE_DELAY));
 
+      // redirect
       const redirectPath = data.firstLogin ? ROUTES.ONBOARDING_NAME : ROUTES.ROOT;
       router.replace(redirectPath);
     },
     onError: (error: unknown) => {
-      // Log error for debugging
       if (error instanceof AppError) {
-        console.error('[Auth] Login failed:', error.toJSON());
+        logger.error('[Auth] Login failed:', error.toJSON());
       } else {
-        console.error('[Auth] Login failed:', error);
+        logger.error('[Auth] Login failed:', error);
       }
     },
   });

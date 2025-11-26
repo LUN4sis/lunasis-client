@@ -1,7 +1,7 @@
 'use client';
 
-import { ROUTES } from '@lunasis/shared/constants';
-import { Button } from '@/components/ui/button';
+import { ROUTES } from '@repo/shared/constants';
+import { Button } from '@web/components/ui/button';
 import Image from 'next/image';
 import styles from './login-button.module.scss';
 

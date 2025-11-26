@@ -1,4 +1,4 @@
-import { ErrorCode } from '@lunasis/shared/types';
+import { ErrorCode } from '@repo/shared/types';
 
 export const TOKEN_EXPIRATION = {
   /** Access token expiration in milliseconds (24 hours) */
@@ -7,6 +7,8 @@ export const TOKEN_EXPIRATION = {
   REFRESH_TOKEN_MS: 720 * 60 * 60 * 1000,
   /** Buffer time before expiration to trigger early refresh (5 minutes) */
   REFRESH_BUFFER_MS: 5 * 60 * 1000,
+  /** Default check interval in milliseconds (1 minute) */
+  DEFAULT_CHECK_INTERVAL_MS: 1 * 60 * 1000,
 } as const;
 
 export const AUTH_ERROR_CODES: readonly ErrorCode[] = [

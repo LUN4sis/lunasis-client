@@ -1,10 +1,10 @@
 'use client';
 
-import { useEffect, useState, Suspense } from 'react';
+import { useEffect, useState, Suspense, useRef } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useLogin } from '@/features/auth';
-import { ErrorCode, ERROR_MESSAGES } from '@lunasis/shared/types';
-import { ROUTES } from '@lunasis/shared/constants';
+import { useLogin } from '@web/features/auth';
+import { ErrorCode, ERROR_MESSAGES } from '@repo/shared/types';
+import { ROUTES } from '@repo/shared/constants';
 
 import styles from './callback.module.scss';
 
@@ -16,7 +16,12 @@ function CallbackContent() {
   const { login, isError } = useLogin();
   const [error, setError] = useState<string | null>(null);
 
+  // prevent double login
+  const hasCalledLogin = useRef(false);
+
   useEffect(() => {
+    if (hasCalledLogin.current) return;
+
     const code = params.get('code');
 
     if (!code) {
@@ -25,7 +30,10 @@ function CallbackContent() {
       return;
     }
 
+    hasCalledLogin.current = true;
+
     login(code);
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

@@ -1,17 +1,19 @@
 'use client';
 
 import { useEffect, useRef, useCallback } from 'react';
-import { useAuthStore } from '@lunasis/shared/stores';
-import { logoutSync } from './use-auth';
+import { useAuthStore } from '../stores/use-auth-store';
 import { shouldAutoLogout, getNextExpirationCheckDelay } from '../utils/token-manager';
-import { logger } from '@lunasis/shared/utils';
+import { logger } from '@repo/shared/utils';
 
-// monitor token expiration and auto-logout when necessary
-export function useTokenExpiration() {
+/**
+ * Monitor token expiration and auto-logout
+ *
+ * @param onLogout - callback function to perform logout
+ */
+export function useTokenExpiration(onLogout: () => void) {
   const { accessTokenIssuedAt, refreshTokenIssuedAt, isLoggedIn } = useAuthStore();
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // check token status and perform auto-logout if needed
   const checkAndHandleExpiration = useCallback(() => {
     // early return: user not logged in
     if (!isLoggedIn) {
@@ -24,19 +26,12 @@ export function useTokenExpiration() {
 
     if (shouldLogout) {
       logger.warn('[TokenExpiration] Refresh token expired, performing auto-logout');
-
-      // perform synchronous logout
-      logoutSync();
-
+      onLogout?.();
       return;
     }
 
-    logger.log('[TokenExpiration] Tokens valid:', {
-      accessTokenIssuedAt,
-      refreshTokenIssuedAt,
-      isLoggedIn,
-    });
-  }, [accessTokenIssuedAt, refreshTokenIssuedAt, isLoggedIn]);
+    logger.log('[TokenExpiration] Tokens valid');
+  }, [accessTokenIssuedAt, refreshTokenIssuedAt, isLoggedIn, onLogout]);
 
   // schedule next expiration check
   const scheduleNextCheck = useCallback(() => {
@@ -50,7 +45,7 @@ export function useTokenExpiration() {
       return;
     }
 
-    // Calculate delay for next check
+    // calculate delay for next check
     const delay = getNextExpirationCheckDelay(accessTokenIssuedAt, refreshTokenIssuedAt);
 
     logger.log('[TokenExpiration] Scheduling next check in:', {
@@ -67,13 +62,9 @@ export function useTokenExpiration() {
 
   // initialize and cleanup
   useEffect(() => {
-    // perform initial check
     checkAndHandleExpiration();
-
-    // schedule periodic checks
     scheduleNextCheck();
 
-    // cleanup on unmount
     return () => {
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);

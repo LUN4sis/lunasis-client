@@ -109,7 +109,7 @@ export function getNextExpirationCheckDelay(
   accessTokenIssuedAt: number | null,
   refreshTokenIssuedAt: number | null,
 ): number {
-  const DEFAULT_CHECK_INTERVAL = 60 * 1000; // 1 minute default
+  const DEFAULT_CHECK_INTERVAL = TOKEN_EXPIRATION.DEFAULT_CHECK_INTERVAL_MS;
 
   if (accessTokenIssuedAt === null && refreshTokenIssuedAt === null) {
     return DEFAULT_CHECK_INTERVAL;
