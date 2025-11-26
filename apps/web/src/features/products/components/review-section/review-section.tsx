@@ -2,13 +2,13 @@
 
 import Image from 'next/image';
 
-import { handleApiError } from '@lunasis/shared/utils';
+import { handleApiError } from '@repo/shared/utils';
 import { useReviews } from '@products/hooks/use-reviews';
 import { ReviewSectionSkeleton } from '@products/components/skeletons/product-skeletons';
 import { COMMON_IMAGE_PROPS } from '@products/constants/image.constants';
 import { useImageError } from '@products/hooks/use-image-error';
 
-import type { Review } from '@products/types/review.type';
+import type { Review, GetReviewsResponse } from '@products/types/review.type';
 import styles from './review-section.module.scss';
 
 interface ReviewSectionProps {
@@ -87,7 +87,7 @@ export const ReviewSection = ({ productId }: ReviewSectionProps) => {
   }
 
   const allReviews: Review[] = (data?.pages ?? [])
-    .flatMap((page) => (Array.isArray(page.reviews) ? page.reviews : []))
+    .flatMap((page: GetReviewsResponse) => (Array.isArray(page.reviews) ? page.reviews : []))
     .filter((r): r is Review => Boolean(r));
 
   if (allReviews.length === 0) {

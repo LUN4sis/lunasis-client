@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { ProductCategory } from '@lunasis/shared/types';
+import { ProductCategory, Product } from '@repo/shared/types';
 import { useProductData, useProductsByCategory } from './use-products';
 import { generateProductSlug } from '../utils/slug.utils';
 
@@ -25,7 +25,7 @@ export function useFullProductData(productId: string, slug: string, category: Pr
     // Fallback to finding product in list by ID or slug
     return (
       productsList?.find(
-        (p) => p.productId === productId || generateProductSlug(p.name) === slug,
+        (p: Product) => p.productId === productId || generateProductSlug(p.name) === slug,
       ) || cachedProduct
     );
   }, [cachedProduct, productsList, productId, slug]);

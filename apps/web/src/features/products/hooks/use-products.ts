@@ -1,14 +1,16 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { getProductsAPI, getProductDetailAPI, getProductBundleAPI } from '../api/products.api';
-import { ProductCategory } from '@lunasis/shared/types';
+import { ProductCategory } from '@repo/shared/types';
 
 import type {
   Product,
   GetProductsParams,
   GetProductDetailParams,
   GetProductBundleParams,
-} from '@lunasis/shared/types';
-import { logger } from '@lunasis/shared/utils';
+} from '@repo/shared/types';
+import { logger } from '@repo/shared/utils';
+import { isAppError } from '@repo/shared/types';
+import { isAuthError } from '@repo/shared/features/auth/constants/auth.constants';
 
 export const productKeys = {
   all: ['products'] as const,
@@ -35,7 +37,11 @@ export function useProducts(params: GetProductsParams) {
         const response = await getProductsAPI(params);
         return response;
       } catch (error) {
-        logger.error('[useProducts] Error fetching products:', error);
+        if (isAppError(error) && isAuthError(error.code)) {
+          logger.log('[useProducts] Auth error handled silently');
+        } else {
+          logger.error('[useProducts] Error fetching products:', error);
+        }
         throw error;
       }
     },

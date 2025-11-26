@@ -1,13 +1,13 @@
 import { memo, useState } from 'react';
 
-import { useIsDesktop } from '@/lib/hooks';
-import { Badge } from '@/components/ui/badge';
-import { Rating } from '@/components/ui/rating';
+import { useIsDesktop } from '@web/lib/hooks';
+import { Badge } from '@web/components/ui/badge';
+import { Rating } from '@web/components/ui/rating';
 
 import { ProductImage } from '@products/components/product-image';
 import { formatPrice } from '@products/utils';
 
-import type { Product } from '@lunasis/shared/types';
+import type { Product } from '@repo/shared/types';
 import styles from './product-card.module.scss';
 
 export interface ProductCardProps {
@@ -57,7 +57,7 @@ export const ProductCard = memo(({ product, rank, onClick, className }: ProductC
         {product.badges && product.badges.length > 0 && (
           <div className={styles.badges}>
             {(isDesktop && showAllBadges ? product.badges : product.badges.slice(0, 2)).map(
-              (badge, index) => (
+              (badge: string, index: number) => (
                 <Badge
                   key={index}
                   text={badge}

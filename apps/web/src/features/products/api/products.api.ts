@@ -1,4 +1,4 @@
-import { apiClient } from '@/lib/api/api-client';
+import { apiClient } from '@web/api/api';
 import type {
   GetProductsParams,
   GetProductsResponse,
@@ -6,9 +6,9 @@ import type {
   GetProductDetailResponse,
   GetProductBundleParams,
   GetProductBundleResponse,
-} from '@lunasis/shared/types';
-import { ErrorCode } from '@lunasis/shared/types';
-import { handleApiError } from '@lunasis/shared/utils';
+} from '@repo/shared/types';
+import { ErrorCode } from '@repo/shared/types';
+import { handleApiError } from '@repo/shared/utils';
 
 /**
  * get products list by params
@@ -23,7 +23,7 @@ export async function getProductsAPI(params: GetProductsParams): Promise<GetProd
 
   try {
     const response = await apiClient.get<GetProductsResponse>(url);
-    return response.data;
+    return response;
   } catch (error) {
     throw handleApiError(error, ErrorCode.INTERNAL_SERVER_ERROR);
   }
@@ -39,7 +39,7 @@ export async function getProductDetailAPI(
 
   try {
     const response = await apiClient.get<GetProductDetailResponse>(`/products/${productId}`);
-    return response.data;
+    return response;
   } catch (error) {
     throw handleApiError(error, ErrorCode.NOT_FOUND);
   }
@@ -57,7 +57,7 @@ export async function getProductBundleAPI(
 
   try {
     const response = await apiClient.get<GetProductBundleResponse>(url);
-    return response.data;
+    return response;
   } catch (error) {
     throw handleApiError(error, ErrorCode.NOT_FOUND);
   }

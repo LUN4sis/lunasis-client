@@ -1,4 +1,4 @@
-import { DEFAULT_BLUR_DATA_URL, RESPONSIVE_IMAGE_SIZES } from '@/lib/constants';
+import { DEFAULT_BLUR_DATA_URL, RESPONSIVE_IMAGE_SIZES } from '@web/lib/constants';
 
 /**
  * Common image props for Next.js Image component
