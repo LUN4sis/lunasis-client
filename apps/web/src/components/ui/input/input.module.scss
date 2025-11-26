@@ -12,6 +12,18 @@
     width: 100%;
   }
 
+  &__full-height {
+    height: 100%;
+
+    .input__wrapper {
+      height: 100%;
+    }
+
+    .input__field {
+      height: 100%;
+    }
+  }
+
   &__label {
     font-family: typography.$font-family-sans;
     font-size: typography.$font-size-base;

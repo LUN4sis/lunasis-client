@@ -4,14 +4,14 @@ import { usePathname, useRouter, useSelectedLayoutSegments } from 'next/navigati
 import Image from 'next/image';
 import clsx from 'clsx';
 
-import { ROUTES, NAVIGATION_SEGMENTS } from '@lunasis/shared/constants';
-import { Button } from '@/components/ui/button';
-import { routeUtils } from '@/lib/utils';
+import { ROUTES, NAVIGATION_SEGMENTS } from '@repo/shared/constants';
+import { Button } from '@web/components/ui/button';
+import { routeUtils } from '@web/lib/utils';
 
-import ChatIcon from '@/assets/icons/chat.svg';
-import CalendarIcon from '@/assets/icons/calendar.svg';
-import ProductIcon from '@/assets/icons/keyframes.svg';
-import ProfileIcon from '@/assets/icons/profile.svg';
+import ChatIcon from '@web/assets/icons/chat.svg';
+import CalendarIcon from '@web/assets/icons/calendar.svg';
+import ProductIcon from '@web/assets/icons/keyframes.svg';
+import ProfileIcon from '@web/assets/icons/profile.svg';
 
 import type { NavItem, NavItemConfig } from './types';
 import styles from './bottom-navigation.module.scss';
