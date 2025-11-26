@@ -2,19 +2,21 @@
 
 import { useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import { withAuth } from '@/features/auth';
+import { withAuth } from '@web/features/auth';
 
-import { Title } from '@/features/onboarding/components/title';
-import { Select } from '@/components/ui/select';
-import { Button } from '@/components/ui/button';
-import { toast } from '@/components/ui/toast';
-import { ROUTES } from '@lunasis/shared/constants';
+import { Title } from '@web/features/onboarding';
+import { Select } from '@web/components/ui/select';
+import { Button } from '@web/components/ui/button';
+import { toast } from '@web/components/ui/toast';
+import { ROUTES } from '@repo/shared/constants';
 
-import { useOnboardingStore } from '@/features/onboarding/stores/use-onboarding-store';
-import { useOnboardingNavigationGuard } from '@/features/onboarding/hooks/use-onboarding-navigation';
-import { useBirthdateValidation } from '@/features/onboarding/hooks/use-birthdate-validation';
-import type { BirthDateSelection } from '@/features/onboarding/types/onboarding.type';
-import { logger } from '@lunasis/shared/utils';
+import {
+  useOnboardingNavigationGuard,
+  useBirthdateValidation,
+  useOnboardingStore,
+} from '@web/features/onboarding';
+import type { BirthDateSelection } from '@web/features/onboarding';
+import { logger } from '@repo/shared/utils';
 
 import styles from '../onboarding.module.scss';
 
