@@ -19,7 +19,7 @@
     "clean": "rm -rf .next .turbo node_modules"
   },
   "dependencies": {
-    "@lunasis/shared": "workspace:*",
+    "@repo/shared": "workspace:*",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
     "@mui/icons-material": "^7.3.4",
@@ -80,7 +80,10 @@
       "<rootDir>/jest.setup.ts"
     ],
     "moduleNameMapper": {
-      "^@/(.*)$": "<rootDir>/src/$1",
+      "^@web/(.*)$": "<rootDir>/src/$1",
+      "^@repo/shared/features/(.*)$": "<rootDir>/../../packages/shared/src/features/$1",
+      "^@repo/shared/(.*)$": "<rootDir>/../../packages/shared/src/$1/index.ts",
+      "^@repo/shared$": "<rootDir>/../../packages/shared/src/index.ts",
       "^.+\\.(css|scss|sass)$": "identity-obj-proxy"
     },
     "testPathIgnorePatterns": [
