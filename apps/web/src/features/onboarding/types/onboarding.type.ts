@@ -1,5 +1,5 @@
 import { Insurance, ProductCategory } from '../constants/onboarding.constants';
-import { ButtonColorScheme } from '@/components/ui/button/types';
+import { ButtonColorScheme } from '@web/components/ui/button/types';
 
 export interface BirthDateSelection {
   year: string;

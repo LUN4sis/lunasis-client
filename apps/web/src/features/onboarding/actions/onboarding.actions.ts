@@ -2,12 +2,15 @@
 
 import { checkNicknameAPI, registerUserAPI } from '../api/onboarding.api';
 import { SubmitRequest, SubmitResponse } from '../types/onboarding.type';
-import { createSuccessResponse, createErrorResponseFromUnknown } from '@/lib/utils/server-action';
-import { ServerActionResponse } from '@/features/auth';
+import {
+  createSuccessResponse,
+  createErrorResponseFromUnknown,
+} from '@web/lib/utils/server-action';
+import { ApiResponse } from '@repo/shared/types';
 import { nicknameSchema, ageSchema } from '../schemas/validation.schemas';
 import { validateForServer, validateFieldsForServer } from '../utils/validation.utils';
 
-export async function checkNickname(nickname: string): Promise<ServerActionResponse<{ ok: true }>> {
+export async function checkNickname(nickname: string): Promise<ApiResponse<{ ok: true }>> {
   try {
     const validationError = validateForServer<string, { ok: true }>(nickname, nicknameSchema);
     if (validationError) return validationError;
@@ -24,9 +27,7 @@ export async function checkNickname(nickname: string): Promise<ServerActionRespo
  * @param data data to register user
  * @returns success or failure and registered user data
  */
-export async function registerUser(
-  data: SubmitRequest,
-): Promise<ServerActionResponse<SubmitResponse>> {
+export async function registerUser(data: SubmitRequest): Promise<ApiResponse<SubmitResponse>> {
   try {
     // validation for required fields (nickname, age only)
     const requiredFieldsError = validateFieldsForServer<SubmitResponse>([

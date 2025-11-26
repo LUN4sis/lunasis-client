@@ -1,7 +1,7 @@
-import styles from '@/app/onboarding/onboarding.module.scss';
-import type { CategorySection } from '@/features/onboarding/types/onboarding.type';
+import type { OnboardingCategorySection } from '@web/features/onboarding';
+import styles from '@web/app/onboarding/onboarding.module.scss';
 
-export function CategorySection({ label, children, className }: CategorySection) {
+export function CategorySection({ label, children, className }: OnboardingCategorySection) {
   return (
     <section className={`${styles.category} ${className || ''}`}>
       <h3 className={styles.label}>{label}</h3>
