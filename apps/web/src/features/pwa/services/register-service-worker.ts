@@ -1,4 +1,4 @@
-import { logger } from '@lunasis/shared/utils';
+import { logger } from '@repo/shared/utils';
 
 /**
  * Register service worker for PWA functionality
