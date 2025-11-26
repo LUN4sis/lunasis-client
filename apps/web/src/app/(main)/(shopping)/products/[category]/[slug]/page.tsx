@@ -3,11 +3,12 @@
 import { useState, useCallback, useMemo } from 'react';
 import { useRouter, useParams, useSearchParams } from 'next/navigation';
 
-import { ROUTES } from '@lunasis/shared/constants';
-import { ProductCategory } from '@lunasis/shared/types';
-import { handleApiError } from '@lunasis/shared/utils';
-import { dynamicWithSkeleton } from '@/lib/utils';
-import { RatingSkeleton, TabSkeleton, ProductImageSkeleton } from '@/components/ui/skeleton';
+import { ROUTES } from '@repo/shared/constants';
+import { ProductCategory } from '@repo/shared/types';
+import { handleApiError } from '@repo/shared/utils';
+import { dynamicWithSkeleton } from '@web/lib/utils';
+import { RatingSkeleton, ProductImageSkeleton } from '@web/components/ui/skeleton';
+import { Tab } from '@web/components/ui/tab';
 
 import { Header } from '@products/components/header';
 import {
@@ -16,24 +17,19 @@ import {
   BadgeList,
   PriceSection,
   ReviewSection,
-} from '@products';
+} from '@web/features/products';
 
 import styles from './products.module.scss';
 
 // dynamic import with skeleton
 const ProductImage = dynamicWithSkeleton(
-  () => import('@/features/products').then((mod) => ({ default: mod.ProductImage })),
+  () => import('@web/features/products').then((mod) => ({ default: mod.ProductImage })),
   () => <ProductImageSkeleton />,
 );
 
 const Rating = dynamicWithSkeleton(
-  () => import('@/components/ui/rating').then((mod) => ({ default: mod.Rating })),
+  () => import('@web/components/ui/rating').then((mod) => ({ default: mod.Rating })),
   () => <RatingSkeleton />,
-);
-
-const Tab = dynamicWithSkeleton(
-  () => import('@/components/ui/tab').then((mod) => ({ default: mod.Tab })),
-  () => <TabSkeleton />,
 );
 
 function ProductDetailPage() {
