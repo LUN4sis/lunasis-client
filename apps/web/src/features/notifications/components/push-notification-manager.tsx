@@ -2,14 +2,14 @@
 
 import { useEffect, useState } from 'react';
 import { subscribeUser, unsubscribeUser, sendNotification } from '../actions/notifications.actions';
-import { NOTIFICATION_CONFIG, MESSAGES } from '@lunasis/shared/constants';
-import { logger } from '@lunasis/shared/utils';
+import { NOTIFICATION_CONFIG, MESSAGES } from '@repo/shared/constants';
+import { logger } from '@repo/shared/utils';
 import {
   isIOS,
   isStandalone,
   isPushNotificationSupported,
   urlBase64ToUint8Array,
-} from '@/features/pwa/utils/pwa.utils';
+} from '@web/features/pwa/utils/pwa.utils';
 
 function PushNotificationManager() {
   const [mounted, setMounted] = useState(false);
@@ -39,7 +39,7 @@ function PushNotificationManager() {
   async function initializePushNotification() {
     try {
       const { registerServiceWorker } = await import(
-        '@/features/pwa/services/register-service-worker'
+        '@web/features/pwa/services/register-service-worker'
       );
       const registration = await registerServiceWorker();
       if (registration) {
