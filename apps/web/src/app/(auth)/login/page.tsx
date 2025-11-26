@@ -1,6 +1,6 @@
 'use client';
 
-import { LoginButton } from '@/features/auth/components/login-button';
+import { LoginButton } from '@web/features/auth/components/login-button';
 import Image from 'next/image';
 import styles from './login.module.scss';
 
