@@ -3,10 +3,10 @@
 import { useMemo, useCallback } from 'react';
 import { useRouter, useParams, useSearchParams } from 'next/navigation';
 
-import { ProductCategory } from '@lunasis/shared/types';
-import { handleApiError } from '@lunasis/shared/utils';
-import { dynamicWithSkeleton } from '@/lib/utils';
-import { ProductImageSkeleton } from '@/components/ui/skeleton';
+import { ProductCategory, ProductPrice } from '@repo/shared/types';
+import { handleApiError } from '@repo/shared/utils';
+import { dynamicWithSkeleton } from '@web/lib/utils';
+import { ProductImageSkeleton } from '@web/components/ui/skeleton';
 
 import { Header } from '@products/components/header';
 import {
@@ -22,7 +22,7 @@ import styles from './bundle.module.scss';
 
 // dynamic import with skeleton
 const ProductImage = dynamicWithSkeleton(
-  () => import('@/features/products').then((mod) => ({ default: mod.ProductImage })),
+  () => import('@web/features/products').then((mod) => ({ default: mod.ProductImage })),
   () => <ProductImageSkeleton />,
 );
 
@@ -69,7 +69,7 @@ function BundlePage() {
   const bundleIdFromParam = useMemo(() => {
     if (!productDetail?.prices) return null;
 
-    const priceOption = productDetail.prices.find((p) => p.count === bundleCount);
+    const priceOption = productDetail.prices.find((p: ProductPrice) => p.count === bundleCount);
 
     return priceOption?.id || null;
   }, [productDetail?.prices, bundleCount]);

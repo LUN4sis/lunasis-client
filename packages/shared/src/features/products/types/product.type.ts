@@ -18,7 +18,7 @@ export enum ProductCategory {
 // ===========================
 
 /**
- * Product 스키마 - API 응답 데이터 검증
+ * validate product data
  */
 export const ProductSchema = z.object({
   productId: z.string(),
@@ -32,7 +32,7 @@ export const ProductSchema = z.object({
 });
 
 /**
- * ProductPrice 스키마
+ * validate product price data
  */
 export const ProductPriceSchema = z.object({
   id: z.string(),
@@ -42,7 +42,7 @@ export const ProductPriceSchema = z.object({
 });
 
 /**
- * ProductDetail 스키마
+ * validate product detail data
  */
 export const ProductDetailSchema = z.object({
   name: z.string(),
@@ -50,7 +50,7 @@ export const ProductDetailSchema = z.object({
 });
 
 /**
- * Mall 스키마
+ * validate mall data
  */
 export const MallSchema = z.object({
   id: z.string(),
@@ -65,22 +65,22 @@ export const MallSchema = z.object({
 // ===========================
 
 /**
- * 제품 정보
+ * product data
  */
 export type Product = z.infer<typeof ProductSchema>;
 
 /**
- * 제품 가격 정보
+ * product price data
  */
 export type ProductPrice = z.infer<typeof ProductPriceSchema>;
 
 /**
- * 제품 상세 정보
+ * product detail data
  */
 export type ProductDetail = z.infer<typeof ProductDetailSchema>;
 
 /**
- * 쇼핑몰 정보
+ * mall data
  */
 export type Mall = z.infer<typeof MallSchema>;
 
@@ -89,21 +89,21 @@ export type Mall = z.infer<typeof MallSchema>;
 // ===========================
 
 /**
- * 제품 목록 조회 파라미터
+ * get products params
  */
 export interface GetProductsParams {
   category: ProductCategory;
 }
 
 /**
- * 제품 상세 조회 파라미터
+ * get product detail params
  */
 export interface GetProductDetailParams {
   productId: string;
 }
 
 /**
- * 제품 번들 조회 파라미터
+ * get product bundle params
  */
 export interface GetProductBundleParams {
   bundleId: string;
@@ -114,17 +114,17 @@ export interface GetProductBundleParams {
 // ===========================
 
 /**
- * 제품 목록 조회 응답
+ * get products response
  */
 export type GetProductsResponse = Product[];
 
 /**
- * 제품 상세 조회 응답
+ * get product detail response
  */
 export type GetProductDetailResponse = ProductDetail;
 
 /**
- * 제품 번들 조회 응답
+ * get product bundle response
  */
 export type GetProductBundleResponse = Mall[];
 
@@ -133,14 +133,14 @@ export type GetProductBundleResponse = Mall[];
 // ===========================
 
 /**
- * 제품 필터
+ * product filters
  */
 export interface ProductFilters {
   category: ProductCategory;
 }
 
 /**
- * 제품 스토어 상태
+ * product store state
  */
 export interface ProductStore {
   filters: ProductFilters;

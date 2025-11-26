@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { FALLBACK_IMAGE_PATH } from '@/lib/constants';
+import { FALLBACK_IMAGE_PATH } from '@web/lib/constants';
 
 /**
  * Custom hook for handling image loading errors with fallback

@@ -4,21 +4,21 @@ import { useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 
-import { ProductCategory } from '@lunasis/shared/types';
-import { PRODUCT_CATEGORIES } from '@lunasis/shared/constants';
+import { ProductCategory } from '@repo/shared/types';
+import { PRODUCT_CATEGORIES } from '@repo/shared/constants';
 
-import { BREAKPOINTS } from '@/lib/constants';
-import { Button } from '@/components/ui/button';
-import { SelectionGroup } from '@/components/ui/selection-group';
+import { BREAKPOINTS } from '@web/lib/constants';
+import { Button } from '@web/components/ui/button';
+import { SelectionGroup } from '@web/components/ui/selection-group';
 import {
   useProductPrefetch,
   useProductsByCategory,
   ProductCard,
   ProductCardSkeleton,
   generateProductSlug,
-} from '@/features/products';
+} from '@web/features/products';
 
-import type { Product } from '@/features/products';
+import type { Product } from '@web/features/products';
 import styles from './ranking.module.scss';
 
 function RankingPage() {
