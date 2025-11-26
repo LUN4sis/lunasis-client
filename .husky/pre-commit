@@ -1,6 +1,3 @@
-#!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
-
 # Exit immediately if a command exits with a non-zero status.
 set -e
 
@@ -19,7 +16,10 @@ echo ""
 
 # 2. Typescript Type Check
 echo "🧩 Checking TypeScript types..."
-npx tsc --noEmit
+# Check each project separately in monorepo
+pnpm --filter web exec tsc --noEmit
+pnpm --filter mobile exec tsc --noEmit
+pnpm --filter @repo/shared exec tsc --noEmit
 echo "${GREEN}✓ TypeScript types are valid${NC}"
 echo ""
 
