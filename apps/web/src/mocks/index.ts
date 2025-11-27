@@ -1,5 +1,5 @@
 import { productsHandlers } from './handlers/products.handlers';
-import { logger } from '@lunasis/shared/utils';
+import { logger } from '@repo/shared/utils';
 
 // combine all handlers
 const handlers = [...productsHandlers];
@@ -7,7 +7,8 @@ const handlers = [...productsHandlers];
 /**
  * MSW initialization function
  * - only works in browser environment
- * - automatically enabled in development environment
+ * - enabled when NEXT_PUBLIC_ENABLE_MSW environment variable is set to 'true'
+ * - can be controlled in both development and production environments
  */
 export const initMocks = async (): Promise<void> => {
   // do not run in SSR environment
@@ -16,12 +17,26 @@ export const initMocks = async (): Promise<void> => {
     return;
   }
 
-  // automatically enabled in development environment, check environment variable in production environment
+  // check environment variable to enable/disable MSW in all environments
   const isDevelopment = process.env.NODE_ENV === 'development';
-  const mswEnabled = process.env.NEXT_PUBLIC_ENABLE_MSW === 'true';
+  const mswEnvValue = process.env.NEXT_PUBLIC_ENABLE_MSW;
+  const mswEnabled = mswEnvValue === 'true';
 
-  if (!isDevelopment && !mswEnabled) {
-    logger.log('[MSW] MSW is disabled in production environment');
+  logger.log('[MSW] Environment check', {
+    isDevelopment,
+    mswEnvValue,
+    mswEnabled,
+    envType: typeof mswEnvValue,
+  });
+
+  if (!mswEnabled) {
+    logger.log('[MSW] MSW is disabled (NEXT_PUBLIC_ENABLE_MSW is not "true")', {
+      isDevelopment,
+      mswEnvValue,
+      mswEnabled,
+      expected: 'true',
+      actual: mswEnvValue,
+    });
     return;
   }
 
