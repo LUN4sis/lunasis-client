@@ -1,0 +1,159 @@
+@use '@/styles' as *;
+
+.postCard {
+  @include flex-column;
+  width: 100%;
+  gap: $spacing-1;
+  cursor: pointer;
+
+  &:hover {
+    background-color: $gray-100;
+    transition: background-color 0.2s ease;
+    border-radius: $radius-lg;
+
+    h3 {
+      color: $red;
+      transition: color 0.2s ease;
+    }
+  }
+
+  h3 {
+    font-size: $font-size-2xl;
+    font-weight: $font-weight-bold;
+    line-height: normal;
+    text-align: left;
+    caret-color: transparent;
+  }
+
+  p {
+    font-size: $font-size-xl;
+    font-weight: $font-weight-light;
+    line-height: normal;
+    white-space: pre-wrap;
+    word-break: keep-all;
+    overflow-wrap: break-word;
+    caret-color: transparent;
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    line-clamp: 2;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+}
+
+.footer {
+  @include flex-between;
+  width: 100%;
+  caret-color: transparent;
+
+  .info {
+    @include flex(row, center, center);
+    gap: $spacing-1;
+
+    .comment {
+      @include flex-center;
+      gap: 0.2rem;
+      color: $red;
+
+      > span {
+        font-size: $font-size-lg;
+        font-weight: $font-weight-regular;
+      }
+
+      > svg {
+        @include size(0.8rem);
+      }
+    }
+
+    .date {
+      @include flex;
+      > span {
+        font-size: $font-size-lg;
+      }
+    }
+
+    .author {
+      @include flex-center;
+      gap: 0.1rem;
+
+      > img {
+        @include circle(1.2rem);
+        overflow: hidden;
+      }
+
+      > span {
+        font-size: $font-size-lg;
+      }
+    }
+
+    .separator {
+      color: $gray-400;
+      font-size: $font-size-xl;
+      font-weight: $font-weight-regular;
+      line-height: normal;
+      text-align: center;
+      line-height: 1;
+    }
+  }
+
+  .bookmark {
+    @include flex;
+    > button {
+      @include flex;
+      padding: 0;
+
+      .bookmarkIcon {
+        @include size(1.5rem);
+        color: $red;
+      }
+    }
+  }
+}
+
+@include respond(mobile) {
+  .postCard {
+    gap: 0;
+
+    h3 {
+      font-size: $font-size-xl;
+    }
+
+    p {
+      font-size: $font-size-lg;
+    }
+  }
+
+  .footer {
+    .info {
+      .comment {
+        > span {
+          font-size: $font-size-base;
+        }
+      }
+
+      .date {
+        > span {
+          font-size: $font-size-base;
+        }
+      }
+
+      .author {
+        > span {
+          font-size: $font-size-base;
+        }
+      }
+    }
+
+    .bookmark {
+      @include flex-center;
+
+      > button {
+        .bookmarkIcon {
+          @include size(1.1rem);
+        }
+      }
+    }
+  }
+}

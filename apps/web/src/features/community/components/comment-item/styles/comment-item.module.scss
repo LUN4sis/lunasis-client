@@ -1,0 +1,47 @@
+@use '@/styles' as *;
+@use './shared' as *;
+
+// comment item component styles
+.commentItem {
+  width: 100%;
+}
+
+.commentWrapper {
+  margin-bottom: $spacing-1;
+}
+
+// comment
+.comment {
+  @include flex-column;
+  padding: $spacing-3;
+  gap: $spacing-1;
+}
+
+// comment content
+.content {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-regular;
+  line-height: normal;
+  text-align: left;
+  white-space: pre-wrap;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+  caret-color: transparent;
+}
+
+// replies section
+.replies {
+  @include flex(column, start, start);
+  gap: $spacing-3;
+  padding-left: $comment-indent;
+}
+
+@include respond(mobile) {
+  .content {
+    font-size: $font-size-base;
+  }
+
+  .replies {
+    padding-left: $comment-indent-mobile;
+  }
+}

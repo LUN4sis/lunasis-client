@@ -1,0 +1,77 @@
+@use '@/styles' as *;
+
+.section {
+  @include flex-column-center;
+  width: 100%;
+  gap: $spacing-4;
+
+  .list {
+    @include flex-column;
+    width: 100%;
+    gap: $spacing-4;
+  }
+
+  .emptyState {
+    @include flex-column-center;
+    gap: $spacing-2;
+
+    .emptyMessage {
+      text-align: center;
+    }
+  }
+}
+
+.button {
+  @include flex-center;
+  border-radius: $radius-7xl;
+  font-size: $font-size-xl;
+  font-weight: $font-weight-bold;
+  letter-spacing: -0.01rem;
+}
+
+.write {
+  width: 80%;
+  border: 2px solid $red !important;
+  padding: $spacing-2 $spacing-3;
+  color: $red !important;
+}
+
+.more {
+  width: 31%;
+  height: fit-content !important;
+  min-height: fit-content !important;
+  padding: 0.2rem 0 !important;
+  gap: $spacing-0 !important;
+
+  span {
+    text-underline-offset: 0.2rem;
+    text-decoration-line: underline;
+    text-decoration-style: solid;
+  }
+
+  svg {
+    position: relative;
+    top: 0.1rem;
+    left: 0.3rem;
+    font-size: $font-size-lg;
+    line-height: 1;
+    font-weight: $font-weight-bold;
+    color: $black;
+  }
+}
+
+@include respond(mobile) {
+  .section {
+    .list {
+      gap: $spacing-2;
+    }
+  }
+
+  .write {
+    width: 88%;
+    font-size: $font-size-lg;
+    padding: 0 $spacing-2;
+    border: 1px solid $red !important;
+    min-height: 2rem !important;
+  }
+}

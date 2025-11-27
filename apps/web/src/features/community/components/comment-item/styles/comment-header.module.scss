@@ -1,0 +1,143 @@
+@use '@/styles' as *;
+@use './shared' as *;
+
+// comment header styles
+.header {
+  width: 100%;
+  @include flex-between;
+  caret-color: transparent;
+}
+
+// author section
+.author {
+  @include flex(row, start, center);
+  gap: $spacing-1;
+}
+
+.avatar {
+  @include circle($comment-avatar-size);
+  overflow: hidden;
+
+  img {
+    object-fit: cover;
+    width: 100%;
+  }
+}
+
+.info {
+  @include flex(column, start, start);
+}
+
+.nickname {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-bold;
+  line-height: normal;
+  text-align: left;
+}
+
+.timestamp {
+  @include flex(row, start, center);
+  gap: $spacing-1;
+
+  time {
+    font-size: $font-size-base;
+    font-weight: $font-weight-regular;
+    line-height: normal;
+    text-align: left;
+
+    &.edited {
+      color: $gray-600;
+    }
+  }
+}
+
+// actions section
+.actions {
+  @include flex(row, start, center);
+  height: 1.5rem;
+  background-color: $gray-300;
+  border-radius: $radius-sm;
+  position: relative;
+
+  button {
+    @include flex(center, center);
+    padding: $spacing-1;
+
+    svg {
+      color: $gray-500;
+      @include size(1rem);
+    }
+  }
+}
+
+.separator {
+  color: $gray-500;
+  font-size: $font-size-xl;
+  font-weight: $font-weight-regular;
+  line-height: normal;
+  text-align: center;
+}
+
+// menu dropdown
+.menuWrapper {
+  position: relative;
+}
+
+.menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: $white;
+  border: 1px solid $gray-300;
+  border-radius: $radius-sm;
+  box-shadow: $box-shadow-md;
+  z-index: 10;
+
+  button {
+    width: 100%;
+    padding: $spacing-1 $spacing-4;
+    font-size: $font-size-base;
+    font-weight: $font-weight-regular;
+    line-height: normal;
+    text-align: left;
+
+    &:hover {
+      background-color: $gray-100;
+    }
+  }
+}
+
+@include respond(mobile) {
+  .avatar {
+    @include circle($comment-avatar-size-mobile);
+  }
+
+  .nickname {
+    font-size: $font-size-base;
+  }
+
+  .timestamp time {
+    font-size: $font-size-sm;
+  }
+
+  .actions {
+    height: 1.3rem;
+
+    button {
+      padding: 0.1rem $spacing-1;
+
+      svg {
+        @include size(0.8rem);
+      }
+    }
+  }
+
+  .menu {
+    margin-top: -0.5rem;
+    padding: 0 $spacing-1;
+  }
+
+  .separator {
+    font-size: $font-size-base;
+  }
+}
