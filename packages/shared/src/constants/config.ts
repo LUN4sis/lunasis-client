@@ -1,7 +1,5 @@
 export const API_CONFIG = {
   timeout: 30000, // 30 seconds
-  retryAttempts: 3,
-  retryDelay: 1000,
 } as const;
 
 export const NOTIFICATION_CONFIG = {
