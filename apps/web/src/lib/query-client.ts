@@ -1,19 +1,15 @@
 import { QueryClient } from '@tanstack/react-query';
-import { logger } from '@lunasis/shared/utils';
 
 export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
+      staleTime: 60 * 1000, // 1 minute
+      gcTime: 5 * 60 * 1000, // 5 minutes
       retry: 1,
       refetchOnWindowFocus: false,
-      staleTime: 1000 * 60 * 5,
     },
     mutations: {
       retry: 0,
-      onError: (error) => {
-        // Global mutation error handler
-        logger.error('[React Query] Mutation error:', error);
-      },
     },
   },
 });
