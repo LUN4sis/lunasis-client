@@ -1,0 +1,144 @@
+@use '@/styles' as *;
+@use './shared' as *;
+
+// shared form patterns
+%form-base {
+  @include flex(column, start, end);
+  gap: $spacing-1;
+}
+
+%textarea-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+%textarea-base {
+  width: 100%;
+  padding: $spacing-2 $spacing-3;
+  border: 1px solid $gray-300;
+  border-radius: $radius-sm;
+  font-size: $font-size-lg;
+  font-weight: $font-weight-regular;
+  line-height: normal;
+  text-align: left;
+  resize: none;
+  min-height: 100px;
+  max-height: 200px;
+  background-color: $white;
+  outline: none;
+  caret-color: transparent;
+
+  // hide scrollbar
+  @include hide-scrollbar;
+}
+
+%char-count {
+  position: absolute;
+  bottom: $spacing-2;
+  right: $spacing-3;
+  font-size: $font-size-sm;
+  color: $gray-500;
+  text-align: right;
+  pointer-events: none;
+}
+
+%actions {
+  @include flex(row, start, center);
+  gap: $spacing-1;
+  width: 100%;
+}
+
+%action-button {
+  min-height: 0 !important;
+  height: auto !important;
+  font-size: $font-size-lg !important;
+  padding: $spacing-2 $spacing-3 !important;
+}
+
+// edit form
+.editForm {
+  @extend %form-base;
+
+  .textareaWrapper {
+    @extend %textarea-wrapper;
+
+    textarea {
+      @extend %textarea-base;
+      padding-bottom: calc($spacing-2 + 1.5rem);
+    }
+
+    .charCount {
+      @extend %char-count;
+    }
+  }
+
+  .actions {
+    @extend %actions;
+
+    .actionButton {
+      @extend %action-button;
+    }
+  }
+}
+
+// reply form
+.replyForm {
+  @include flex(column, center, start);
+  padding-left: $comment-indent;
+
+  .header {
+    @include flex(row, start, center);
+    gap: $spacing-1;
+
+    p {
+      font-size: $font-size-lg;
+      font-weight: $font-weight-bold;
+    }
+  }
+
+  .textareaWrapper {
+    @extend %textarea-wrapper;
+
+    textarea {
+      @extend %textarea-base;
+    }
+
+    .charCount {
+      @extend %char-count;
+    }
+  }
+
+  .actions {
+    @extend %actions;
+
+    .actionButton {
+      @extend %action-button;
+    }
+  }
+}
+
+@include respond(mobile) {
+  .editForm {
+    .textareaWrapper {
+      textarea {
+        font-size: $font-size-base;
+        padding-bottom: calc($spacing-2 + 1.25rem);
+      }
+
+      .charCount {
+        font-size: $font-size-xs;
+        bottom: $spacing-1;
+        right: $spacing-2;
+      }
+    }
+
+    .actions .actionButton {
+      padding: $spacing-1 $spacing-2 !important;
+      font-size: $font-size-base !important;
+    }
+  }
+
+  .replyForm {
+    padding-left: $comment-indent-mobile;
+  }
+}

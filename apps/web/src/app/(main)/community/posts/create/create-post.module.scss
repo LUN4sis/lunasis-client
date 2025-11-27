@@ -1,0 +1,15 @@
+@use '@/styles' as *;
+
+.container {
+  @include full-screen-container;
+  @include hide-scrollbar;
+  @include safe-area-inset(padding, all);
+  @include extend-background-to-status-bar($gray-50);
+  @include flex-column;
+
+  padding: 5% 10%;
+
+  @include respond(mobile) {
+    padding: 10% 5%;
+  }
+}

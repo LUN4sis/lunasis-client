@@ -1,0 +1,22 @@
+@use '@/styles' as *;
+
+.header {
+  @include flex(row, space-between, center);
+  padding: $spacing-2;
+  width: 100%;
+
+  > button {
+    @include size(2rem);
+    flex-shrink: 0 !important;
+  }
+}
+
+.searchButton {
+  @include size(2rem);
+  flex-shrink: 0 !important;
+
+  .searchIcon {
+    @include size(1.5rem);
+    flex-shrink: 0 !important;
+  }
+}
