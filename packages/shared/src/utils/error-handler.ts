@@ -1,6 +1,7 @@
 import axios, { AxiosError } from 'axios';
-import { AppError, ErrorCode, createAppErrorFromServer, ERROR_MESSAGES } from '../types/error.type';
-import { logger } from './logger';
+import { AppError, ErrorCode, createAppErrorFromServer, ERROR_MESSAGES } from '@repo/shared/types';
+import { logger } from '@repo/shared/utils';
+import { isAuthError } from '@repo/shared/features/auth';
 
 /**
  * 모든 에러를 AppError로 변환
@@ -77,6 +78,15 @@ export function handleAndLogError(
   fallbackErrorCode: ErrorCode = ErrorCode.UNKNOWN_ERROR,
 ): AppError {
   const appError = handleApiError(error, fallbackErrorCode);
+
+  // log auth error silently
+  if (isAuthError(appError.code)) {
+    logger.log(`[Error${context ? ` - ${context}` : ''}] Auth error handled silently:`, {
+      code: appError.code,
+      message: appError.message,
+    });
+    return appError;
+  }
 
   // log detailed error in development environment
   if (typeof process !== 'undefined' && process.env?.NODE_ENV === 'development') {

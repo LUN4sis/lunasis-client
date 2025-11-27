@@ -17,7 +17,7 @@ export interface Logger {
  *
  * @example
  * ```typescript
- * import { logger } from '@lunasis/shared/utils';
+ * import { logger } from '@repo/shared/utils';
  *
  * logger.log('일반 로그');
  * logger.info('정보 로그');
