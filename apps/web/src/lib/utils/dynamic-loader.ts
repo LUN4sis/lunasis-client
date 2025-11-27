@@ -7,7 +7,7 @@ import { ComponentType } from 'react';
  * @example
  * ```tsx
  * const ProductImage = dynamicWithSkeleton(
- *   () => import('@/features/products').then(mod => ({ default: mod.ProductImage })),
+ *   () => import('@web/features/products').then(mod => ({ default: mod.ProductImage })),
  *   () => <ProductImageSkeleton />
  * );
  * ```
