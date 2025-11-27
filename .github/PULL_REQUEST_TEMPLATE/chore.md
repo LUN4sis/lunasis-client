@@ -23,8 +23,8 @@ title: 'chore: [short description]'
 
 ## 🧪 Validation
 
-- [ ] `npm run build` passes
-- [ ] `npm run check` (lint + format + test) passes
+- [ ] `pnpm build` passes
+- [ ] `pnpm check` (lint + format + test) passes
 - [ ] Config or script works as expected
 - [ ] No runtime behavior changed
 

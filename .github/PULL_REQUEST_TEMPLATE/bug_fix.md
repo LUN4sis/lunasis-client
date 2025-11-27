@@ -26,8 +26,8 @@ title: 'fix: [short description]'
 
 - [ ] Bug reproduced before fix
 - [ ] Verified fix locally
-- [ ] `npm run build` passes
-- [ ] `npm run check` (lint + format + test) passes
+- [ ] `pnpm build` passes
+- [ ] `pnpm check` (lint + format + test) passes
 - [ ] No new issues introduced
 
 ---

@@ -30,9 +30,9 @@ title: 'feat: [short description]'
 
 ## 🧪 Testing
 
-- [ ] `npm run dev` runs successfully
-- [ ] `npm run build` passes
-- [ ] `npm run check` (lint + format + test) passes
+- [ ] `pnpm dev` runs successfully
+- [ ] `pnpm build` passes
+- [ ] `pnpm check` (lint + format + test) passes
 - [ ] New feature works as expected
 - [ ] No regression in existing features
 
