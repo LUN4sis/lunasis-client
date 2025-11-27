@@ -1,7 +1,8 @@
-import { getApiUrl } from '../api/client';
+import { getApiUrl } from '../api/base.api';
 
 export const ROUTES = {
   ROOT: '/',
+  HOME: '/home',
   LOGIN: '/login',
   OAUTH_CALLBACK: '/oauth/callback',
   get OAUTH_REDIRECT() {
@@ -22,9 +23,15 @@ export const ROUTES = {
 
   // Communication
   CHAT: '/chat',
+
+  // Community
   COMMUNITY: '/community',
-  COMMUNITY_POST: (postId: number) => `/community/${postId}`,
-  COMMUNITY_CREATE: '/community/create',
+  COMMUNITY_CATEGORY: (category: string) => `/community/${category.toLowerCase()}`,
+  COMMUNITY_POST: (postId: string) => `/community/posts/${postId}`,
+  COMMUNITY_CREATE: '/community/posts/create',
+  COMMUNITY_EDIT: (postId: string) => `/community/posts/${postId}/edit`,
+
+  HOSPITAL: '/hospital',
 
   // Profile
   PROFILE: '/profile',
