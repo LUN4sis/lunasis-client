@@ -1,20 +1,24 @@
 import axios, { AxiosError } from 'axios';
-import { apiClient } from '@/lib/api/api-client';
-import { handleApiError } from '@lunasis/shared/utils';
-import { AppError, ErrorCode } from '@lunasis/shared/types';
+import { api } from '@web/api/api';
+import { handleApiError } from '@repo/shared/utils';
+import { ApiResponse, AppError, ErrorCode } from '@repo/shared/types';
 import { SubmitRequest, SubmitResponse } from '../types/onboarding.type';
 
 export async function checkNicknameAPI(nickname: string): Promise<{ ok: true }> {
   try {
-    const res = await apiClient.post('/users/check', { nickname });
-    if (res.status === 200) return { ok: true };
+    const response = await api.post<ApiResponse<{ ok: true }>>('/users/check', { nickname });
 
-    throw handleApiError(res, ErrorCode.UNKNOWN_ERROR);
+    if (response.success && response.data) {
+      return { ok: true };
+    }
+
+    throw handleApiError(response, ErrorCode.UNKNOWN_ERROR);
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
-      const axiosError = error as AxiosError<{ message?: string }>;
+      const axiosError = error as AxiosError<ApiResponse<{ ok: true }>>;
       const status = axiosError.response?.status;
-      const message = axiosError.response?.data?.message;
+      const message =
+        axiosError.response?.data?.message || axiosError.response?.data?.error?.message;
 
       if (status === 404 && message?.includes('중복')) {
         throw new AppError(ErrorCode.VALIDATION_ERROR, 'Nickname already exists', status);
@@ -27,18 +31,19 @@ export async function checkNicknameAPI(nickname: string): Promise<{ ok: true }> 
 
 export async function registerUserAPI(formData: SubmitRequest): Promise<SubmitResponse> {
   try {
-    const response = await apiClient.post('/users', formData);
+    const response = await api.post<ApiResponse<SubmitResponse>>('/users', formData);
 
-    if (response.status === 200 || response.status === 201) {
+    if (response.success && response.data) {
       return response.data;
     }
 
     throw handleApiError(response, ErrorCode.UNKNOWN_ERROR);
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
-      const axiosError = error as AxiosError<{ message?: string }>;
+      const axiosError = error as AxiosError<ApiResponse<SubmitResponse>>;
       const status = axiosError.response?.status;
-      const message = axiosError.response?.data?.message;
+      const message =
+        axiosError.response?.data?.message || axiosError.response?.data?.error?.message;
 
       if (status === 400) {
         throw new AppError(ErrorCode.VALIDATION_ERROR, message || 'Invalid data', status);

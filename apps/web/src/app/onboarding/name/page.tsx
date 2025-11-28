@@ -2,18 +2,17 @@
 
 import { useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import { withAuth } from '@/features/auth';
+import { withAuth } from '@web/features/auth';
 
-import { Title } from '@/features/onboarding/components/title';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { toast } from '@/components/ui/toast';
-import { ROUTES } from '@lunasis/shared/constants';
+import { Title } from '@web/features/onboarding';
+import { Input } from '@web/components/ui/input';
+import { Button } from '@web/components/ui/button';
+import { toast } from '@web/components/ui/toast';
+import { ROUTES } from '@repo/shared/constants';
 
-import { useAuthStore } from '@/features/auth';
-import { useNicknameValidation } from '@/features/onboarding/hooks/use-onboarding-validation';
-import { useOnboardingStore } from '@/features/onboarding/stores/use-onboarding-store';
-import { logger } from '@lunasis/shared/utils';
+import { useAuthStore } from '@repo/shared/features/auth';
+import { useNicknameValidation, useOnboardingStore } from '@web/features/onboarding';
+import { logger } from '@repo/shared/utils';
 
 import styles from '../onboarding.module.scss';
 

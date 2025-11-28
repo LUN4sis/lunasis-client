@@ -14,19 +14,21 @@ echo ""
 
 # 1. TypeScript Type Check
 echo "🧩 Checking TypeScript types..."
-npx tsc --noEmit --skipLibCheck
+pnpm --filter web exec tsc --noEmit
+pnpm --filter mobile exec tsc --noEmit
+pnpm --filter @repo/shared exec tsc --noEmit
 echo "${GREEN}✓ TypeScript check passed${NC}"
 echo ""
 
 # 2. Test
 echo "🧪 Running full test suite..."
-npx jest --coverage --passWithNoTests
+pnpm --filter web exec jest --coverage --passWithNoTests
 echo "${GREEN}✓ All tests passed${NC}"
 echo ""
 
 # 3. Build
 echo "🏗️ Building project for verification..."
-npx next build
+pnpm --filter web exec next build
 echo "${GREEN}✓ Build successful${NC}"
 echo ""
 

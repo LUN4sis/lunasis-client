@@ -1,7 +1,7 @@
 'use server';
 
 import webpush from 'web-push';
-import { logger } from '@lunasis/shared/utils';
+import { logger } from '@repo/shared/utils';
 
 // Initialize VAPID details only if environment variables are set
 const vapidPublicKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY;

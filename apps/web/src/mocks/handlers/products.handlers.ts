@@ -1,5 +1,5 @@
 import { http, HttpResponse } from 'msw';
-import { ProductCategory } from '@lunasis/shared/types';
+import { ProductCategory } from '@repo/shared/types';
 import { mockProductsByCategory } from '../data/products.data';
 import { generateProductDetail, generateReviews, generateMallList } from '../utils/mock-generators';
 import { Mall, ProductDetail, ReviewResponse, ReviewsPageResponse } from '../types/product.types';

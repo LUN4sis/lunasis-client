@@ -5,7 +5,7 @@ import { formatPrice } from '@products/utils';
 import { useImageError } from '@products/hooks/use-image-error';
 import { COMMON_IMAGE_PROPS } from '@products/constants/image.constants';
 
-import type { Mall } from '@lunasis/shared/types';
+import type { Mall } from '@repo/shared/types';
 import styles from './mall-card.module.scss';
 
 export interface MallCardProps {

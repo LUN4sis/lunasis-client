@@ -1,10 +1,10 @@
-import { ErrorCode, AppError } from '@lunasis/shared/types';
-import type { ServerActionResponse } from '@/features/auth';
+import { ErrorCode, AppError } from '@repo/shared/types';
+import type { ApiResponse } from '@repo/shared/types';
 
 /**
  * Create success response
  */
-export function createSuccessResponse<T>(data: T): ServerActionResponse<T> {
+export function createSuccessResponse<T>(data: T): ApiResponse<T> {
   return {
     success: true,
     data,
@@ -14,10 +14,7 @@ export function createSuccessResponse<T>(data: T): ServerActionResponse<T> {
 /**
  * Create error response
  */
-export function createErrorResponse<T = never>(
-  code: ErrorCode,
-  message: string,
-): ServerActionResponse<T> {
+export function createErrorResponse<T = never>(code: ErrorCode, message: string): ApiResponse<T> {
   return {
     success: false,
     error: {
@@ -30,9 +27,7 @@ export function createErrorResponse<T = never>(
 /**
  * Create error response from AppError
  */
-export function createErrorResponseFromAppError<T = never>(
-  error: AppError,
-): ServerActionResponse<T> {
+export function createErrorResponseFromAppError<T = never>(error: AppError): ApiResponse<T> {
   return {
     success: false,
     error: {
@@ -45,7 +40,7 @@ export function createErrorResponseFromAppError<T = never>(
 /**
  * Create error response from unknown error
  */
-export function createErrorResponseFromUnknown<T = never>(error: unknown): ServerActionResponse<T> {
+export function createErrorResponseFromUnknown<T = never>(error: unknown): ApiResponse<T> {
   if (error instanceof AppError) {
     return createErrorResponseFromAppError(error);
   }

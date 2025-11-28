@@ -2,24 +2,26 @@
 
 import { useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import { withAuth } from '@/features/auth';
+import { withAuth } from '@web/features/auth';
 
-import { Title, CategorySection } from '@/features/onboarding';
-import { Button } from '@/components/ui/button';
-import { toast } from '@/components/ui/toast';
-import { ROUTES } from '@lunasis/shared/constants';
+import { Title, CategorySection } from '@web/features/onboarding';
+import { Button } from '@web/components/ui/button';
+import { toast } from '@web/components/ui/toast';
+import { ROUTES } from '@repo/shared/constants';
 import {
   COMMUNITY_OPTIONS,
   INSURANCE_OPTIONS,
   PRODUCT_OPTIONS,
   Insurance,
   ProductCategory,
-} from '@/features/onboarding/constants/onboarding.constants';
+} from '@web/features/onboarding';
 
-import { useOnboardingStore } from '@/features/onboarding/stores/use-onboarding-store';
-import { useOnboardingNavigationGuard } from '@/features/onboarding/hooks/use-onboarding-navigation';
-import { useOnboardingInterests } from '@/features/onboarding/hooks/use-onboarding-interests';
-import { logger } from '@lunasis/shared/utils';
+import {
+  useOnboardingStore,
+  useOnboardingNavigationGuard,
+  useOnboardingInterests,
+} from '@web/features/onboarding';
+import { logger } from '@repo/shared/utils';
 
 import styles from '../onboarding.module.scss';
 

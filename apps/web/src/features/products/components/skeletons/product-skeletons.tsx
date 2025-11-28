@@ -1,4 +1,4 @@
-import { Skeleton } from '@/components/ui/skeleton';
+import { Skeleton } from '@web/components/ui/skeleton';
 import styles from './product-skeletons.module.scss';
 
 export function ProductCardSkeleton() {

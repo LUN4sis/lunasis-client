@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import { ROUTES } from '@lunasis/shared/constants';
+import { ROUTES } from '@repo/shared/constants';
 
 const protectedPaths = [
   ROUTES.ROOT,

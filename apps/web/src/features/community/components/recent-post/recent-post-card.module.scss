@@ -1,0 +1,82 @@
+@use '@/styles' as *;
+
+.recentPostCard {
+  @include flex-column;
+  gap: $spacing-1;
+  width: 100%;
+  padding: $spacing-3 $spacing-2 $spacing-3 $spacing-4;
+  background: $white;
+  border-radius: $radius-2xl;
+  transition: box-shadow 0.2s ease;
+  cursor: pointer;
+  caret-color: transparent;
+
+  &:hover {
+    box-shadow: $box-shadow-md;
+  }
+
+  .header {
+    @include flex-between;
+    h3 {
+      font-size: $font-size-xl;
+      font-weight: $font-weight-bold;
+      line-height: normal;
+      text-align: left;
+    }
+
+    .author {
+      @include flex(row, start, center);
+      gap: $spacing-1;
+
+      img {
+        @include circle(1.5rem);
+        overflow: hidden;
+        object-fit: cover;
+      }
+
+      span {
+        font-size: $font-size-lg;
+        font-weight: $font-weight-bold;
+        color: $red;
+      }
+    }
+  }
+
+  p {
+    font-size: $font-size-xl;
+    font-weight: $font-weight-regular;
+    line-height: normal;
+    white-space: pre-wrap;
+    caret-color: transparent;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    display: -webkit-box;
+    line-clamp: 3;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+  }
+}
+
+@include respond(mobile) {
+  .recentPostCard {
+    padding: $spacing-2 $spacing-2 $spacing-3 $spacing-4;
+    gap: $spacing-1;
+
+    .header {
+      h3 {
+        font-size: $font-size-lg;
+      }
+
+      .author {
+        span {
+          font-size: $font-size-base;
+        }
+      }
+    }
+
+    p {
+      font-size: $font-size-lg;
+    }
+  }
+}

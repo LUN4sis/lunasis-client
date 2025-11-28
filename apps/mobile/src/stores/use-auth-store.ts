@@ -5,7 +5,11 @@
 
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
-import type { AuthStoreState } from '@lunasis/shared/types';
+import type {
+  AuthState,
+  TokenUpdatePayload,
+  AuthProfile,
+} from '@repo/shared/features/auth/types/store.type';
 import { asyncStorageAdapter } from '@/src/lib/storage-adapter';
 
 /**
@@ -31,7 +35,7 @@ import { asyncStorageAdapter } from '@/src/lib/storage-adapter';
  * }
  * ```
  */
-export const useAuthStore = create<AuthStoreState>()(
+export const useAuthStore = create<AuthState>()(
   persist(
     (set) => ({
       accessToken: null,
@@ -40,39 +44,32 @@ export const useAuthStore = create<AuthStoreState>()(
       refreshTokenIssuedAt: null,
       isLoggedIn: false,
       nickname: null,
-      privateChat: null,
-      firstLogin: null,
+      privateChat: false,
+      firstLogin: false,
 
       /**
        * 토큰 업데이트
        */
-      updateTokens: (tokens) => {
+      updateTokens: (payload: TokenUpdatePayload) => {
         const now = Date.now();
-        set((state) => {
-          const hasNewAccessToken = tokens.accessToken !== undefined;
-          const hasNewRefreshToken = tokens.refreshToken !== undefined;
-
-          return {
-            ...state,
-            accessToken: tokens.accessToken ?? state.accessToken,
-            refreshToken: tokens.refreshToken ?? state.refreshToken,
-            // 새 토큰이 제공된 경우에만 타임스탬프 업데이트
-            accessTokenIssuedAt: hasNewAccessToken ? now : state.accessTokenIssuedAt,
-            refreshTokenIssuedAt: hasNewRefreshToken ? now : state.refreshTokenIssuedAt,
-            isLoggedIn: !!(tokens.accessToken ?? state.accessToken),
-          };
+        set({
+          accessToken: payload.accessToken,
+          refreshToken: payload.refreshToken,
+          accessTokenIssuedAt: payload.accessTokenIssuedAt ?? now,
+          refreshTokenIssuedAt: payload.refreshTokenIssuedAt ?? now,
+          isLoggedIn: true,
         });
       },
 
       /**
        * 프로필 설정
        */
-      setProfile: (profile) => {
-        set((state) => ({
+      setProfile: (profile: AuthProfile) => {
+        set((state: AuthState) => ({
           ...state,
-          nickname: profile.nickname ?? state.nickname,
-          privateChat: profile.privateChat ?? state.privateChat,
-          firstLogin: profile.firstLogin ?? state.firstLogin,
+          nickname: profile.nickname,
+          privateChat: profile.privateChat,
+          firstLogin: profile.firstLogin,
         }));
       },
 
@@ -87,8 +84,8 @@ export const useAuthStore = create<AuthStoreState>()(
           refreshTokenIssuedAt: null,
           isLoggedIn: false,
           nickname: null,
-          privateChat: null,
-          firstLogin: null,
+          privateChat: false,
+          firstLogin: false,
         });
       },
     }),

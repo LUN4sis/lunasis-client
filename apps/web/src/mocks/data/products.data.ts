@@ -1,5 +1,5 @@
 import { Product } from '../types/product.types';
-import { ProductCategory } from '@lunasis/shared/types';
+import { ProductCategory } from '@repo/shared/types';
 
 export const tamponProducts: Product[] = [
   {

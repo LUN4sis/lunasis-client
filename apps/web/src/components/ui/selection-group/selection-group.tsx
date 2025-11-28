@@ -1,7 +1,6 @@
 import { memo } from 'react';
-import { Button } from '@/components/ui/button';
-import type { ButtonColorScheme } from '@/components/ui/button';
-import type { ButtonVariant } from '@/components/ui/button';
+import { Button } from '@web/components/ui/button';
+import type { ButtonColorScheme, ButtonVariant } from '@web/components/ui/button';
 
 import clsx from 'clsx';
 import styles from './selection-group.module.scss';

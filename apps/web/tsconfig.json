@@ -19,19 +19,29 @@
     "noImplicitReturns": true,
     "forceConsistentCasingInFileNames": true,
     "types": ["node"],
+    "baseUrl": ".",
     "plugins": [
       {
         "name": "next"
       }
     ],
     "paths": {
-      "@/*": ["./src/*"],
-      "@products": ["./src/features/products"],
+      "@web/*": ["./src/*"],
+      "@products": ["./src/features/products/index.ts"],
       "@products/*": ["./src/features/products/*"],
-      "@lunasis/shared": ["../../packages/shared/src"],
-      "@lunasis/shared/*": ["../../packages/shared/src/*"]
+      "@community": ["./src/features/community/index.ts"],
+      "@community/*": ["./src/features/community/*"],
+      "@repo/shared": ["../../packages/shared/src/index.ts"],
+      "@repo/shared/*": ["../../packages/shared/src/*"]
     }
   },
-  "include": ["next-env.d.ts", "src/types/**/*.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "include": [
+    "next-env.d.ts",
+    "src/types/**/*.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "src/features/auth/components/token-expiration-handler.tsx"
+  ],
   "exclude": ["node_modules"]
 }

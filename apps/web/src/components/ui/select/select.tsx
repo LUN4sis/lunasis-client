@@ -1,10 +1,12 @@
 'use client';
 
 import { useState, useMemo, useEffect } from 'react';
-import styles from './select.module.scss';
-import clsx from 'clsx';
+
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import type { BirthDateSelection } from '@/features/onboarding/types/onboarding.type';
+import type { BirthDateSelection } from '@web/features/onboarding';
+
+import clsx from 'clsx';
+import styles from './select.module.scss';
 
 // return the last day of the month
 const getLastDayOfMonth = (year: number, month: number) => new Date(year, month, 0).getDate();

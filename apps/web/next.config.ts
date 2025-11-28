@@ -14,6 +14,10 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'plus.unsplash.com',
       },
+      {
+        protocol: 'https',
+        hostname: '**.googleusercontent.com',
+      },
     ],
     qualities: [75, 85, 90, 100],
   },
@@ -21,14 +25,6 @@ const nextConfig: NextConfig = {
     const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080/api';
 
     return [
-      // {
-      //   source: '/oauth2/:path*',
-      //   destination: `${apiUrl}/oauth2/:path*`,
-      // },
-      // {
-      //   source: '/login/oauth2/:path*',
-      //   destination: `${apiUrl}/login/oauth2/:path*`,
-      // },
       {
         source: '/api/:path*',
         destination: `${apiUrl}/:path*`,

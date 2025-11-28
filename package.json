@@ -20,8 +20,10 @@
     "clean": "turbo run clean && rm -rf node_modules"
   },
   "devDependencies": {
-    "turbo": "latest",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.3",
     "prettier": "^3.6.2",
+    "turbo": "latest",
     "typescript": "^5.0.0"
   },
   "engines": {

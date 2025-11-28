@@ -1,7 +1,7 @@
-import clsx from 'clsx';
 import { formatPrice, calculateUnitPrice } from '@products/utils';
+import type { ProductPrice } from '@repo/shared/types';
 
-import type { ProductPrice } from '@lunasis/shared/types';
+import clsx from 'clsx';
 import styles from './price-section.module.scss';
 
 export interface PriceSectionProps {

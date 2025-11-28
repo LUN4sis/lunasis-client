@@ -1,4 +1,4 @@
-import { BottomNavigation } from '@/components/layouts/bottom-navigation';
+import { BottomNavigation } from '@web/components/layouts/bottom-navigation';
 
 export default function WithBottomNavLayout({ children }: { children: React.ReactNode }) {
   return (
