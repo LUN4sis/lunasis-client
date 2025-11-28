@@ -389,13 +389,11 @@ export class BaseApi {
 /**
  * GET API URL
  */
-export function getApiUrl(): string {
+// for oauth callback
+export function getApiUrl(forceAbsolute?: boolean): string {
   // server-side
-  if (typeof window === 'undefined') {
-    if (typeof process !== 'undefined' && process.env?.NEXT_PUBLIC_API_URL) {
-      return process.env.NEXT_PUBLIC_API_URL;
-    }
-    return 'http://localhost:8080/api';
+  if (forceAbsolute || typeof window === 'undefined') {
+    return process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080/api';
   }
 
   // client-side

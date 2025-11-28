@@ -6,7 +6,7 @@ export const ROUTES = {
   LOGIN: '/login',
   OAUTH_CALLBACK: '/oauth/callback',
   get OAUTH_REDIRECT() {
-    return `${getApiUrl()}/oauth2/authorization/google`;
+    return `${getApiUrl(true)}/oauth2/authorization/google`;
   },
 
   // Onboarding
