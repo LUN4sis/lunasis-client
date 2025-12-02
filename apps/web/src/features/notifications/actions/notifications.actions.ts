@@ -1,7 +1,7 @@
 'use server';
 
 import webpush from 'web-push';
-import { logger } from '@repo/shared/utils';
+import { logger, transformError } from '@repo/shared/utils';
 
 // Initialize VAPID details only if environment variables are set
 const vapidPublicKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY;
@@ -58,7 +58,8 @@ export async function sendNotification(message: string) {
     );
     return { success: true };
   } catch (error) {
-    console.error('[Notifications] Error sending push notification:', error);
+    const appError = transformError(error);
+    logger.error('[Notifications] Error sending push notification:', appError.toJSON());
     return { success: false, error: 'Failed to send notification' };
   }
 }

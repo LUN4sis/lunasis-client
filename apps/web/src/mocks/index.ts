@@ -1,5 +1,5 @@
 import { productsHandlers } from './handlers/products.handlers';
-import { logger } from '@repo/shared/utils';
+import { logger, transformError } from '@repo/shared/utils';
 
 // combine all handlers
 const handlers = [...productsHandlers];
@@ -13,7 +13,7 @@ const handlers = [...productsHandlers];
 export const initMocks = async (): Promise<void> => {
   // do not run in SSR environment
   if (typeof window === 'undefined') {
-    logger.log('[MSW] Skipping MSW initialization in SSR environment');
+    logger.info('[MSW] Skipping MSW initialization in SSR environment');
     return;
   }
 
@@ -22,7 +22,7 @@ export const initMocks = async (): Promise<void> => {
   const mswEnvValue = process.env.NEXT_PUBLIC_ENABLE_MSW;
   const mswEnabled = mswEnvValue === 'true';
 
-  logger.log('[MSW] Environment check', {
+  logger.info('[MSW] Environment check', {
     isDevelopment,
     mswEnvValue,
     mswEnabled,
@@ -30,7 +30,7 @@ export const initMocks = async (): Promise<void> => {
   });
 
   if (!mswEnabled) {
-    logger.log('[MSW] MSW is disabled (NEXT_PUBLIC_ENABLE_MSW is not "true")', {
+    logger.info('[MSW] MSW is disabled (NEXT_PUBLIC_ENABLE_MSW is not "true")', {
       isDevelopment,
       mswEnvValue,
       mswEnabled,
@@ -40,7 +40,7 @@ export const initMocks = async (): Promise<void> => {
     return;
   }
 
-  logger.log('[MSW] Initializing MSW...', { isDevelopment, mswEnabled });
+  logger.info('[MSW] Initializing MSW...', { isDevelopment, mswEnabled });
 
   try {
     // dynamic import in browser environment
@@ -54,9 +54,10 @@ export const initMocks = async (): Promise<void> => {
       onUnhandledRequest: 'bypass', // ignore unknown requests
     });
 
-    logger.log('[MSW] Mock Service Worker started successfully');
+    logger.info('[MSW] Mock Service Worker started successfully');
   } catch (error) {
-    logger.error('[MSW] Mock Service Worker initialization failed:', error);
+    const appError = transformError(error);
+    logger.error('[MSW] Mock Service Worker initialization failed:', appError.toJSON());
     throw error;
   }
 };

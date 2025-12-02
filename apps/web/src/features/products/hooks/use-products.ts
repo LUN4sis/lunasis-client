@@ -8,7 +8,7 @@ import type {
   GetProductDetailParams,
   GetProductBundleParams,
 } from '@repo/shared/types';
-import { logger } from '@repo/shared/utils';
+import { logger, transformError } from '@repo/shared/utils';
 import { isAppError } from '@repo/shared/types';
 import { isAuthError } from '@repo/shared/features/auth/constants/auth.constants';
 
@@ -37,10 +37,11 @@ export function useProducts(params: GetProductsParams) {
         const response = await getProductsAPI(params);
         return response;
       } catch (error) {
+        const appError = transformError(error);
         if (isAppError(error) && isAuthError(error.code)) {
-          logger.log('[useProducts] Auth error handled silently');
+          logger.info('[useProducts] Auth error handled silently');
         } else {
-          logger.error('[useProducts] Error fetching products:', error);
+          logger.error('[useProducts] Error fetching products:', appError.toJSON());
         }
         throw error;
       }
@@ -54,16 +55,13 @@ export function useProducts(params: GetProductsParams) {
  * get products by category
  */
 export function useProductsByCategory(category: ProductCategory) {
-  logger.log('[useProductsByCategory] category:', category);
+  logger.info('[useProductsByCategory] category:', { category });
   const result = useProducts({ category });
-  logger.log(
-    '[useProductsByCategory] data:',
-    result.data,
-    'isLoading:',
-    result.isLoading,
-    'isError:',
-    result.isError,
-  );
+  logger.info('[useProductsByCategory] data:', {
+    hasData: !!result.data,
+    isLoading: result.isLoading,
+    isError: result.isError,
+  });
   return result;
 }
 

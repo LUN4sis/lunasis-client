@@ -153,7 +153,7 @@ export const useOnboardingStore = create<OnboardingStoreState>()(
       }),
       onRehydrateStorage: () => (state) => {
         if (state) {
-          logger.log('[OnboardingStore] Rehydrated from storage:', {
+          logger.info('[OnboardingStore] Rehydrated from storage:', {
             nickname: state.nickname,
           });
         } else {

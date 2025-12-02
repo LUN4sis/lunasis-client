@@ -21,7 +21,7 @@ import {
   useOnboardingNavigationGuard,
   useOnboardingInterests,
 } from '@web/features/onboarding';
-import { logger } from '@repo/shared/utils';
+import { logger, transformError } from '@repo/shared/utils';
 
 import styles from '../onboarding.module.scss';
 
@@ -75,7 +75,7 @@ function InterestsPage() {
           return;
         }
 
-        logger.log('[Interests Page] Submitting interests:', {
+        logger.info('[Interests Page] Submitting interests:', {
           nickname,
           age,
           chatbotService,
@@ -109,10 +109,11 @@ function InterestsPage() {
         //   return;
         // }
 
-        logger.log('[Interests Page] Onboarding completed successfully');
+        logger.info('[Interests Page] Onboarding completed successfully');
         router.push(ROUTES.ROOT);
       } catch (error) {
-        logger.error('[Interests Page] Submit error:', error);
+        const appError = transformError(error);
+        logger.error('[Interests Page] Submit error:', appError.toJSON());
         toast.error('Failed to save your preferences. Please try again.');
       }
     },

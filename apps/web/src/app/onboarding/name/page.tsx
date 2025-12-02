@@ -12,7 +12,7 @@ import { ROUTES } from '@repo/shared/constants';
 
 import { useAuthStore } from '@repo/shared/features/auth';
 import { useNicknameValidation, useOnboardingStore } from '@web/features/onboarding';
-import { logger } from '@repo/shared/utils';
+import { logger, transformError } from '@repo/shared/utils';
 
 import styles from '../onboarding.module.scss';
 
@@ -47,11 +47,12 @@ function NamePage() {
         }
 
         setIsNicknameValidated(true);
-        logger.log('[Name Page] Nickname validated successfully:', nickname);
+        logger.info('[Name Page] Nickname validated successfully:', { nickname });
         router.push(ROUTES.ONBOARDING_AGE);
       } catch (error) {
         toast.error('Something went wrong. Please try again.');
-        logger.error('[Name Page] Error during nickname validation:', error);
+        const appError = transformError(error);
+        logger.error('[Name Page] Error during nickname validation:', appError.toJSON());
       } finally {
         setIsSubmitting(false);
       }
