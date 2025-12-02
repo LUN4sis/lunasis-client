@@ -60,7 +60,7 @@ export function withAuth<P extends object>(Component: ComponentType<P>, options?
         return;
       }
 
-      logger.log('[withAuth] Authenticated, rendering page');
+      logger.info('[withAuth] Authenticated, rendering page');
     }, [isHydrated, isLoggedIn, accessToken, router]);
 
     // Show loading until hydration is complete

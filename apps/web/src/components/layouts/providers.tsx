@@ -20,7 +20,7 @@ function MSWProvider({ children }: ProvidersProps) {
     const initializeMocks = async () => {
       await initMocks();
       const mswEnabled = process.env.NEXT_PUBLIC_ENABLE_MSW === 'true';
-      logger.log('[MSWProvider] Ready to render', { mswEnabled });
+      logger.info('[MSWProvider] Ready to render', { mswEnabled });
       setIsReady(true);
     };
 

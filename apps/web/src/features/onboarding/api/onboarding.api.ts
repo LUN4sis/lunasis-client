@@ -12,7 +12,7 @@ export async function checkNicknameAPI(nickname: string): Promise<{ ok: true }> 
       return { ok: true };
     }
 
-    throw handleApiError(response, ErrorCode.UNKNOWN_ERROR);
+    throw handleApiError(response);
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
       const axiosError = error as AxiosError<ApiResponse<{ ok: true }>>;
@@ -25,7 +25,7 @@ export async function checkNicknameAPI(nickname: string): Promise<{ ok: true }> 
       }
     }
 
-    throw handleApiError(error, ErrorCode.UNKNOWN_ERROR);
+    throw handleApiError(error);
   }
 }
 
@@ -37,7 +37,7 @@ export async function registerUserAPI(formData: SubmitRequest): Promise<SubmitRe
       return response.data;
     }
 
-    throw handleApiError(response, ErrorCode.UNKNOWN_ERROR);
+    throw handleApiError(response);
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
       const axiosError = error as AxiosError<ApiResponse<SubmitResponse>>;
@@ -50,6 +50,6 @@ export async function registerUserAPI(formData: SubmitRequest): Promise<SubmitRe
       }
     }
 
-    throw handleApiError(error, ErrorCode.UNKNOWN_ERROR);
+    throw handleApiError(error);
   }
 }

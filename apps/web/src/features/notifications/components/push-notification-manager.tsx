@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { subscribeUser, unsubscribeUser, sendNotification } from '../actions/notifications.actions';
 import { NOTIFICATION_CONFIG, MESSAGES } from '@repo/shared/constants';
-import { logger } from '@repo/shared/utils';
+import { logger, transformError } from '@repo/shared/utils';
 import {
   isIOS,
   isStandalone,
@@ -47,7 +47,8 @@ function PushNotificationManager() {
         setSubscription(sub);
       }
     } catch (error) {
-      logger.error('[PushNotification] Failed to initialize:', error);
+      const appError = transformError(error);
+      logger.error('[PushNotification] Failed to initialize:', appError.toJSON());
     }
   }
 
@@ -64,7 +65,8 @@ function PushNotificationManager() {
       const subscriptionJSON = sub.toJSON() as PushSubscriptionJSON;
       await subscribeUser(subscriptionJSON as unknown as PushSubscription);
     } catch (error) {
-      logger.error('[PushNotification] Failed to subscribe:', error);
+      const appError = transformError(error);
+      logger.error('[PushNotification] Failed to subscribe:', appError.toJSON());
     }
   }
 
@@ -74,7 +76,8 @@ function PushNotificationManager() {
       setSubscription(null);
       await unsubscribeUser();
     } catch (error) {
-      logger.error('[PushNotification] Failed to unsubscribe:', error);
+      const appError = transformError(error);
+      logger.error('[PushNotification] Failed to unsubscribe:', appError.toJSON());
     }
   }
 

@@ -13,7 +13,7 @@ function OnboardingPage() {
   const age = useOnboardingStore((s) => s.age);
 
   useEffect(() => {
-    logger.log('[Onboarding Index] Redirecting based on progress:', {
+    logger.info('[Onboarding Index] Redirecting based on progress:', {
       isNicknameValidated,
       age,
     });

@@ -1,9 +1,21 @@
 import type { NextConfig } from 'next';
+import path from 'path';
 
 const devOrigin = process.env.NEXT_PUBLIC_DEV_ORIGIN || '';
 
 const nextConfig: NextConfig = {
   allowedDevOrigins: devOrigin ? [devOrigin] : [],
+  sassOptions: {
+    includePaths: [path.join(__dirname, 'src')],
+    prependData: `@use "sass:math";`,
+  },
+  webpack: (config) => {
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      '@': path.join(__dirname, 'src'),
+    };
+    return config;
+  },
   images: {
     remotePatterns: [
       {

@@ -8,7 +8,7 @@ import { exchangeAuthToken } from '../actions/auth.actions';
 import { logoutManager } from '../utils';
 
 import { ROUTES } from '@repo/shared/constants';
-import { logger } from '@repo/shared/utils';
+import { logger, transformError } from '@repo/shared/utils';
 import { AppError, ErrorCode, ERROR_MESSAGES } from '@repo/shared/types';
 import type { ExchangeResponse } from '@repo/shared/features/auth/types';
 
@@ -85,11 +85,8 @@ export function useLogin() {
       router.replace(redirectPath);
     },
     onError: (error: unknown) => {
-      if (error instanceof AppError) {
-        logger.error('[Auth] Login failed:', error.toJSON());
-      } else {
-        logger.error('[Auth] Login failed:', error);
-      }
+      const appError = error instanceof AppError ? error : transformError(error);
+      logger.error('[Auth] Login failed:', appError.toJSON());
     },
   });
 

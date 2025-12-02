@@ -5,8 +5,10 @@ import axios, {
   AxiosResponse,
   InternalAxiosRequestConfig,
 } from 'axios';
-import { API_CONFIG } from '../constants/config';
-import type { ApiResponse } from '../types';
+import { API_CONFIG } from '@repo/shared/constants/config';
+import type { ApiResponse } from '@repo/shared/types/api.type';
+import type { ApiErrorResponse } from '@repo/shared/types/error.type';
+import { transformAxiosError } from '@repo/shared/utils';
 
 // ===========================
 // Types & Interfaces
@@ -250,12 +252,12 @@ export class BaseApi {
   private setupResponseInterceptor(): void {
     this.client.interceptors.response.use(
       (response: AxiosResponse) => response,
-      async (error: AxiosError) => {
+      async (error: AxiosError<ApiErrorResponse>) => {
         const originalRequest = error.config as AxiosRequestConfig & { _retry?: boolean };
 
         // return error if request config is missing
         if (!originalRequest) {
-          return Promise.reject(error);
+          return Promise.reject(transformAxiosError(error));
         }
 
         const status = error.response?.status;
@@ -271,7 +273,7 @@ export class BaseApi {
           return this.handleAuthError(errorData.code, status, error);
         }
 
-        return Promise.reject(error);
+        return Promise.reject(transformAxiosError(error));
       },
     );
   }
