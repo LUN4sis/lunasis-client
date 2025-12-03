@@ -7,7 +7,6 @@ import type {
   GetProductBundleParams,
   GetProductBundleResponse,
 } from '@repo/shared/types';
-import { ErrorCode } from '@repo/shared/types';
 import { handleApiError } from '@repo/shared/utils';
 
 /**
@@ -25,7 +24,7 @@ export async function getProductsAPI(params: GetProductsParams): Promise<GetProd
     const response = await apiClient.get<GetProductsResponse>(url);
     return response;
   } catch (error) {
-    throw handleApiError(error, ErrorCode.INTERNAL_SERVER_ERROR);
+    throw handleApiError(error);
   }
 }
 
@@ -41,7 +40,7 @@ export async function getProductDetailAPI(
     const response = await apiClient.get<GetProductDetailResponse>(`/products/${productId}`);
     return response;
   } catch (error) {
-    throw handleApiError(error, ErrorCode.NOT_FOUND);
+    throw handleApiError(error);
   }
 }
 
@@ -59,6 +58,6 @@ export async function getProductBundleAPI(
     const response = await apiClient.get<GetProductBundleResponse>(url);
     return response;
   } catch (error) {
-    throw handleApiError(error, ErrorCode.NOT_FOUND);
+    throw handleApiError(error);
   }
 }

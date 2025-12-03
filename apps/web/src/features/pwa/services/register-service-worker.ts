@@ -1,4 +1,4 @@
-import { logger } from '@repo/shared/utils';
+import { logger, transformError } from '@repo/shared/utils';
 
 /**
  * Register service worker for PWA functionality
@@ -15,7 +15,7 @@ export async function registerServiceWorker(): Promise<ServiceWorkerRegistration
       updateViaCache: 'none',
     });
 
-    logger.log('[Service Worker] Registered successfully');
+    logger.info('[Service Worker] Registered successfully');
 
     // Listen for updates
     registration.addEventListener('updatefound', () => {
@@ -23,7 +23,7 @@ export async function registerServiceWorker(): Promise<ServiceWorkerRegistration
       if (newWorker) {
         newWorker.addEventListener('statechange', () => {
           if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-            logger.log('[Service Worker] New version available');
+            logger.info('[Service Worker] New version available');
             // TODO: Notify user about new version
           }
         });
@@ -32,7 +32,8 @@ export async function registerServiceWorker(): Promise<ServiceWorkerRegistration
 
     return registration;
   } catch (error) {
-    logger.error('[Service Worker] Registration failed:', error);
+    const appError = transformError(error);
+    logger.error('[Service Worker] Registration failed:', appError.toJSON());
     return undefined;
   }
 }

@@ -16,7 +16,7 @@ import {
   useOnboardingStore,
 } from '@web/features/onboarding';
 import type { BirthDateSelection } from '@web/features/onboarding';
-import { logger } from '@repo/shared/utils';
+import { logger, transformError } from '@repo/shared/utils';
 
 import styles from '../onboarding.module.scss';
 
@@ -60,10 +60,11 @@ function AgePage() {
       setIsSubmitting(true);
 
       try {
-        logger.log('[Age Page] Submitting age:', useOnboardingStore.getState().age);
+        logger.info('[Age Page] Submitting age:', { age: useOnboardingStore.getState().age });
         router.push(ROUTES.ONBOARDING_INTERESTS);
       } catch (error) {
-        logger.error('[Age Page] Submit error:', error);
+        const appError = transformError(error);
+        logger.error('[Age Page] Submit error:', appError.toJSON());
         toast.error('Something went wrong. Please try again.');
       } finally {
         setIsSubmitting(false);

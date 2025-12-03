@@ -1,6 +1,6 @@
 import type { ApiResponse } from '@repo/shared/types';
 import type { ExchangeResponse, RefreshTokenResponse } from '../types/auth.type';
-import { logger } from '@repo/shared/utils';
+import { logger, transformError } from '@repo/shared/utils';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080/api';
 
@@ -80,6 +80,7 @@ export async function logoutAPI(
       body: JSON.stringify({ refreshToken }),
     });
   } catch (error) {
-    logger.error('[Auth] Logout failed:', error);
+    const appError = transformError(error);
+    logger.error('[Auth] Logout failed:', appError.toJSON());
   }
 }

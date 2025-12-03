@@ -2,6 +2,8 @@
 
 # dependencies
 node_modules/
+/apps/web/node_modules
+/apps/mobile/node_modules
 .pnp
 .pnp.*
 .yarn/*
@@ -75,3 +77,16 @@ Desktop.ini
 
 certificates
 .cursorrules
+
+/apps/web/.next/
+/apps/mobile/.next/
+/apps/web/node_modules
+/apps/mobile/node_modules
+/apps/web/coverage
+/apps/mobile/coverage
+/apps/web/dist
+/apps/mobile/dist
+/apps/web/build
+/apps/mobile/build
+/apps/web/public/pwa
+/apps/mobile/public/pwa

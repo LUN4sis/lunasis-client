@@ -1,5 +1,5 @@
 import { useAuthStore } from '../stores/use-auth-store';
-import { logger } from '@repo/shared/utils';
+import { logger, transformError } from '@repo/shared/utils';
 
 export interface LogoutDependencies {
   clearQueryCache?: () => void;
@@ -38,7 +38,8 @@ export class LogoutManager {
       await this.dependencies.performServerLogout(accessToken, refreshToken);
       logger.info('[LogoutManager] Server logout successful');
     } catch (error) {
-      logger.error('[LogoutManager] Server logout failed: ', error);
+      const appError = transformError(error);
+      logger.error('[LogoutManager] Server logout failed:', appError.toJSON());
     }
   }
 

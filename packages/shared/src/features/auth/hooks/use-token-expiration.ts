@@ -17,7 +17,7 @@ export function useTokenExpiration(onLogout: () => void) {
   const checkAndHandleExpiration = useCallback(() => {
     // early return: user not logged in
     if (!isLoggedIn) {
-      logger.log('[TokenExpiration] User not logged in, skipping check');
+      logger.info('[TokenExpiration] User not logged in, skipping check');
       return;
     }
 
@@ -30,7 +30,7 @@ export function useTokenExpiration(onLogout: () => void) {
       return;
     }
 
-    logger.log('[TokenExpiration] Tokens valid');
+    logger.info('[TokenExpiration] Tokens valid');
   }, [accessTokenIssuedAt, refreshTokenIssuedAt, isLoggedIn, onLogout]);
 
   // schedule next expiration check
@@ -48,7 +48,7 @@ export function useTokenExpiration(onLogout: () => void) {
     // calculate delay for next check
     const delay = getNextExpirationCheckDelay(accessTokenIssuedAt, refreshTokenIssuedAt);
 
-    logger.log('[TokenExpiration] Scheduling next check in:', {
+    logger.info('[TokenExpiration] Scheduling next check in:', {
       delayMs: delay,
       delaySec: Math.round(delay / 1000),
     });

@@ -42,7 +42,7 @@ export function useOnboardingComplete() {
   const router = useRouter();
 
   const completeOnboarding = () => {
-    logger.log('[Onboarding Complete] Redirecting to home');
+    logger.info('[Onboarding Complete] Redirecting to home');
     router.push(ROUTES.ROOT);
   };
 

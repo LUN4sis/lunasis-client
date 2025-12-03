@@ -3,7 +3,7 @@
 // ===========================
 
 /**
- * 애플리케이션 에러 코드
+ * application error code
  */
 export enum ErrorCode {
   // Authentication
@@ -39,7 +39,7 @@ export enum ErrorCode {
 // ===========================
 
 /**
- * 에러 메시지 맵 (사용자에게 표시되는 메시지)
+ * Error message map (messages displayed to users)
  */
 export const ERROR_MESSAGES: Record<ErrorCode, string> = {
   [ErrorCode.AUTH_REQUIRED]: 'Login is required.',
@@ -48,21 +48,50 @@ export const ERROR_MESSAGES: Record<ErrorCode, string> = {
   [ErrorCode.TOKEN_EXPIRED]: 'Token expired.',
   [ErrorCode.TOKEN_INVALID]: 'Invalid authentication information.',
   [ErrorCode.REFRESH_TOKEN_EXPIRED]: 'Refresh token expired.',
-  [ErrorCode.TOKEN_NOT_PAIR]: 'Access token and refresh token information do not match.',
-  [ErrorCode.TOKEN_NOT_EXIST]: 'Token information does not exist.',
+  [ErrorCode.TOKEN_NOT_PAIR]: 'Authentication information does not match.',
+  [ErrorCode.TOKEN_NOT_EXIST]: 'Authentication information does not exist.',
   [ErrorCode.INVALID_CODE]: 'Invalid authentication code.',
   [ErrorCode.EXCHANGE_FAILED]: 'Token exchange failed.',
-  [ErrorCode.NETWORK_ERROR]: 'Network error occurred.',
+  [ErrorCode.NETWORK_ERROR]: 'Check your network connection.',
   [ErrorCode.TIMEOUT]: 'Request timed out.',
-  [ErrorCode.NOT_FOUND]: 'Resource not found.',
+  [ErrorCode.NOT_FOUND]: 'Requested information not found',
   [ErrorCode.INTERNAL_SERVER_ERROR]: 'Server error occurred.',
   [ErrorCode.BAD_REQUEST]: 'Bad request.',
-  [ErrorCode.VALIDATION_ERROR]: 'Validation failed.',
-  [ErrorCode.UNKNOWN_ERROR]: 'Unknown error occurred.',
+  [ErrorCode.VALIDATION_ERROR]: 'Check your input.',
+  [ErrorCode.UNKNOWN_ERROR]: 'An unknown error occurred.',
 };
 
 /**
- * 백엔드 에러 메시지 맵
+ * HTTP status code to error message mapping
+ */
+export const HTTP_ERROR_MESSAGES: Record<number, string> = {
+  400: 'Bad request.',
+  401: 'Login is required.',
+  403: 'Access denied.',
+  404: 'Requested information not found',
+  408: 'Request timed out.',
+  409: 'Resource already exists.',
+  422: 'Check your input.',
+  429: 'Too many requests. Please try again later.',
+  500: 'Server error occurred.',
+  502: 'Server connection failed.',
+  503: 'Service temporarily unavailable.',
+  504: 'Server response timed out.',
+};
+
+/**
+ * Base error response structure from API
+ */
+export interface ApiErrorResponse {
+  status: number;
+  code: string;
+  message: string;
+  details?: Record<string, unknown>;
+  timestamp?: string;
+}
+
+/**
+ * Backend error message map
  */
 export const SERVER_ERROR_MESSAGES = {
   ACCESS_TOKEN_EXPIRED: '토큰이 만료되었습니다',
@@ -85,7 +114,7 @@ export const SERVER_ERROR_MESSAGES = {
 // ===========================
 
 /**
- * 애플리케이션 에러 클래스
+ * Application error class
  */
 export class AppError extends Error {
   constructor(
@@ -93,18 +122,20 @@ export class AppError extends Error {
     public message: string = ERROR_MESSAGES[code],
     public statusCode?: number,
     public originalError?: unknown,
+    public details?: Record<string, unknown>,
   ) {
     super(message);
     this.name = 'AppError';
+    Object.setPrototypeOf(this, AppError.prototype);
 
-    // 에러 스택 트레이스 유지
+    // Maintain error stack trace
     if (Error.captureStackTrace) {
       Error.captureStackTrace(this, AppError);
     }
   }
 
   /**
-   * 에러를 JSON 형식으로 변환
+   * Convert error to JSON format
    */
   toJSON() {
     return {
@@ -112,14 +143,76 @@ export class AppError extends Error {
       code: this.code,
       message: this.message,
       statusCode: this.statusCode,
+      details: this.details,
     };
   }
 
   /**
-   * 사용자에게 표시할 메시지 반환
+   * Return user-friendly message
    */
   toDisplayMessage(): string {
     return this.message;
+  }
+}
+
+/**
+ * Network related errors
+ */
+export class NetworkError extends AppError {
+  constructor(message: string = ERROR_MESSAGES[ErrorCode.NETWORK_ERROR]) {
+    super(ErrorCode.NETWORK_ERROR, message, 0, undefined, undefined);
+    this.name = 'NetworkError';
+    Object.setPrototypeOf(this, NetworkError.prototype);
+  }
+}
+
+/**
+ * Authentication errors
+ */
+export class AuthError extends AppError {
+  constructor(
+    message: string = ERROR_MESSAGES[ErrorCode.UNAUTHORIZED],
+    code: ErrorCode = ErrorCode.UNAUTHORIZED,
+  ) {
+    super(code, message, 401, undefined, undefined);
+    this.name = 'AuthError';
+    Object.setPrototypeOf(this, AuthError.prototype);
+  }
+}
+
+/**
+ * Authorization errors
+ */
+export class PermissionError extends AppError {
+  constructor(message: string = ERROR_MESSAGES[ErrorCode.FORBIDDEN]) {
+    super(ErrorCode.FORBIDDEN, message, 403, undefined, undefined);
+    this.name = 'PermissionError';
+    Object.setPrototypeOf(this, PermissionError.prototype);
+  }
+}
+
+/**
+ * Validation errors
+ */
+export class ValidationError extends AppError {
+  constructor(
+    message: string = ERROR_MESSAGES[ErrorCode.VALIDATION_ERROR],
+    public readonly errors?: Record<string, string[]>,
+  ) {
+    super(ErrorCode.VALIDATION_ERROR, message, 400, undefined, { errors });
+    this.name = 'ValidationError';
+    Object.setPrototypeOf(this, ValidationError.prototype);
+  }
+}
+
+/**
+ * Server errors (500, 502, 503, 504)
+ */
+export class ServerError extends AppError {
+  constructor(message: string = ERROR_MESSAGES[ErrorCode.INTERNAL_SERVER_ERROR]) {
+    super(ErrorCode.INTERNAL_SERVER_ERROR, message, 500, undefined, undefined);
+    this.name = 'ServerError';
+    Object.setPrototypeOf(this, ServerError.prototype);
   }
 }
 
@@ -128,7 +221,7 @@ export class AppError extends Error {
 // ===========================
 
 /**
- * 백엔드 응답 메시지를 ErrorCode로 매핑
+ * Map backend response message to ErrorCode
  */
 export function mapServerMessageToErrorCode(message: string): ErrorCode | null {
   switch (message) {
@@ -147,11 +240,11 @@ export function mapServerMessageToErrorCode(message: string): ErrorCode | null {
     case SERVER_ERROR_MESSAGES.USER_NOT_FOUND:
       return ErrorCode.NOT_FOUND;
     case SERVER_ERROR_MESSAGES.BAD_REQUEST:
-      return ErrorCode.BAD_REQUEST;
+      return ErrorCode.VALIDATION_ERROR; // Backend returns MethodArgumentValidException as 404
     case SERVER_ERROR_MESSAGES.UNAUTHORIZED:
       return ErrorCode.UNAUTHORIZED;
     case SERVER_ERROR_MESSAGES.INVALID_UUID:
-      return ErrorCode.TOKEN_INVALID;
+      return ErrorCode.VALIDATION_ERROR; // MissingPathVariableException is ValidationError
     case SERVER_ERROR_MESSAGES.UNKNOWN_ERROR:
       return ErrorCode.UNKNOWN_ERROR;
     default:
@@ -160,7 +253,7 @@ export function mapServerMessageToErrorCode(message: string): ErrorCode | null {
 }
 
 /**
- * HTTP 상태 코드를 ErrorCode로 매핑 (fallback)
+ * Map HTTP status code to ErrorCode (fallback)
  */
 export function mapStatusToErrorCode(status: number): ErrorCode {
   switch (status) {
@@ -185,12 +278,12 @@ export function mapStatusToErrorCode(status: number): ErrorCode {
 }
 
 /**
- * 백엔드 응답을 ErrorCode로 변환 (하이브리드 전략)
- * 1순위: 메시지 기반 매핑 (정확한 에러 식별)
- * 2순위: HTTP 상태 코드 기반 fallback
+ * Convert backend response to ErrorCode (hybrid strategy)
+ * 1st priority: Message-based mapping (exact error identification)
+ * 2nd priority: HTTP status code based fallback
  */
 export function parseServerError(response: { message?: string; code: number }): ErrorCode {
-  // 1. 메시지 기반으로 정확한 에러 코드 찾기
+  // 1. Find exact error code based on message
   if (response.message) {
     const errorCode = mapServerMessageToErrorCode(response.message);
     if (errorCode) {
@@ -198,31 +291,72 @@ export function parseServerError(response: { message?: string; code: number }): 
     }
   }
 
-  // 2. HTTP 상태 코드로 fallback
+  // 2. Fallback to HTTP status code
   return mapStatusToErrorCode(response.code);
 }
 
 /**
- * 백엔드 응답을 AppError로 변환
+ * Convert backend response to AppError
  */
 export function createAppErrorFromServer(response: { message?: string; code: number }): AppError {
   const errorCode = parseServerError(response);
 
-  // 디버깅용으로 원본 메시지를 유지하고, 사용자에게는 영문 메시지를 표시
+  // Keep original message for debugging, display English message to users
   const displayMessage = ERROR_MESSAGES[errorCode];
 
   return new AppError(errorCode, displayMessage, response.code, response.message);
 }
 
 /**
- * 에러가 AppError인지 확인
+ * Check if error is AppError
+ * Type guard for AppError
  */
 export function isAppError(error: unknown): error is AppError {
   return error instanceof AppError;
 }
 
 /**
- * 에러를 AppError로 변환
+ * Check if error is NetworkError
+ * Type guard for NetworkError
+ */
+export function isNetworkError(error: unknown): error is NetworkError {
+  return error instanceof NetworkError;
+}
+
+/**
+ * Check if error is AuthError
+ * Type guard for AuthError
+ */
+export function isAuthError(error: unknown): error is AuthError {
+  return error instanceof AuthError;
+}
+
+/**
+ * Check if error is PermissionError
+ * Type guard for PermissionError
+ */
+export function isPermissionError(error: unknown): error is PermissionError {
+  return error instanceof PermissionError;
+}
+
+/**
+ * 에러가 ValidationError인지 확인
+ * Type guard for ValidationError
+ */
+export function isValidationError(error: unknown): error is ValidationError {
+  return error instanceof ValidationError;
+}
+
+/**
+ * Check if error is ServerError
+ * Type guard for ServerError
+ */
+export function isServerError(error: unknown): error is ServerError {
+  return error instanceof ServerError;
+}
+
+/**
+ * Convert error to AppError
  */
 export function toAppError(error: unknown): AppError {
   if (isAppError(error)) {
