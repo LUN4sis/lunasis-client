@@ -395,7 +395,10 @@ export class BaseApi {
 export function getApiUrl(forceAbsolute?: boolean): string {
   // server-side
   if (forceAbsolute || typeof window === 'undefined') {
-    return process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080/api';
+    return (
+      (typeof process !== 'undefined' && process.env.NEXT_PUBLIC_API_URL) ||
+      'http://localhost:8080/api'
+    );
   }
 
   // client-side
