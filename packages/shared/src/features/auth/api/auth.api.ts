@@ -2,7 +2,9 @@ import type { ApiResponse } from '@repo/shared/types';
 import type { ExchangeResponse, RefreshTokenResponse } from '../types/auth.type';
 import { logger, transformError } from '@repo/shared/utils';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080/api';
+const API_BASE_URL =
+  (typeof process !== 'undefined' && process.env.NEXT_PUBLIC_API_URL) ||
+  'http://localhost:8080/api';
 
 /**
  * Exchange OAuth code for tokens
