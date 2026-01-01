@@ -1,3 +1,5 @@
+import { isDevelopment } from '@repo/shared/constants';
+
 type LogLevel = 'debug' | 'info' | 'warn' | 'error';
 
 interface LogData {
@@ -5,7 +7,7 @@ interface LogData {
 }
 
 class Logger {
-  private isDev = process.env.NODE_ENV === 'development';
+  private isDev = isDevelopment();
 
   private log(level: LogLevel, message: string, data?: LogData): void {
     if (!this.isDev && level === 'debug') return;

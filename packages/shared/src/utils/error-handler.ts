@@ -12,6 +12,7 @@ import {
   ServerError,
   SERVER_ERROR_MESSAGES,
 } from '@repo/shared/types/error.type';
+import { isDevelopment } from '@repo/shared/constants';
 import { logger } from './logger';
 
 // ===========================
@@ -175,7 +176,7 @@ export function handleAndLogError(error: unknown, context?: string): AppError {
   }
 
   // log detail error in development
-  if (typeof process !== 'undefined' && process.env?.NODE_ENV === 'development') {
+  if (isDevelopment()) {
     logger.error(`[Error${context ? ` - ${context}` : ''}]:`, {
       code: appError.code,
       message: appError.message,

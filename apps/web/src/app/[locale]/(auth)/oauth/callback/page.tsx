@@ -1,7 +1,8 @@
 'use client';
 
 import { useEffect, useState, Suspense, useRef } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
+import { useRouter } from '@web/i18n/navigation';
 import { useLogin } from '@web/features/auth';
 import { ErrorCode, ERROR_MESSAGES } from '@repo/shared/types';
 import { ROUTES } from '@repo/shared/constants';

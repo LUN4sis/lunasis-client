@@ -1,0 +1,47 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "retry": "Retry",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "back": "Back"
+  },
+  "login": {
+    "label": "Sign in with Google"
+  },
+  "main": {
+    "talkRoom": {
+      "label": "Talk Room",
+      "description": "Talk it out with the community"
+    },
+    "hospital": {
+      "label": "Find the right Hospital",
+      "description": "Get expert advice and find the right clinic"
+    },
+    "shopping": {
+      "label": "Hot Picks for you",
+      "description": "Explore and shop products tailored to you"
+    },
+    "chat": {
+      "prompt": "Not sure where to start?",
+      "button": "Chat with me! 👆"
+    }
+  },
+  "navigation": {
+    "home": "Home",
+    "community": "Community",
+    "chat": "Chat",
+    "profile": "Profile"
+  },
+  "notFound": {
+    "title": "Lost your way?",
+    "description1": "The page you requested has disappeared into space",
+    "description2": "or you may have entered an invalid address.",
+    "homeButton": "Go to home",
+    "backButton": "Go to previous page"
+  }
+}
