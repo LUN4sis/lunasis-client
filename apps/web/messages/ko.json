@@ -1,0 +1,47 @@
+{
+  "common": {
+    "loading": "로딩 중...",
+    "error": "오류가 발생했습니다",
+    "retry": "다시 시도",
+    "cancel": "취소",
+    "confirm": "확인",
+    "save": "저장",
+    "delete": "삭제",
+    "edit": "수정",
+    "back": "뒤로"
+  },
+  "login": {
+    "label": "Google 계정으로 로그인"
+  },
+  "main": {
+    "talkRoom": {
+      "label": "토크룸",
+      "description": "커뮤니티와 이야기 나누기"
+    },
+    "hospital": {
+      "label": "병원 찾기",
+      "description": "전문가 조언을 받고 적합한 병원 찾기"
+    },
+    "shopping": {
+      "label": "추천 상품",
+      "description": "맞춤 상품 탐색 및 쇼핑"
+    },
+    "chat": {
+      "prompt": "어디서 시작해야 할지 모르겠다면?",
+      "button": "채팅하기! 👆"
+    }
+  },
+  "navigation": {
+    "home": "홈",
+    "community": "커뮤니티",
+    "chat": "채팅",
+    "profile": "프로필"
+  },
+  "notFound": {
+    "title": "앗! 길을 잃었어요",
+    "description1": "요청하신 페이지가 사라졌거나",
+    "description2": "주소가 잘못되었을 수 있어요",
+    "homeButton": "홈으로 돌아가기",
+    "backButton": "이전 페이지로 돌아가기"
+  }
+}
