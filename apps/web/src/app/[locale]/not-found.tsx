@@ -1,25 +1,19 @@
 import Link from 'next/link';
-import { ROUTES } from '@web/lib/constants';
+import { getTranslations } from 'next-intl/server';
 
 import styles from './not-found.module.scss';
 
-/**
- * 404 Page - Server Component
- *
- * Keeps as server component to prevent CSS preload warnings
- */
-const NotFound = () => {
+const NotFound = async () => {
+  const t = await getTranslations('notFound');
+
   return (
     <div className={styles.container}>
       <div className={`${styles.content} ${styles.mounted}`}>
         <div className={styles.graphic} role="img" aria-label="404 Not Found">
           <div className={styles.floatWrapper}>
-            {/* Planet */}
             <div className={styles.planet}>
               <div className={styles.pinkOverlay}></div>
               <div className={styles.yellowOverlay}></div>
-
-              {/* Face */}
               <div className={styles.face}>
                 <div className={styles.eyes}>
                   <div className={styles.eye}></div>
@@ -28,8 +22,6 @@ const NotFound = () => {
                 <div className={styles.mouth}></div>
               </div>
             </div>
-
-            {/* Orbiting Elements */}
             <div className={styles.orbit} aria-hidden="true"></div>
             <div className={styles.star1} aria-hidden="true">
               ✨
@@ -39,20 +31,16 @@ const NotFound = () => {
             </div>
           </div>
         </div>
-
-        {/* Text Content */}
         <h1 className={styles.code} aria-hidden="true">
           404
         </h1>
-        <h2 className={styles.title}>Lost your way?</h2>
+        <h2 className={styles.title}>{t('title')}</h2>
         <p className={styles.description}>
-          The page you requested has disappeared into space
+          {t('description1')}
           <br />
-          or you may have entered an invalid address.
+          {t('description2')}
         </p>
-
-        {/* Action Button */}
-        <Link href={ROUTES.ROOT} className={styles.homeButton} aria-label="Go to home page">
+        <Link href="/" className={styles.homeButton} aria-label={t('homeButton')}>
           <div className={styles.iconWrapper} aria-hidden="true">
             <svg
               width="18"
@@ -68,15 +56,14 @@ const NotFound = () => {
               <polyline points="9 22 9 12 15 12 15 22" />
             </svg>
           </div>
-          <span>Go to home</span>
+          <span>{t('homeButton')}</span>
         </Link>
-
         <a
           href="javascript:history.back()"
           className={styles.backButton}
-          aria-label="Go to previous page"
+          aria-label={t('backButton')}
         >
-          Go to previous page
+          {t('backButton')}
         </a>
       </div>
     </div>

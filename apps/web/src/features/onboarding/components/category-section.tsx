@@ -1,5 +1,5 @@
 import type { OnboardingCategorySection } from '@web/features/onboarding';
-import styles from '@web/app/onboarding/onboarding.module.scss';
+import styles from '@web/app/[locale]/onboarding/onboarding.module.scss';
 
 export function CategorySection({ label, children, className }: OnboardingCategorySection) {
   return (

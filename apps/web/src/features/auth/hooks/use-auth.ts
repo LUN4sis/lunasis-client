@@ -1,6 +1,6 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import { useRouter } from '@web/i18n/navigation';
 import { useMutation } from '@tanstack/react-query';
 
 import { useAuthStore } from '@repo/shared/features/auth';

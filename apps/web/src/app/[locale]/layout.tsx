@@ -1,9 +1,13 @@
 import type { Metadata } from 'next';
 import { DM_Sans } from 'next/font/google';
+import { NextIntlClientProvider, hasLocale } from 'next-intl';
+import { getMessages, setRequestLocale } from 'next-intl/server';
+import { notFound } from 'next/navigation';
 import { Providers } from '@web/components/layouts';
 import { TokenExpirationHandler } from '@web/features/auth/components/token-expiration-handler';
+import { routing } from '@web/i18n/routing';
 
-import './globals.scss';
+import '../globals.scss';
 
 const dmSans = DM_Sans({
   variable: '--font-dm-sans',
@@ -56,17 +60,34 @@ export const viewport = {
   themeColor: '#f6f6f6',
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
+type Props = {
   children: React.ReactNode;
-}>) {
+  params: Promise<{ locale: string }>;
+};
+
+export function generateStaticParams() {
+  return routing.locales.map((locale) => ({ locale }));
+}
+
+export default async function LocaleLayout({ children, params }: Props) {
+  const { locale } = await params;
+
+  if (!hasLocale(routing.locales, locale)) {
+    notFound();
+  }
+
+  setRequestLocale(locale);
+
+  const messages = await getMessages();
+
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang={locale} suppressHydrationWarning>
       <body className={dmSans.variable} style={{ backgroundColor: '#f6f6f6' }}>
         <Providers>
-          <TokenExpirationHandler />
-          {children}
+          <NextIntlClientProvider messages={messages}>
+            <TokenExpirationHandler />
+            {children}
+          </NextIntlClientProvider>
         </Providers>
       </body>
     </html>
