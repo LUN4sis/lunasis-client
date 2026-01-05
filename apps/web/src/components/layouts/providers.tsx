@@ -2,6 +2,7 @@
 
 import { QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { GoogleOAuthProvider } from '@react-oauth/google';
 import { queryClient } from '@web/lib/query-client';
 import { ReactNode, useEffect, useState } from 'react';
 import { ToastContainer } from '@web/components/ui/toast';
@@ -37,12 +38,14 @@ function MSWProvider({ children }: ProvidersProps) {
 
 export default function Providers({ children }: ProvidersProps) {
   return (
-    <QueryClientProvider client={queryClient}>
-      <MSWProvider>
-        <ToastContainer />
-        {children}
-        <ReactQueryDevtools initialIsOpen={false} position="bottom" />
-      </MSWProvider>
-    </QueryClientProvider>
+    <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID ?? ''}>
+      <QueryClientProvider client={queryClient}>
+        <MSWProvider>
+          <ToastContainer />
+          {children}
+          <ReactQueryDevtools initialIsOpen={false} position="bottom" />
+        </MSWProvider>
+      </QueryClientProvider>
+    </GoogleOAuthProvider>
   );
 }

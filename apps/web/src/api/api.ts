@@ -14,9 +14,9 @@ export const api = new BaseApi({
 
   getAccessToken: () => useAuthStore.getState().accessToken,
   getRefreshToken: () => useAuthStore.getState().refreshToken,
-  onTokenRefresh: async (accessToken, refreshToken) => {
-    const response = await refreshTokenAPI(accessToken, refreshToken);
-    const tokens = toTokens(response, refreshToken);
+  onTokenRefresh: async (_accessToken, refreshToken) => {
+    const response = await refreshTokenAPI(refreshToken);
+    const tokens = toTokens({ data: response }, refreshToken);
 
     return {
       accessToken: tokens.accessToken!,

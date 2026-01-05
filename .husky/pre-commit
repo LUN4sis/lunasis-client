@@ -32,7 +32,7 @@ if [ -n "$STAGED_TEST_FILES" ]; then
   # --bail: 첫 실패 시 즉시 중단
   # --findRelatedTests: 변경된 파일과 관련된 테스트만 실행
   # --passWithNoTests: 테스트 파일이 없어도 통과
-  npx jest --bail --findRelatedTests --passWithNoTests $STAGED_TEST_FILES
+  pnpm --filter web exec jest --bail --findRelatedTests --passWithNoTests $STAGED_TEST_FILES
   echo "${GREEN}✓ All related tests passed${NC}"
   echo ""
 else

@@ -1,0 +1,93 @@
+{
+  "common": {
+    "loading": "로딩 중...",
+    "comingSoon": "준비중입니다!",
+    "error": "오류가 발생했습니다",
+    "retry": "다시 시도",
+    "cancel": "취소",
+    "confirm": "확인",
+    "save": "저장",
+    "delete": "삭제",
+    "edit": "수정",
+    "back": "뒤로"
+  },
+  "login": {
+    "label": "Google 계정으로 로그인"
+  },
+  "main": {
+    "talkRoom": {
+      "label": "토크룸",
+      "description": "커뮤니티와 이야기 나누기"
+    },
+    "hospital": {
+      "label": "병원 찾기",
+      "description": "전문가 조언을 받고 적합한 병원 찾기"
+    },
+    "shopping": {
+      "label": "추천 상품",
+      "description": "맞춤 상품 탐색 및 쇼핑"
+    },
+    "chat": {
+      "prompt": "어디서 시작해야 할지 모르겠다면?",
+      "button": "채팅하기! 👆"
+    }
+  },
+  "chat": {
+    "placeholder": "루나에게 무엇이든 물어보세요!",
+    "welcome": {
+      "normal": "다시 돌아오신 것을 환영해요!\n준비되면 무엇이든 말해주세요.",
+      "incognito": "시크릿 모드입니다.\n\n이 대화는 기록에 남지 않으며 저장되지 않습니다."
+    },
+    "welcomeScreen": {
+      "firstTime": {
+        "title": "👋 안녕하세요, 루나입니다!",
+        "intro": "저는 여러분의 AI 기반 웰니스 동반자로, 과학과 공감을 바탕으로 건강을 이해하고 관리하는 것을 돕습니다. 생리 주기 추적, 근처 병원 찾기, 혹은 단순히 몸에 대한 궁금증 해결까지—언제든 여러분을 위해 여기 있습니다.",
+        "examplesTitle": "🌸 다음과 같은 질문을 해보세요:",
+        "categories": {
+          "healthNavigation": {
+            "title": "🏥 건강 네비게이션 & 지역 서비스",
+            "examples": [
+              "주말에 운영하는 가장 가까운 여성 건강 클리닉은 어디인가요?",
+              "강남 지역 병원의 최근 환자 리뷰를 요약해주세요."
+            ]
+          },
+          "menstrualHealth": {
+            "title": "🩸 생리 건강 & 추적",
+            "examples": [
+              "생리 전 갈색 분비물이 정상인가요?",
+              "생리통은 있는데 생리가 없어요. 무엇이 문제일까요?"
+            ]
+          },
+          "aiInsights": {
+            "title": "🧠 AI 기반 건강 인사이트",
+            "examples": [
+              "지난 3주기를 분석해서 이상한 점이 있는지 알려주세요.",
+              "최근 증상을 바탕으로 웰니스 요약을 생성해주세요."
+            ]
+          }
+        }
+      },
+      "returning": {
+        "title": "다시 돌아오신 것을 환영해요!",
+        "subtitle": "준비되면 무엇이든 말해주세요."
+      },
+      "incognito": {
+        "title": "시크릿 모드입니다.",
+        "subtitle": "이 대화는 기록에 남지 않으며 저장되지 않습니다."
+      }
+    }
+  },
+  "navigation": {
+    "home": "홈",
+    "community": "커뮤니티",
+    "chat": "채팅",
+    "profile": "프로필"
+  },
+  "notFound": {
+    "title": "앗! 길을 잃었어요",
+    "description1": "요청하신 페이지가 사라졌거나",
+    "description2": "주소가 잘못되었을 수 있어요",
+    "homeButton": "홈으로 돌아가기",
+    "backButton": "이전 페이지로 돌아가기"
+  }
+}

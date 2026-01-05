@@ -16,5 +16,11 @@
       "@repo/shared/stores": ["../../packages/shared/src/stores/index.ts"]
     }
   },
-  "include": ["**/*.ts", "**/*.tsx", ".expo/types/**/*.ts", "expo-env.d.ts"]
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    ".expo/types/**/*.ts",
+    "expo-env.d.ts",
+    "../../packages/shared/src/types/global.d.ts"
+  ]
 }

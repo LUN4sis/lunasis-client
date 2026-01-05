@@ -27,15 +27,15 @@ export const PAGINATION_CONFIG = {
   defaultPage: 0,
 } as const;
 
-export const isDevelopment = () => {
-  if (typeof process !== 'undefined') {
+export const isDevelopment = (): boolean => {
+  if (typeof process !== 'undefined' && process.env) {
     return process.env.NODE_ENV === 'development';
   }
   return false;
 };
 
-export const isProduction = () => {
-  if (typeof process !== 'undefined') {
+export const isProduction = (): boolean => {
+  if (typeof process !== 'undefined' && process.env) {
     return process.env.NODE_ENV === 'production';
   }
   return false;

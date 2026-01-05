@@ -1,3 +1,4 @@
 export * from './error.type';
 export * from './api.type';
-export * from '../features/products/types/product.type';
+export * from './locale';
+export * from '../features/products/types';
