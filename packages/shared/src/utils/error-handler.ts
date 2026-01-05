@@ -12,7 +12,7 @@ import {
   ServerError,
   SERVER_ERROR_MESSAGES,
 } from '@repo/shared/types/error.type';
-import { isDevelopment } from '@repo/shared/constants';
+import { isDevelopment } from '@repo/shared/constants/config';
 import { logger } from './logger';
 
 // ===========================

@@ -80,9 +80,21 @@ export function useLogin() {
       // wait for Zustand persist to complete
       await new Promise((resolve) => setTimeout(resolve, STATE_UPDATE_DELAY));
 
-      // redirect
+      // Get locale from sessionStorage (stored before OAuth redirect)
+      const getLocale = (): 'ko' | 'en' => {
+        if (typeof window !== 'undefined') {
+          const storedLocale = sessionStorage.getItem('oauth_locale');
+          if (storedLocale) {
+            sessionStorage.removeItem('oauth_locale');
+            return storedLocale as 'ko' | 'en';
+          }
+        }
+        return 'en'; // default locale
+      };
+
+      const locale = getLocale();
       const redirectPath = data.firstLogin ? ROUTES.ONBOARDING_NAME : ROUTES.ROOT;
-      router.replace(redirectPath);
+      router.replace(`/${locale}${redirectPath}`);
     },
     onError: (error: unknown) => {
       const appError = error instanceof AppError ? error : transformError(error);

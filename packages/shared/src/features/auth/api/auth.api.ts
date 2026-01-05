@@ -1,88 +1,49 @@
-import type { ApiResponse } from '@repo/shared/types';
-import type { ExchangeResponse, RefreshTokenResponse } from '../types/auth.type';
-import { logger, transformError } from '@repo/shared/utils';
+import type { LoginResponse, RefreshTokenResponse } from '../types/auth.type';
+import { createApiClient } from '@repo/shared/api';
 
 const API_BASE_URL =
   (typeof process !== 'undefined' && process.env.NEXT_PUBLIC_API_URL) ||
   'http://localhost:8080/api';
 
 /**
- * Exchange OAuth code for tokens
- *
- * POST /sessions/exchange
- * Body: { exchangeToken: string }
- * Response: { success, message, code, data: { accessToken, refreshToken, ... } }
+ * Google Login API
+ * POST /api/auth/google
+ * @request body {loginCode: string}
+ * @response {LoginResponse}
  */
-export async function exchangeTokenAPI(code: string): Promise<ApiResponse<ExchangeResponse>> {
-  const url = `${API_BASE_URL}/sessions/exchange`;
-  const requestBody = { exchangeToken: code };
-
-  try {
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(requestBody),
-    });
-
-    if (!response.ok) {
-      throw new Error(`Token exchange failed: ${response.status} ${response.statusText}`);
-    }
-
-    const data = await response.json();
-
-    return data;
-  } catch (error) {
-    throw error;
-  }
-}
+export const googleLoginAPI = async (loginCode: string): Promise<LoginResponse> => {
+  const api = createApiClient({ baseURL: API_BASE_URL });
+  return await api.post<LoginResponse, { loginCode: string }>('/auth/google', { loginCode });
+};
 
 /**
- * Refresh access token
+ * Alias for backward compatibility
  */
-export async function refreshTokenAPI(
-  accessToken: string,
-  refreshToken: string,
-): Promise<ApiResponse<RefreshTokenResponse>> {
-  const response = await fetch(`${API_BASE_URL}/sessions`, {
-    method: 'PATCH',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${accessToken}`,
-    },
-    body: JSON.stringify({ refreshToken }),
-  });
-
-  if (!response.ok) {
-    throw new Error('Token refresh failed');
-  }
-
-  return response.json();
-}
+export const exchangeTokenAPI = googleLoginAPI;
 
 /**
- * Logout user
+ * Token Refresh API
+ * PATCH /api/auth
+ * @header {Authorization: Bearer <accessToken>}
+ * @request body {refreshToken: string}
+ * @response {RefreshTokenResponse}
  */
-export async function logoutAPI(
-  accessToken: string | null,
-  refreshToken: string | null,
-): Promise<void> {
-  if (!accessToken && !refreshToken) {
-    return;
-  }
+export const tokenRefreshAPI = async (refreshToken: string): Promise<RefreshTokenResponse> => {
+  const api = createApiClient({ baseURL: API_BASE_URL });
+  return await api.patch<RefreshTokenResponse, { refreshToken: string }>('/auth', { refreshToken });
+};
 
-  try {
-    await fetch(`${API_BASE_URL}/sessions`, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-        ...(accessToken && { Authorization: `Bearer ${accessToken}` }),
-      },
-      body: JSON.stringify({ refreshToken }),
-    });
-  } catch (error) {
-    const appError = transformError(error);
-    logger.error('[Auth] Logout failed:', appError.toJSON());
-  }
-}
+/**
+ * Alias for backward compatibility
+ */
+export const refreshTokenAPI = tokenRefreshAPI;
+
+/**
+ * Logout API
+ * DELETE /api/auth
+ * @reqeust body {refreshToken: string}
+ */
+export const logoutAPI = async (refreshToken: string): Promise<{ success: boolean }> => {
+  const api = createApiClient({ baseURL: API_BASE_URL });
+  return await api.delete<{ success: boolean }>('/auth', { data: { refreshToken } });
+};
