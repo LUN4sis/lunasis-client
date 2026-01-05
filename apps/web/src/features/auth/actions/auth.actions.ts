@@ -38,10 +38,6 @@ export async function exchangeAuthToken(
     // If name is provided, use Apple login API
     const data = name ? await appleLoginAPI(credential, name) : await googleLoginAPI(credential);
 
-    console.log('[Server Action] Token exchange successful', {
-      hasData: !!data,
-    });
-
     return {
       success: true,
       data,
