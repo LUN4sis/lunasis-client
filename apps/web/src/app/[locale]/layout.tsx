@@ -3,8 +3,10 @@ import { DM_Sans } from 'next/font/google';
 import { NextIntlClientProvider, hasLocale } from 'next-intl';
 import { getMessages, setRequestLocale } from 'next-intl/server';
 import { notFound } from 'next/navigation';
+import { Suspense } from 'react';
 import { Providers } from '@web/components/layouts';
 import { TokenExpirationHandler } from '@web/features/auth/components/token-expiration-handler';
+import { LoadingFallback } from '@web/components/ui/loading-fallback';
 import { routing } from '@web/i18n/routing';
 
 import '../globals.scss';
@@ -85,8 +87,12 @@ export default async function LocaleLayout({ children, params }: Props) {
       <body className={dmSans.variable} style={{ backgroundColor: '#f6f6f6' }}>
         <Providers>
           <NextIntlClientProvider messages={messages}>
-            <TokenExpirationHandler />
-            {children}
+            {/* next-intl 권장 사항: NextIntlClientProvider 내부에 Suspense 경계 제공 */}
+            {/* Recommended by next-intl: Provide Suspense boundary inside NextIntlClientProvider */}
+            <Suspense fallback={<LoadingFallback />}>
+              <TokenExpirationHandler />
+              {children}
+            </Suspense>
           </NextIntlClientProvider>
         </Providers>
       </body>
