@@ -1,6 +1,7 @@
 {
   "common": {
     "loading": "Loading...",
+    "comingSoon": "Coming soon",
     "error": "An error occurred",
     "retry": "Retry",
     "cancel": "Cancel",
@@ -29,6 +30,51 @@
     "chat": {
       "prompt": "Not sure where to start?",
       "button": "Chat with me! 👆"
+    }
+  },
+  "chat": {
+    "placeholder": "Ask to Luna",
+    "welcome": {
+      "normal": "Welcome back!\nTell me anything when you're ready.",
+      "incognito": "You are now incognito.\n\nThis chat won't appear in history and won't be kept."
+    },
+    "welcomeScreen": {
+      "firstTime": {
+        "title": "👋 Hi, I'm Luna!",
+        "intro": "I'm your AI-powered wellness companion, here to support you in understanding and managing your health with care, science, and empathy. Whether you're tracking your cycle, looking for reliable clinics nearby, or just curious about your body—I'm here for you, anytime.",
+        "examplesTitle": "🌸 Here are some questions you can ask me:",
+        "categories": {
+          "healthNavigation": {
+            "title": "🏥 Health Navigation & Local Services",
+            "examples": [
+              "Where is the nearest women's health clinic open on weekends?",
+              "Summarize recent patient reviews of a clinic in Gangnam, Seoul."
+            ]
+          },
+          "menstrualHealth": {
+            "title": "🩸 Menstrual Health & Tracking",
+            "examples": [
+              "Is brown spotting before my period normal?",
+              "I have cramps but no period—what could it be?"
+            ]
+          },
+          "aiInsights": {
+            "title": "🧠 AI-Powered Health Insights",
+            "examples": [
+              "Can you analyze my last 3 cycles and tell me if something looks off?",
+              "Generate a wellness summary based on my recent symptoms."
+            ]
+          }
+        }
+      },
+      "returning": {
+        "title": "Welcome back!",
+        "subtitle": "Tell me anything when you're ready."
+      },
+      "incognito": {
+        "title": "You are now incognito.",
+        "subtitle": "This chat won't appear in history and won't be kept."
+      }
     }
   },
   "navigation": {

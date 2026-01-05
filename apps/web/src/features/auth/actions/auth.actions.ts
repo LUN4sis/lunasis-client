@@ -1,6 +1,7 @@
 'use server';
 
 import type { ExchangeResponse } from '@repo/shared/features/auth';
+import { googleLoginAPI, logoutAPI } from '@repo/shared/features/auth/api/auth.api';
 import { ErrorCode } from '@repo/shared/types';
 
 interface ActionResponse<T = unknown> {
@@ -13,58 +14,18 @@ interface ActionResponse<T = unknown> {
 }
 
 /**
- * Exchange OAuth code for tokens (Server Action)
+ * Exchange Google OAuth credential for tokens (Server Action)
+ * Uses Google OAuth code from @react-oauth/google
  */
-export async function exchangeAuthToken(code: string): Promise<ActionResponse<ExchangeResponse>> {
-  const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080/api';
-  const url = `${API_BASE_URL}/sessions/exchange`;
-
-  const requestBody = { exchangeToken: code };
-
+export async function exchangeAuthToken(
+  credential: string,
+): Promise<ActionResponse<ExchangeResponse>> {
   try {
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(requestBody),
-    });
-
-    if (!response.ok) {
-      return {
-        success: false,
-        error: {
-          code: ErrorCode.EXCHANGE_FAILED,
-          message: `HTTP ${response.status}: ${response.statusText}`,
-        },
-      };
-    }
-
-    const data = await response.json();
-
-    if (!data.success) {
-      return {
-        success: false,
-        error: {
-          code: data.error?.code || ErrorCode.EXCHANGE_FAILED,
-          message: data.error?.message || data.message || 'Token exchange failed',
-        },
-      };
-    }
-
-    if (!data.data) {
-      return {
-        success: false,
-        error: {
-          code: ErrorCode.EXCHANGE_FAILED,
-          message: 'No data in response',
-        },
-      };
-    }
+    const data = await googleLoginAPI(credential);
 
     return {
       success: true,
-      data: data.data,
+      data,
     };
   } catch (error) {
     return {
@@ -79,6 +40,7 @@ export async function exchangeAuthToken(code: string): Promise<ActionResponse<Ex
 
 /**
  * Logout (Server Action)
+ * Reuses logoutAPI from @repo/shared
  */
 export async function logoutUser(
   accessToken: string | null,
@@ -88,19 +50,15 @@ export async function logoutUser(
     return { success: true };
   }
 
-  const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080/api';
-  const url = `${API_BASE_URL}/sessions`;
+  if (!refreshToken) {
+    return {
+      success: false,
+      error: 'Refresh token is required for logout',
+    };
+  }
 
   try {
-    await fetch(url, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-        ...(accessToken && { Authorization: `Bearer ${accessToken}` }),
-      },
-      body: JSON.stringify({ refreshToken }),
-    });
-
+    await logoutAPI(refreshToken);
     return { success: true };
   } catch (error) {
     return {

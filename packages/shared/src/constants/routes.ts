@@ -1,13 +1,8 @@
-import { getApiUrl } from '../api/base.api';
-
 export const ROUTES = {
   ROOT: '/',
   HOME: '/home',
   LOGIN: '/login',
-  OAUTH_CALLBACK: '/oauth/callback',
-  get OAUTH_REDIRECT() {
-    return `${getApiUrl(true)}/oauth2/authorization/google`;
-  },
+  GOOGLE_CALLBACK: '/oauth/callback/google',
 
   // Onboarding
   ONBOARDING_NAME: '/onboarding/name',

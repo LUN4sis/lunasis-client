@@ -1,4 +1,4 @@
-import { isDevelopment } from '@repo/shared/constants';
+import { isDevelopment } from '@repo/shared/constants/config';
 
 type LogLevel = 'debug' | 'info' | 'warn' | 'error';
 

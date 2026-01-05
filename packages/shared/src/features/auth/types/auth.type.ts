@@ -1,13 +1,18 @@
 /**
- * OAuth Token Exchange Response
+ * Login Response (also used as ExchangeResponse)
  */
-export interface ExchangeResponse {
+export interface LoginResponse {
   accessToken: string;
   refreshToken: string;
   firstLogin: boolean;
   nickname: string;
   privateChat: boolean;
 }
+
+/**
+ * Type alias for backward compatibility
+ */
+export type ExchangeResponse = LoginResponse;
 
 /**
  * Token Refresh Response
