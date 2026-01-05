@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useLogin } from '@web/features/auth/hooks/use-auth';
 import { verifyOAuthState } from '@web/features/auth/utils';
@@ -14,9 +14,9 @@ import { routing } from '@web/i18n/routing';
  *  *
  * This page is located outside of [locale] to use a fixed redirect URI.
  * After processing OAuth, it redirects to the appropriate locale-based route.
- *
+
  */
-export default function GoogleCallbackPage() {
+const GoogleCallbackContent = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const { login, isError } = useLogin();
@@ -110,4 +110,12 @@ export default function GoogleCallbackPage() {
   }
 
   return <LoadingFallback />;
+};
+
+export default function GoogleCallbackPage() {
+  return (
+    <Suspense fallback={<LoadingFallback />}>
+      <GoogleCallbackContent />
+    </Suspense>
+  );
 }
