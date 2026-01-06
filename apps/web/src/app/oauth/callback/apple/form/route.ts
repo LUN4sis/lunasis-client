@@ -60,11 +60,3 @@ export async function POST(request: NextRequest) {
     return NextResponse.redirect(errorUrl);
   }
 }
-
-/**
- * Handle GET requests (for direct page access or refresh)
- */
-export async function GET() {
-  // GET requests are handled by page.tsx
-  return new NextResponse(null, { status: 200 });
-}
