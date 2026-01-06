@@ -5,7 +5,12 @@
     "build": {
       "dependsOn": ["^build"],
       "outputs": [".next/**", "!.next/cache/**", "dist/**", ".expo/**"],
-      "env": ["NEXT_PUBLIC_API_URL", "NEXT_PUBLIC_ENABLE_MSW"]
+      "env": [
+        "NEXT_PUBLIC_API_URL",
+        "NEXT_PUBLIC_ENABLE_MSW",
+        "GOOGLE_CLIENT_SECRET",
+        "VAPID_PRIVATE_KEY"
+      ]
     },
     "dev": {
       "cache": false,
