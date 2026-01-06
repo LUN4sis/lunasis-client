@@ -10,13 +10,12 @@ import { ROUTES } from '@repo/shared/constants';
 import { routing } from '@web/i18n/routing';
 
 /**
- * Google OAuth Callback Page (Locale-independent)
- *  *
+ * Apple OAuth Callback Page (Locale-independent)
+ *
  * This page is located outside of [locale] to use a fixed redirect URI.
  * After processing OAuth, it redirects to the appropriate locale-based route.
-
  */
-const GoogleCallbackContent = () => {
+const AppleCallbackContent = () => {
   const searchParams = useSearchParams();
   const { login, isError } = useLogin();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -26,6 +25,7 @@ const GoogleCallbackContent = () => {
     const error = searchParams.get('error');
     const errorDescription = searchParams.get('error_description');
     const state = searchParams.get('state');
+    const name = searchParams.get('name') || '';
 
     // Get locale from sessionStorage (stored before OAuth redirect)
     const getLocale = (): 'ko' | 'en' => {
@@ -47,13 +47,13 @@ const GoogleCallbackContent = () => {
       }
     };
 
-    // Handle OAuth error from Google
+    // Handle OAuth error from Apple
     if (error) {
-      logger.error('[Auth] Google OAuth error', {
+      logger.error('[Auth] Apple OAuth error', {
         error: error as string,
         description: errorDescription as string | null,
       });
-      setErrorMessage(errorDescription || 'Google authentication failed. Please try again.');
+      setErrorMessage(errorDescription || 'Apple authentication failed. Please try again.');
 
       // Redirect to login after 3 seconds
       setTimeout(() => {
@@ -76,10 +76,10 @@ const GoogleCallbackContent = () => {
 
     // Process authorization code
     if (code) {
-      logger.info('[Auth] Google OAuth code received, exchanging for tokens...');
+      logger.info('[Auth] Apple OAuth code received, exchanging for tokens...');
 
       // Login hook will handle the redirect after successful login
-      login({ code });
+      login({ code, name });
     } else {
       logger.warn('[Auth] No OAuth code found in URL');
       setErrorMessage('Invalid authentication response. Please try again.');
@@ -117,10 +117,10 @@ const GoogleCallbackContent = () => {
   return <LoadingFallback />;
 };
 
-export default function GoogleCallbackPage() {
+export default function AppleCallbackPage() {
   return (
     <Suspense fallback={<LoadingFallback />}>
-      <GoogleCallbackContent />
+      <AppleCallbackContent />
     </Suspense>
   );
 }

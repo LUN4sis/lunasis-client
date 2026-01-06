@@ -16,6 +16,14 @@ export const googleLoginAPI = async (loginCode: string): Promise<LoginResponse> 
   return await api.post<LoginResponse, { loginCode: string }>('/auth/google', { loginCode });
 };
 
+export const appleLoginAPI = async (loginCode: string, name: string): Promise<LoginResponse> => {
+  const api = createApiClient({ baseURL: API_BASE_URL });
+  return await api.post<LoginResponse, { loginCode: string; name: string }>('/auth/apple', {
+    loginCode,
+    name,
+  });
+};
+
 /**
  * Alias for backward compatibility
  */

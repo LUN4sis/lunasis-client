@@ -51,15 +51,21 @@ export function logoutSync() {
   logoutManager.logoutSync();
 }
 
+interface LoginParams {
+  code: string;
+  name?: string;
+}
+
 /**
  * Hook for handling OAuth login/token exchange with React Query
+ * Supports both Google and Apple OAuth
  */
 export function useLogin() {
   const { updateTokens, setProfile } = useAuthStore();
 
   const loginMutation = useMutation({
-    mutationFn: async (code: string) => {
-      const result = await exchangeAuthToken(code);
+    mutationFn: async ({ code, name }: LoginParams) => {
+      const result = await exchangeAuthToken(code, name);
 
       // Validate result
       if (!result.success || !result.data) {

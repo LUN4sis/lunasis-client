@@ -3,7 +3,12 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import { useParams } from 'next/navigation';
-import { buildGoogleOAuthUrl, getOAuthCallbackUrl } from '@web/features/auth/utils';
+import {
+  buildGoogleOAuthUrl,
+  getOAuthCallbackUrl,
+  buildAppleOAuthUrl,
+  getAppleOAuthCallbackUrl,
+} from '@web/features/auth/utils';
 import { logger } from '@repo/shared/utils';
 
 import styles from './login.module.scss';
@@ -51,6 +56,30 @@ export default function LoginPage() {
     }
   };
 
+  /**
+   * Handle Apple login button click
+   */
+  const handleAppleLogin = () => {
+    try {
+      setError(null);
+      const redirectUri = getAppleOAuthCallbackUrl(locale);
+      const appleAuthUrl = buildAppleOAuthUrl(redirectUri);
+
+      logger.info('[Auth] Redirecting to Apple OAuth', {
+        redirectUri,
+        locale,
+      });
+
+      window.location.href = appleAuthUrl;
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to start login';
+      logger.error('[Auth] Failed to build Apple OAuth URL', {
+        error: errorMessage,
+      });
+      setError(errorMessage);
+    }
+  };
+
   return (
     <main className={styles.container}>
       <section className={styles.logoContainer}>
@@ -75,12 +104,21 @@ export default function LoginPage() {
         )}
         <button
           onClick={handleGoogleLogin}
-          className={styles.googleLoginButton}
+          className={styles.loginButton}
           type="button"
           aria-label="구글 로그인"
         >
           <Image src="/google.svg" alt="google" width={24} height={24} />
           <span>구글로 로그인</span>
+        </button>
+        <button
+          onClick={handleAppleLogin}
+          className={styles.loginButton}
+          type="button"
+          aria-label="애플 로그인"
+        >
+          <Image src="/apple.svg" alt="apple" width={24} height={24} />
+          <span>애플로 로그인</span>
         </button>
       </section>
     </main>

@@ -70,7 +70,7 @@ export const buildGoogleOAuthUrl = (redirectUri: string, state?: string): string
 };
 
 /**
- * Get OAuth callback redirect URI
+ * Get OAuth callback redirect URI for Google
  */
 export const getOAuthCallbackUrl = (locale?: string): string => {
   if (typeof window !== 'undefined' && locale) {
@@ -88,4 +88,62 @@ export const getOAuthCallbackUrl = (locale?: string): string => {
   }
 
   return 'http://localhost:3000/oauth/callback/google';
+};
+
+/**
+ * Get OAuth callback redirect URI for Apple
+ */
+export const getAppleOAuthCallbackUrl = (locale?: string): string => {
+  if (typeof window !== 'undefined' && locale) {
+    sessionStorage.setItem('oauth_locale', locale);
+  }
+
+  const envRedirectUri = process.env.NEXT_PUBLIC_APPLE_REDIRECT_URI;
+  if (envRedirectUri) {
+    return envRedirectUri;
+  }
+
+  if (typeof window !== 'undefined') {
+    const origin = window.location.origin;
+    return `${origin}/oauth/callback/apple`;
+  }
+
+  return 'http://localhost:3000/oauth/callback/apple';
+};
+
+/**
+ * Build Apple OAuth authorization URL
+ *
+ * @param redirectUri - OAuth callback redirect URI
+ * @param state - CSRF protection state parameter (optional, will be generated if not provided)
+ * @returns Apple OAuth authorization URL
+ */
+export const buildAppleOAuthUrl = (redirectUri: string, state?: string): string => {
+  const clientId = process.env.NEXT_PUBLIC_APPLE_CLIENT_ID;
+
+  if (!clientId) {
+    throw new Error(
+      'Apple Client ID is not configured. Please set NEXT_PUBLIC_APPLE_CLIENT_ID in your .env.local file.',
+    );
+  }
+
+  if (!redirectUri) {
+    throw new Error('Redirect URI is required for OAuth');
+  }
+
+  const oauthState = state || generateOAuthState();
+  const scope = 'name email';
+  const responseType = 'code';
+  const responseMode = 'form_post'; // Apple requires form_post for web
+
+  const params = new URLSearchParams({
+    client_id: clientId,
+    redirect_uri: redirectUri,
+    response_type: responseType,
+    scope: scope,
+    state: oauthState,
+    response_mode: responseMode,
+  });
+
+  return `https://appleid.apple.com/auth/authorize?${params.toString()}`;
 };
