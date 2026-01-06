@@ -71,14 +71,21 @@ export const buildGoogleOAuthUrl = (redirectUri: string, state?: string): string
 
 /**
  * Get OAuth callback redirect URI
- * OAuth 콜백 리다이렉트 URI 가져오기
  */
 export const getOAuthCallbackUrl = (locale?: string): string => {
   if (typeof window !== 'undefined' && locale) {
     sessionStorage.setItem('oauth_locale', locale);
   }
 
-  const FIXED_REDIRECT_URI = 'http://localhost:3000/oauth/callback/google';
+  const envRedirectUri = process.env.NEXT_PUBLIC_REDIRECT_URI;
+  if (envRedirectUri) {
+    return envRedirectUri;
+  }
 
-  return FIXED_REDIRECT_URI;
+  if (typeof window !== 'undefined') {
+    const origin = window.location.origin;
+    return `${origin}/oauth/callback/google`;
+  }
+
+  return 'http://localhost:3000/oauth/callback/google';
 };
