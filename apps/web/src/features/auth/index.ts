@@ -3,6 +3,7 @@ export * from './actions/auth.actions';
 
 // Components
 export { LoginButton } from './components/login-button';
+export { AppleLoginButton } from './components/apple-login-button';
 export { LogoutButton } from './components/logout-button';
 
 // HOC

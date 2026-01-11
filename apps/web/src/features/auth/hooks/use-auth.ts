@@ -1,6 +1,6 @@
 'use client';
 
-import { useRouter } from '@web/i18n/navigation';
+import { useParams } from 'next/navigation';
 import { useMutation } from '@tanstack/react-query';
 
 import { useAuthStore } from '@repo/shared/features/auth';
@@ -11,6 +11,7 @@ import { ROUTES } from '@repo/shared/constants';
 import { logger, transformError } from '@repo/shared/utils';
 import { AppError, ErrorCode, ERROR_MESSAGES } from '@repo/shared/types';
 import type { ExchangeResponse } from '@repo/shared/features/auth/types';
+import { routing } from '@web/i18n/routing';
 
 const STATE_UPDATE_DELAY = 200;
 
@@ -20,7 +21,7 @@ const STATE_UPDATE_DELAY = 200;
  * Uses LogoutManager for consistent logout behavior
  */
 export function useLogout() {
-  const router = useRouter();
+  const params = useParams();
   const { accessToken, refreshToken } = useAuthStore();
 
   const logoutMutation = useMutation({
@@ -28,7 +29,12 @@ export function useLogout() {
       await logoutManager.completeLogout(accessToken, refreshToken);
     },
     onSettled: () => {
-      router.push(ROUTES.ROOT);
+      if (typeof window !== 'undefined') {
+        // Get locale from params or use default
+        const locale = (params?.locale as string) || routing.defaultLocale;
+        const redirectUrl = `${window.location.origin}/${locale}${ROUTES.ROOT}`;
+        window.location.href = redirectUrl;
+      }
     },
   });
 
@@ -45,16 +51,21 @@ export function logoutSync() {
   logoutManager.logoutSync();
 }
 
+interface LoginParams {
+  code: string;
+  name?: string;
+}
+
 /**
  * Hook for handling OAuth login/token exchange with React Query
+ * Supports both Google and Apple OAuth
  */
 export function useLogin() {
   const { updateTokens, setProfile } = useAuthStore();
-  const router = useRouter();
 
   const loginMutation = useMutation({
-    mutationFn: async (code: string) => {
-      const result = await exchangeAuthToken(code);
+    mutationFn: async ({ code, name }: LoginParams) => {
+      const result = await exchangeAuthToken(code, name);
 
       // Validate result
       if (!result.success || !result.data) {
@@ -92,9 +103,14 @@ export function useLogin() {
         return 'en'; // default locale
       };
 
-      const locale = getLocale();
-      const redirectPath = data.firstLogin ? ROUTES.ONBOARDING_NAME : ROUTES.ROOT;
-      router.replace(`/${locale}${redirectPath}`);
+      // Use window.location.href for reliable redirect from OAuth callback page
+      // (which is outside [locale] group)
+      if (typeof window !== 'undefined') {
+        const locale = getLocale();
+        const redirectPath = data.firstLogin ? ROUTES.ONBOARDING_NAME : ROUTES.ROOT;
+        const redirectUrl = `${window.location.origin}/${locale}${redirectPath}`;
+        window.location.href = redirectUrl;
+      }
     },
     onError: (error: unknown) => {
       const appError = error instanceof AppError ? error : transformError(error);

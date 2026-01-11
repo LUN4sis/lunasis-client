@@ -1,7 +1,7 @@
 'use server';
 
 import type { ExchangeResponse } from '@repo/shared/features/auth';
-import { googleLoginAPI, logoutAPI } from '@repo/shared/features/auth/api/auth.api';
+import { googleLoginAPI, appleLoginAPI, logoutAPI } from '@repo/shared/features/auth/api/auth.api';
 import { ErrorCode } from '@repo/shared/types';
 
 interface ActionResponse<T = unknown> {
@@ -14,14 +14,18 @@ interface ActionResponse<T = unknown> {
 }
 
 /**
- * Exchange Google OAuth credential for tokens (Server Action)
- * Uses Google OAuth code from @react-oauth/google
+ * Exchange OAuth credential for tokens (Server Action)
+ * Supports both Google and Apple OAuth
+ * @param credential - OAuth authorization code
+ * @param name - User name (required for Apple, optional for Google)
  */
 export async function exchangeAuthToken(
   credential: string,
+  name?: string,
 ): Promise<ActionResponse<ExchangeResponse>> {
   try {
-    const data = await googleLoginAPI(credential);
+    // If name is provided, use Apple login API
+    const data = name ? await appleLoginAPI(credential, name) : await googleLoginAPI(credential);
 
     return {
       success: true,

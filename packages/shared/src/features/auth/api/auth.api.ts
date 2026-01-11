@@ -12,8 +12,16 @@ const API_BASE_URL =
  * @response {LoginResponse}
  */
 export const googleLoginAPI = async (loginCode: string): Promise<LoginResponse> => {
-  const api = createApiClient({ baseURL: API_BASE_URL, unwrapData: true });
+  const api = createApiClient({ baseURL: API_BASE_URL });
   return await api.post<LoginResponse, { loginCode: string }>('/auth/google', { loginCode });
+};
+
+export const appleLoginAPI = async (loginCode: string, name: string): Promise<LoginResponse> => {
+  const api = createApiClient({ baseURL: API_BASE_URL });
+  return await api.post<LoginResponse, { loginCode: string; name: string }>('/auth/apple', {
+    loginCode,
+    name,
+  });
 };
 
 /**
@@ -41,13 +49,9 @@ export const refreshTokenAPI = tokenRefreshAPI;
 /**
  * Logout API
  * DELETE /api/auth
- * @param refreshToken - Refresh token to invalidate
- * @request body {refreshToken: string}
- * @response {success: boolean}
+ * @reqeust body {refreshToken: string}
  */
 export const logoutAPI = async (refreshToken: string): Promise<{ success: boolean }> => {
-  const api = createApiClient({
-    baseURL: API_BASE_URL,
-  });
+  const api = createApiClient({ baseURL: API_BASE_URL });
   return await api.delete<{ success: boolean }>('/auth', { data: { refreshToken } });
 };
