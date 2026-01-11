@@ -12,15 +12,15 @@
 }
 
 .incognitoBar {
-  @include flex(row, end, center);
+  @include flex(row, flex-end, center);
   background-color: $orange-300;
-  padding: $spacing-2 $spacing-3 0 $spacing-1;
+  padding: $spacing-2 $spacing-3 $spacing-0 $spacing-1;
 
   .button {
     @include flex-center;
     @include size(3rem, 2.5rem);
-    padding: 0;
-    transition: transform 0.15s ease-out;
+    padding: $spacing-0;
+    @include transition(transform, 0.15s, ease-out);
 
     @media (hover: hover) and (pointer: fine) {
       &:hover:not(:disabled) {
@@ -48,6 +48,11 @@
 
 @include respond(mobile) {
   .incognitoBar {
-    padding: $spacing-1 $spacing-2 0 0;
+    padding: $spacing-1 $spacing-3 $spacing-0 $spacing-0;
+  }
+
+  .button {
+    @include size(3.2rem, 2.8rem);
+    touch-action: manipulation;
   }
 }
