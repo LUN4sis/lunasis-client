@@ -12,7 +12,7 @@ const API_BASE_URL =
  * @response {LoginResponse}
  */
 export const googleLoginAPI = async (loginCode: string): Promise<LoginResponse> => {
-  const api = createApiClient({ baseURL: API_BASE_URL });
+  const api = createApiClient({ baseURL: API_BASE_URL, unwrapData: true });
   return await api.post<LoginResponse, { loginCode: string }>('/auth/google', { loginCode });
 };
 
@@ -41,9 +41,13 @@ export const refreshTokenAPI = tokenRefreshAPI;
 /**
  * Logout API
  * DELETE /api/auth
- * @reqeust body {refreshToken: string}
+ * @param refreshToken - Refresh token to invalidate
+ * @request body {refreshToken: string}
+ * @response {success: boolean}
  */
 export const logoutAPI = async (refreshToken: string): Promise<{ success: boolean }> => {
-  const api = createApiClient({ baseURL: API_BASE_URL });
+  const api = createApiClient({
+    baseURL: API_BASE_URL,
+  });
   return await api.delete<{ success: boolean }>('/auth', { data: { refreshToken } });
 };

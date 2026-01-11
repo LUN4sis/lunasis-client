@@ -88,7 +88,7 @@ function BottomNavigation() {
   };
 
   return (
-    <nav className={styles.bottomNavigation}>
+    <nav className={styles.bottomNavigation} data-bottom-navigation>
       {navItems.map((item) => {
         const isActive = item.isActive!();
         const iconSize = item.iconSize || DEFAULT_ICON_SIZE;

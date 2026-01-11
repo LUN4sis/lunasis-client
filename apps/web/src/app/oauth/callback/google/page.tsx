@@ -5,7 +5,7 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import { useLogin } from '@web/features/auth/hooks/use-auth';
 import { verifyOAuthState } from '@web/features/auth/utils';
 import { logger } from '@repo/shared/utils';
-import { LoadingFallback } from '@web/components/ui/loading-fallback';
+import { Loading } from '@web/components/ui/loading';
 import { ROUTES } from '@repo/shared/constants';
 import { routing } from '@web/i18n/routing';
 
@@ -109,12 +109,15 @@ const GoogleCallbackContent = () => {
     );
   }
 
-  return <LoadingFallback />;
+  return <Loading />;
 };
+
+export const dynamic = 'force-dynamic';
+export const runtime = 'edge';
 
 export default function GoogleCallbackPage() {
   return (
-    <Suspense fallback={<LoadingFallback />}>
+    <Suspense fallback={<Loading />}>
       <GoogleCallbackContent />
     </Suspense>
   );
