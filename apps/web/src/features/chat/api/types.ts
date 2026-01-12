@@ -1,11 +1,5 @@
 import { z } from 'zod';
 import type { ApiResponse } from '@repo/shared/types';
-import type {
-  GetChatsResponseData,
-  CreateChatResponseData,
-  GetChatMessagesResponseData,
-  SendMessageResponseData,
-} from '../types/chat.types';
 
 // ============================================================================
 // Zod Schemas for API Response Validation
@@ -53,6 +47,30 @@ export const getChatMessagesResponseSchema = z.array(chatMessageSchema);
 export const sendMessageResponseSchema = z.object({
   answer: z.string(),
 });
+
+// ============================================================================
+// API Response Data Types (inferred from Zod schemas)
+// ============================================================================
+
+/**
+ * Response data type for GET /chats
+ */
+export type GetChatsResponseData = z.infer<typeof chatRoomSchema>;
+
+/**
+ * Response data type for POST /chats
+ */
+export type CreateChatResponseData = z.infer<typeof createChatResponseSchema>;
+
+/**
+ * Response data type for GET /chats/[chatRoom]
+ */
+export type GetChatMessagesResponseData = z.infer<typeof chatMessageSchema>;
+
+/**
+ * Response data type for POST /chats/[chatRoom]
+ */
+export type SendMessageResponseData = z.infer<typeof sendMessageResponseSchema>;
 
 // ============================================================================
 // API Response Types (with ApiResponse wrapper)

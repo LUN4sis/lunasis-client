@@ -1,0 +1,163 @@
+@use '@/styles' as *;
+
+.container {
+  @include flex(column, center, center);
+  padding: $spacing-6 $spacing-4;
+
+  .content {
+    max-width: 600px;
+    width: 100%;
+  }
+}
+
+.title {
+  font-size: $font-size-3xl;
+  font-weight: $font-weight-bold;
+  font-family: $font-family-sans;
+  color: $gray-900;
+  margin: $spacing-0 $spacing-0 $spacing-3;
+  text-align: center;
+}
+
+.intro {
+  font-size: $font-size-lg;
+  font-family: $font-family-sans;
+  color: $gray-700;
+  line-height: 1.6;
+  margin: $spacing-0 $spacing-0 $spacing-5;
+  text-align: center;
+}
+
+.subtitle {
+  font-size: $font-size-xl;
+  font-family: $font-family-sans;
+  color: $gray-600;
+  margin: $spacing-0;
+  text-align: center;
+}
+
+.examples {
+  margin-top: $spacing-5;
+}
+
+.examplesTitle {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  font-family: $font-family-sans;
+  color: $gray-800;
+  margin: $spacing-0 $spacing-0 $spacing-4;
+}
+
+.category {
+  margin-bottom: $spacing-4;
+
+  &:last-child {
+    margin-bottom: $spacing-0;
+  }
+}
+
+.categoryTitle {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  font-family: $font-family-sans;
+  color: $gray-700;
+  margin: $spacing-0 $spacing-0 $spacing-2;
+}
+
+.exampleList {
+  list-style: none;
+  padding: $spacing-0;
+  margin: $spacing-0;
+
+  li {
+    font-size: $font-size-base;
+    font-family: $font-family-sans;
+    color: $gray-600;
+    padding: $spacing-2 $spacing-3;
+    background-color: $white;
+    border-radius: $radius-lg;
+    margin-bottom: $spacing-2;
+    @include transition(all, 0.2s, ease);
+    cursor: pointer;
+
+    &:hover {
+      background-color: $purple-300;
+      color: $purple;
+      transform: translateX(4px);
+    }
+
+    &:last-child {
+      margin-bottom: $spacing-0;
+    }
+  }
+}
+
+// Type-specific styles
+.first-time {
+  .title {
+    font-size: $font-size-4xl;
+  }
+}
+
+.returning {
+  min-height: 200px;
+
+  .title {
+    font-size: $font-size-3xl;
+  }
+}
+
+.incognito {
+  min-height: 200px;
+  background-color: $gray-100;
+
+  .title {
+    font-size: $font-size-3xl;
+    color: $gray-800;
+  }
+
+  .subtitle {
+    color: $gray-600;
+  }
+}
+
+@include respond(mobile) {
+  .container {
+    padding: $spacing-4 $spacing-3;
+    min-height: 250px;
+  }
+
+  .title {
+    font-size: $font-size-2xl;
+  }
+
+  .intro {
+    font-size: $font-size-base;
+  }
+
+  .subtitle {
+    font-size: $font-size-lg;
+  }
+
+  .examplesTitle {
+    font-size: $font-size-base;
+  }
+
+  .categoryTitle {
+    font-size: $font-size-sm;
+  }
+
+  .exampleList li {
+    font-size: $font-size-sm;
+    padding: $spacing-2;
+  }
+
+  .first-time .title {
+    font-size: $font-size-3xl;
+  }
+
+  .returning .title,
+  .incognito .title {
+    font-size: $font-size-2xl;
+  }
+}

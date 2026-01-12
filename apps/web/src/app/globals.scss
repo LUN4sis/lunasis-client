@@ -43,3 +43,12 @@ body {
 .app-content {
   padding-bottom: calc(var(--bottom-nav-height) + env(safe-area-inset-bottom, 0px));
 }
+
+// Hide bottom-navigation when keyboard is open on mobile
+@include respond(mobile) {
+  body.keyboard-open {
+    nav[data-bottom-navigation] {
+      display: none !important;
+    }
+  }
+}

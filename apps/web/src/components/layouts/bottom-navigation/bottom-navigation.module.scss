@@ -2,7 +2,6 @@
 
 .bottomNavigation {
   @include pwa-container;
-  @include safe-area-inset(padding, bottom);
   position: fixed;
   bottom: 0;
   left: 0;
@@ -16,6 +15,35 @@
   display: flex;
   justify-content: space-evenly;
   align-items: center;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  display: var(--bottom-nav-display, flex);
+
+  @include respond(mobile) {
+    position: fixed;
+    top: calc(
+      var(--initial-vh, 100lvh) - var(--bottom-nav-height) - env(safe-area-inset-bottom, 0px)
+    );
+    bottom: auto;
+    left: 0;
+    right: 0;
+    height: calc(var(--bottom-nav-height) + env(safe-area-inset-bottom, 0px));
+
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+
+    transform: translate3d(0, 0, 0);
+    backface-visibility: hidden;
+    will-change: auto;
+
+    transition: none !important;
+    contain: layout style paint;
+    isolation: isolate;
+
+    @supports not (height: 100lvh) {
+      top: calc(
+        var(--initial-vh, 100vh) - var(--bottom-nav-height) - env(safe-area-inset-bottom, 0px)
+      );
+    }
+  }
 }
 
 .navItem {
