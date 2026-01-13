@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from 'react';
 import Image from 'next/image';
 import { useParams } from 'next/navigation';
 import {
@@ -21,11 +20,9 @@ import styles from './login.module.scss';
 export default function LoginPage() {
   const params = useParams();
   const locale = params?.locale as string | undefined;
-  const [error, setError] = useState<string | null>(null);
 
   const handleGoogleLogin = () => {
     try {
-      setError(null);
       const redirectUri = getOAuthCallbackUrl(locale);
       const googleAuthUrl = buildGoogleOAuthUrl(redirectUri);
 
@@ -42,13 +39,11 @@ export default function LoginPage() {
       logger.error('[Auth] Failed to build Google OAuth URL', {
         error: errorMessage,
       });
-      setError(errorMessage);
     }
   };
 
   const handleAppleLogin = () => {
     try {
-      setError(null);
       const redirectUri = getAppleOAuthCallbackUrl(locale);
       const appleAuthUrl = buildAppleOAuthUrl(redirectUri);
 
@@ -63,7 +58,6 @@ export default function LoginPage() {
       logger.error('[Auth] Failed to build Apple OAuth URL', {
         error: errorMessage,
       });
-      setError(errorMessage);
     }
   };
 

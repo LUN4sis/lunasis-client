@@ -73,7 +73,7 @@ const GoogleCallbackContent = () => {
       logger.info('[Auth] Google OAuth code received, exchanging for tokens...');
 
       // Login hook will handle the redirect after successful login
-      login(code);
+      login({ code });
     } else {
       logger.warn('[Auth] No OAuth code found in URL');
       setErrorMessage('Invalid authentication response. Please try again.');
