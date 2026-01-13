@@ -10,7 +10,9 @@ import {
   getAppleOAuthCallbackUrl,
 } from '@web/features/auth/utils';
 import { logger } from '@repo/shared/utils';
+import { Button } from '@web/components/ui/button';
 
+import clsx from 'clsx';
 import styles from './login.module.scss';
 
 /**
@@ -21,9 +23,6 @@ export default function LoginPage() {
   const locale = params?.locale as string | undefined;
   const [error, setError] = useState<string | null>(null);
 
-  /**
-   * Handle Google login button click
-   */
   const handleGoogleLogin = () => {
     try {
       setError(null);
@@ -37,15 +36,6 @@ export default function LoginPage() {
         envRedirectUri: process.env.NEXT_PUBLIC_REDIRECT_URI,
       });
 
-      console.group('[Auth Debug] Google OAuth Configuration');
-      console.log('Environment REDIRECT_URI:', process.env.NEXT_PUBLIC_REDIRECT_URI);
-      console.log('Actual Redirect URI used:', redirectUri);
-      console.log('Current locale:', locale);
-      console.log('Full OAuth URL:', googleAuthUrl);
-      console.log('⚠️  Make sure this EXACT URI is registered in Google OAuth Console:');
-      console.log('   ', redirectUri);
-      console.groupEnd();
-
       window.location.href = googleAuthUrl;
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Failed to start login';
@@ -56,9 +46,6 @@ export default function LoginPage() {
     }
   };
 
-  /**
-   * Handle Apple login button click
-   */
   const handleAppleLogin = () => {
     try {
       setError(null);
@@ -87,39 +74,30 @@ export default function LoginPage() {
         <span>LUNAsis</span>
       </section>
       <section className={styles.loginButtonContainer}>
-        {error && (
-          <div
-            style={{
-              color: '#ef4444',
-              padding: '12px',
-              marginBottom: '16px',
-              borderRadius: '8px',
-              backgroundColor: '#fef2f2',
-              fontSize: '14px',
-              textAlign: 'center',
-            }}
-          >
-            {error}
-          </div>
-        )}
-        <button
+        <Button
           onClick={handleGoogleLogin}
-          className={styles.loginButton}
+          className={clsx(styles.loginButton, styles.google)}
           type="button"
           aria-label="구글 로그인"
+          variant="solid"
+          colorScheme="white"
+          fullWidth={true}
         >
           <Image src="/google.svg" alt="google" width={24} height={24} />
           <span>구글로 로그인</span>
-        </button>
-        <button
+        </Button>
+        <Button
           onClick={handleAppleLogin}
-          className={styles.loginButton}
+          className={clsx(styles.loginButton, styles.apple)}
           type="button"
+          variant="solid"
+          colorScheme="white"
+          fullWidth={true}
           aria-label="애플 로그인"
         >
-          <Image src="/apple.svg" alt="apple" width={24} height={24} />
+          <Image src="/apple.svg" alt="apple" width={28} height={28} />
           <span>애플로 로그인</span>
-        </button>
+        </Button>
       </section>
     </main>
   );
