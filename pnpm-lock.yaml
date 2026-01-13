@@ -5307,11 +5307,6 @@ packages:
     peerDependencies:
       react: ^19.1.4
 
-  react-dom@19.1.4:
-    resolution: {integrity: sha512-s2868ab/xo2SI6H4106A7aFI8Mrqa4xC6HZT/pBzYyQ3cBLqa88hu47xYD8xf+uECleN698Awn7RCWlkTiKnqQ==}
-    peerDependencies:
-      react: ^19.1.4
-
   react-fast-compare@3.2.2:
     resolution: {integrity: sha512-nsO+KSNgo1SbJqJEYRE9ERzo7YtYbou/OqjSQKxV7jcKox7+usiUVZOAC+XnDOABXggQTno0Y1CpVnuWEc1boQ==}
 
@@ -5422,10 +5417,6 @@ packages:
     peerDependencies:
       react: '>=16.6.0'
       react-dom: '>=16.6.0'
-
-  react@19.1.4:
-    resolution: {integrity: sha512-DHINL3PAmPUiK1uszfbKiXqfE03eszdt5BpVSuEAHb5nfmNPwnsy7g39h2t8aXFc/Bv99GH81s+j8dobtD+jOw==}
-    engines: {node: '>=0.10.0'}
 
   react@19.1.4:
     resolution: {integrity: sha512-DHINL3PAmPUiK1uszfbKiXqfE03eszdt5BpVSuEAHb5nfmNPwnsy7g39h2t8aXFc/Bv99GH81s+j8dobtD+jOw==}
@@ -8974,11 +8965,6 @@ snapshots:
     dependencies:
       '@tanstack/query-devtools': 5.92.0
       '@tanstack/react-query': 5.90.16(react@19.1.4)
-      react: 19.1.4
-
-  '@tanstack/react-query@5.90.16(react@19.1.4)':
-    dependencies:
-      '@tanstack/query-core': 5.90.16
       react: 19.1.4
 
   '@tanstack/react-query@5.90.16(react@19.1.4)':
@@ -12585,11 +12571,6 @@ snapshots:
       react: 19.1.4
       scheduler: 0.26.0
 
-  react-dom@19.1.4(react@19.1.4):
-    dependencies:
-      react: 19.1.4
-      scheduler: 0.26.0
-
   react-fast-compare@3.2.2: {}
 
   react-freeze@1.0.4(react@19.1.4):
@@ -12765,8 +12746,6 @@ snapshots:
       prop-types: 15.8.1
       react: 19.1.4
       react-dom: 19.1.4(react@19.1.4)
-
-  react@19.1.4: {}
 
   react@19.1.4: {}
 
