@@ -1,7 +1,6 @@
 'use client';
 
 import { QueryClientProvider } from '@tanstack/react-query';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { queryClient } from '@web/lib/query-client';
 import { ReactNode, useEffect, useState } from 'react';
@@ -40,12 +39,7 @@ function MSWProvider({ children }: ProvidersProps) {
     initializeMocks();
   }, []);
 
-  // wait for MSW initialization
-  if (!isReady) {
-    return null;
-  }
-
-  return <>{children}</>;
+  return <>{isReady ? children : null}</>;
 }
 
 export default function Providers({ children }: ProvidersProps) {
