@@ -34,6 +34,15 @@ const nextConfig: NextConfig = {
     ],
     qualities: [75, 85, 90, 100],
   },
+  async redirects() {
+    return [
+      {
+        source: '/',
+        destination: '/ko',
+        permanent: false,
+      },
+    ];
+  },
   async rewrites() {
     const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080/api';
 
