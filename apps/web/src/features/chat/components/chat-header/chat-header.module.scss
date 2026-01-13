@@ -1,0 +1,42 @@
+@use '@/styles' as *;
+
+.header {
+  @include flex(row, space-between, center);
+  padding: $spacing-3 $spacing-4;
+  caret-color: transparent;
+  user-select: none;
+  background-color: $gray-50;
+}
+
+.title {
+  flex: 1;
+
+  p {
+    text-align: center;
+    font-size: $font-size-3xl;
+    font-weight: $font-weight-regular;
+  }
+}
+
+@include respond(mobile) {
+  .header {
+    padding: $spacing-2 $spacing-2;
+
+    button {
+      min-width: 2.75rem;
+      min-height: 2.75rem;
+      touch-action: manipulation;
+
+      svg {
+        @include size(1.5rem);
+      }
+    }
+
+    .title {
+      p {
+        font-size: $font-size-xl;
+        font-weight: $font-weight-medium;
+      }
+    }
+  }
+}

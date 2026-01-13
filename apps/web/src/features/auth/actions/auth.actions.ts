@@ -25,9 +25,7 @@ export async function exchangeAuthToken(
 ): Promise<ActionResponse<ExchangeResponse>> {
   try {
     // If name is provided, use Apple login API
-    const data = name
-      ? await appleLoginAPI(credential, name)
-      : await googleLoginAPI(credential);
+    const data = name ? await appleLoginAPI(credential, name) : await googleLoginAPI(credential);
 
     return {
       success: true,

@@ -1,11 +1,11 @@
 'use client';
 
 import { Suspense, useEffect, useState } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { useLogin } from '@web/features/auth/hooks/use-auth';
 import { verifyOAuthState } from '@web/features/auth/utils';
 import { logger } from '@repo/shared/utils';
-import { LoadingFallback } from '@web/components/ui/loading-fallback';
+import { Loading } from '@web/components/ui/loading';
 import { ROUTES } from '@repo/shared/constants';
 import { routing } from '@web/i18n/routing';
 
@@ -18,6 +18,7 @@ import { routing } from '@web/i18n/routing';
  */
 const GoogleCallbackContent = () => {
   const searchParams = useSearchParams();
+  const router = useRouter();
   const { login, isError } = useLogin();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -38,15 +39,6 @@ const GoogleCallbackContent = () => {
       return routing.defaultLocale;
     };
 
-    // Helper function to redirect to login page
-    const redirectToLogin = () => {
-      if (typeof window !== 'undefined') {
-        const locale = getLocale();
-        const loginUrl = `${window.location.origin}/${locale}${ROUTES.LOGIN}`;
-        window.location.href = loginUrl;
-      }
-    };
-
     // Handle OAuth error from Google
     if (error) {
       logger.error('[Auth] Google OAuth error', {
@@ -57,7 +49,8 @@ const GoogleCallbackContent = () => {
 
       // Redirect to login after 3 seconds
       setTimeout(() => {
-        redirectToLogin();
+        const locale = getLocale();
+        router.replace(`/${locale}${ROUTES.LOGIN}`);
       }, 3000);
       return;
     }
@@ -69,7 +62,8 @@ const GoogleCallbackContent = () => {
 
       // Redirect to login after 3 seconds
       setTimeout(() => {
-        redirectToLogin();
+        const locale = getLocale();
+        router.replace(`/${locale}${ROUTES.LOGIN}`);
       }, 3000);
       return;
     }
@@ -86,10 +80,11 @@ const GoogleCallbackContent = () => {
 
       // Redirect to login after 3 seconds
       setTimeout(() => {
-        redirectToLogin();
+        const locale = getLocale();
+        router.replace(`/${locale}${ROUTES.LOGIN}`);
       }, 3000);
     }
-  }, [searchParams, login]);
+  }, [searchParams, login, router]);
 
   // Show error message if authentication failed
   if (errorMessage || isError) {
@@ -114,12 +109,15 @@ const GoogleCallbackContent = () => {
     );
   }
 
-  return <LoadingFallback />;
+  return <Loading />;
 };
+
+export const dynamic = 'force-dynamic';
+export const runtime = 'edge';
 
 export default function GoogleCallbackPage() {
   return (
-    <Suspense fallback={<LoadingFallback />}>
+    <Suspense fallback={<Loading />}>
       <GoogleCallbackContent />
     </Suspense>
   );

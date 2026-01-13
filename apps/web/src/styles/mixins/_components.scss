@@ -176,3 +176,44 @@
   background: $bg;
   border-radius: $radius;
 }
+
+// File card component
+@mixin file-card {
+  @include card-bordered(
+    $padding: $spacing-2 $spacing-3,
+    $bg: $gray-50,
+    $radius: $radius-lg,
+    $border: 1px solid $gray-200
+  );
+  @include flex(row, center, center, $spacing-3);
+
+  &:hover {
+    background-color: $gray-100;
+  }
+
+  > svg {
+    color: $red;
+    font-size: $font-size-5xl !important;
+    flex-shrink: 0;
+  }
+}
+
+@mixin file-info {
+  @include flex-column;
+  justify-content: center;
+  flex: 1;
+  min-width: 0;
+}
+
+@mixin file-name {
+  @include text-ellipsis;
+  width: 100%;
+  font-size: $font-size-lg;
+  font-weight: $font-weight-medium;
+  color: $gray-900;
+}
+
+@mixin file-size {
+  font-size: $font-size-base;
+  color: $gray-500;
+}

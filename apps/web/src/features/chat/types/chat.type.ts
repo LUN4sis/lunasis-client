@@ -68,3 +68,11 @@ export interface MessageDisplayProps {
   timestamp?: string;
   attachments?: Attachment[];
 }
+
+// =========================
+// Request Types
+// =========================
+
+export type StartChatRequest = {
+  question: string;
+};
