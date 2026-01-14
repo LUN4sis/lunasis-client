@@ -51,10 +51,9 @@ const nextConfig: NextConfig = {
         source: '/api/:path*',
         destination: `${apiUrl}/:path*`,
       },
-      {
-        source: '/oauth/callback/:path*',
-        destination: `${apiUrl}/oauth/callback/:path*`,
-      },
+      // Note: /oauth/callback/apple and /oauth/callback/google are handled by Next.js routes
+      // and should NOT be rewritten to API server
+      // Other OAuth callbacks can be added here if needed
     ];
   },
   async headers() {
