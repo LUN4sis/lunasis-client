@@ -45,12 +45,12 @@ export async function POST(request: NextRequest) {
       redirectUrl.searchParams.set('error_description', 'No authorization code received');
     }
 
-    return NextResponse.redirect(redirectUrl);
+    return NextResponse.redirect(redirectUrl, { status: 303 });
   } catch {
     logger.error('[Auth] Failed to process Apple OAuth callback', { request });
     const errorUrl = new URL('/oauth/callback/apple/complete', request.url);
     errorUrl.searchParams.set('error', 'server_error');
     errorUrl.searchParams.set('error_description', 'Failed to process Apple OAuth callback');
-    return NextResponse.redirect(errorUrl);
+    return NextResponse.redirect(errorUrl, { status: 303 });
   }
 }
