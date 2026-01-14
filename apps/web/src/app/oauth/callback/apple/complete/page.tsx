@@ -9,12 +9,6 @@ import { LoadingFallback } from '@web/components/ui/loading-fallback';
 import { ROUTES } from '@repo/shared/constants';
 import { routing } from '@web/i18n/routing';
 
-/**
- * Apple OAuth Callback Page (Locale-independent)
- *
- * This page is located outside of [locale] to use a fixed redirect URI.
- * After processing OAuth, it redirects to the appropriate locale-based route.
- */
 const AppleCallbackContent = () => {
   const searchParams = useSearchParams();
   const { login, isError } = useLogin();
@@ -27,7 +21,6 @@ const AppleCallbackContent = () => {
     const state = searchParams.get('state');
     const name = searchParams.get('name') || '';
 
-    // Get locale from sessionStorage (stored before OAuth redirect)
     const getLocale = (): 'ko' | 'en' => {
       if (typeof window !== 'undefined') {
         const storedLocale = sessionStorage.getItem('oauth_locale');
@@ -38,7 +31,6 @@ const AppleCallbackContent = () => {
       return routing.defaultLocale;
     };
 
-    // Helper function to redirect to login page
     const redirectToLogin = () => {
       if (typeof window !== 'undefined') {
         const locale = getLocale();
@@ -47,7 +39,6 @@ const AppleCallbackContent = () => {
       }
     };
 
-    // Handle OAuth error from Apple
     if (error) {
       logger.error('[Auth] Apple OAuth error', {
         error: error as string,
@@ -55,43 +46,36 @@ const AppleCallbackContent = () => {
       });
       setErrorMessage(errorDescription || 'Apple authentication failed. Please try again.');
 
-      // Redirect to login after 3 seconds
       setTimeout(() => {
         redirectToLogin();
       }, 3000);
       return;
     }
 
-    // Verify state parameter for CSRF protection
     if (!verifyOAuthState(state)) {
       logger.error('[Auth] OAuth state verification failed - possible CSRF attack');
       setErrorMessage('Security verification failed. Please try logging in again.');
 
-      // Redirect to login after 3 seconds
       setTimeout(() => {
         redirectToLogin();
       }, 3000);
       return;
     }
 
-    // Process authorization code
     if (code) {
       logger.info('[Auth] Apple OAuth code received, exchanging for tokens...');
 
-      // Login hook will handle the redirect after successful login
       login({ code, name });
     } else {
       logger.warn('[Auth] No OAuth code found in URL');
       setErrorMessage('Invalid authentication response. Please try again.');
 
-      // Redirect to login after 3 seconds
       setTimeout(() => {
         redirectToLogin();
       }, 3000);
     }
   }, [searchParams, login]);
 
-  // Show error message if authentication failed
   if (errorMessage || isError) {
     return (
       <div

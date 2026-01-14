@@ -1,12 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { logger } from '@repo/shared/utils';
 
-/**
- * Apple OAuth Callback Route Handler
- *
- * Apple uses response_mode=form_post, so the callback comes as a POST request.
- * This handler extracts the authorization code and user info, then redirects
- * to the client page with the data in query params.
- */
 export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData();
@@ -17,8 +11,7 @@ export async function POST(request: NextRequest) {
     const error = formData.get('error') as string | null;
     const errorDescription = formData.get('error_description') as string | null;
 
-    // Build redirect URL with query params
-    const redirectUrl = new URL('/oauth/callback/apple', request.url);
+    const redirectUrl = new URL('/oauth/callback/apple/complete', request.url);
 
     if (error) {
       redirectUrl.searchParams.set('error', error);
@@ -32,7 +25,6 @@ export async function POST(request: NextRequest) {
         redirectUrl.searchParams.set('state', state);
       }
 
-      // Parse user info if available (only provided on first login)
       if (userJson) {
         try {
           const user = JSON.parse(userJson);
@@ -43,7 +35,7 @@ export async function POST(request: NextRequest) {
             redirectUrl.searchParams.set('name', name);
           }
         } catch {
-          // Ignore JSON parse errors for user data
+          logger.error('[Auth] Failed to parse user JSON', { userJson });
         }
       }
     } else {
@@ -53,8 +45,8 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.redirect(redirectUrl);
   } catch {
-    // Redirect to callback page with error
-    const errorUrl = new URL('/oauth/callback/apple', request.url);
+    logger.error('[Auth] Failed to process Apple OAuth callback', { request });
+    const errorUrl = new URL('/oauth/callback/apple/complete', request.url);
     errorUrl.searchParams.set('error', 'server_error');
     errorUrl.searchParams.set('error_description', 'Failed to process Apple OAuth callback');
     return NextResponse.redirect(errorUrl);
