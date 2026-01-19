@@ -13,6 +13,11 @@ import { logger } from '@repo/shared/utils';
 export function useTokenExpiration(onLogout: () => void) {
   const { accessTokenIssuedAt, refreshTokenIssuedAt, isLoggedIn } = useAuthStore();
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const onLogoutRef = useRef(onLogout);
+
+  useEffect(() => {
+    onLogoutRef.current = onLogout;
+  }, [onLogout]);
 
   const checkAndHandleExpiration = useCallback(() => {
     // early return: user not logged in
@@ -26,12 +31,12 @@ export function useTokenExpiration(onLogout: () => void) {
 
     if (shouldLogout) {
       logger.warn('[TokenExpiration] Refresh token expired, performing auto-logout');
-      onLogout?.();
+      onLogoutRef.current();
       return;
     }
 
     logger.info('[TokenExpiration] Tokens valid');
-  }, [accessTokenIssuedAt, refreshTokenIssuedAt, isLoggedIn, onLogout]);
+  }, [accessTokenIssuedAt, refreshTokenIssuedAt, isLoggedIn]);
 
   // schedule next expiration check
   const scheduleNextCheck = useCallback(() => {
@@ -68,12 +73,8 @@ export function useTokenExpiration(onLogout: () => void) {
     return () => {
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
+        timeoutRef.current = null;
       }
     };
   }, [checkAndHandleExpiration, scheduleNextCheck]);
-
-  // re-schedule when token timestamps change
-  useEffect(() => {
-    scheduleNextCheck();
-  }, [accessTokenIssuedAt, refreshTokenIssuedAt, scheduleNextCheck]);
 }

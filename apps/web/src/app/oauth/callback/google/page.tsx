@@ -17,11 +17,12 @@ const GoogleCallbackContent = () => {
 
   useEffect(() => {
     const code = searchParams.get('code');
-    const error = searchParams.get('error');
+    const oauthError = searchParams.get('error');
     const errorDescription = searchParams.get('error_description');
     const state = searchParams.get('state');
 
     // Get locale from sessionStorage (stored before OAuth redirect)
+    // sessionStorage에서 로케일 가져오기 (OAuth 리다이렉트 전에 저장됨)
     const getLocale = (): 'ko' | 'en' => {
       if (typeof window !== 'undefined') {
         const storedLocale = sessionStorage.getItem('oauth_locale');
@@ -33,10 +34,11 @@ const GoogleCallbackContent = () => {
     };
 
     // Handle OAuth error from Google
-    if (error) {
+    // Google에서 반환된 OAuth 에러 처리
+    if (oauthError) {
       logger.error('[Auth] Google OAuth error', {
-        error: error as string,
-        description: errorDescription as string | null,
+        error: oauthError,
+        description: errorDescription,
       });
       setErrorMessage(errorDescription || 'Google authentication failed. Please try again.');
 
