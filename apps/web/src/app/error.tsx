@@ -16,11 +16,25 @@ const Error = ({ error, reset }: ErrorProps) => {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    logger.error('Page error occurred', {
-      message: error.message,
+    // Log detailed error information for debugging
+    // 디버깅을 위한 상세 에러 정보 로깅
+    const errorInfo = {
+      message: error.message || '(empty message)',
+      name: error.name,
       digest: error.digest,
       stack: error.stack,
-    });
+      // Additional context for empty message errors
+      // 빈 메시지 에러에 대한 추가 컨텍스트
+      isEmpty: !error.message,
+      url: typeof window !== 'undefined' ? window.location.href : 'unknown',
+    };
+
+    logger.error('Page error occurred', errorInfo);
+
+    // Log to console in development for easier debugging
+    if (process.env.NODE_ENV === 'development') {
+      console.error('[Error Boundary]', error);
+    }
 
     setMounted(true);
   }, [error]);

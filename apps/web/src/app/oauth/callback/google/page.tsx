@@ -9,17 +9,10 @@ import { Loading } from '@web/components/ui/loading';
 import { ROUTES } from '@repo/shared/constants';
 import { routing } from '@web/i18n/routing';
 
-/**
- * Google OAuth Callback Page (Locale-independent)
- *  *
- * This page is located outside of [locale] to use a fixed redirect URI.
- * After processing OAuth, it redirects to the appropriate locale-based route.
-
- */
 const GoogleCallbackContent = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const { login, isError } = useLogin();
+  const { login, isError, error } = useLogin();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
@@ -47,7 +40,6 @@ const GoogleCallbackContent = () => {
       });
       setErrorMessage(errorDescription || 'Google authentication failed. Please try again.');
 
-      // Redirect to login after 3 seconds
       setTimeout(() => {
         const locale = getLocale();
         router.replace(`/${locale}${ROUTES.LOGIN}`);
@@ -88,6 +80,11 @@ const GoogleCallbackContent = () => {
 
   // Show error message if authentication failed
   if (errorMessage || isError) {
+    // Get error details for debugging
+    // 디버깅을 위한 에러 상세 정보 가져오기
+    const errorDetails =
+      error instanceof Error ? error.message : error ? JSON.stringify(error) : null;
+
     return (
       <div
         style={{
@@ -104,6 +101,30 @@ const GoogleCallbackContent = () => {
         <p style={{ color: '#6b7280', marginBottom: '16px' }}>
           {errorMessage || 'An error occurred during login. Please try again.'}
         </p>
+        {/* Show error details in development for debugging */}
+        {/* 디버깅을 위해 개발 환경에서 에러 상세 정보 표시 */}
+        {errorDetails && (
+          <details style={{ marginBottom: '16px', maxWidth: '400px' }}>
+            <summary style={{ color: '#9ca3af', fontSize: '12px', cursor: 'pointer' }}>
+              Error Details (for debugging)
+            </summary>
+            <pre
+              style={{
+                color: '#9ca3af',
+                fontSize: '10px',
+                textAlign: 'left',
+                whiteSpace: 'pre-wrap',
+                wordBreak: 'break-all',
+                background: '#1f2937',
+                padding: '8px',
+                borderRadius: '4px',
+                marginTop: '8px',
+              }}
+            >
+              {errorDetails}
+            </pre>
+          </details>
+        )}
         <p style={{ color: '#9ca3af', fontSize: '14px' }}>Redirecting to login page...</p>
       </div>
     );
