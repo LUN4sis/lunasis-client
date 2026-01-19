@@ -1,84 +1,103 @@
 'use client';
 
 import { Suspense, useEffect, useState } from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { useLogin } from '@web/features/auth/hooks/use-auth';
 import { verifyOAuthState } from '@web/features/auth/utils';
-import { logger } from '@repo/shared/utils';
-import { Loading } from '@web/components/ui/loading';
+import { handleAndLogError, logger, safeSessionStorage } from '@repo/shared/utils';
+import { LoadingFallback } from '@web/components/ui/loading-fallback';
 import { ROUTES } from '@repo/shared/constants';
 import { routing } from '@web/i18n/routing';
 
 const GoogleCallbackContent = () => {
   const searchParams = useSearchParams();
-  const router = useRouter();
   const { login, isError, error } = useLogin();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
-    const code = searchParams.get('code');
-    const oauthError = searchParams.get('error');
-    const errorDescription = searchParams.get('error_description');
-    const state = searchParams.get('state');
-
-    // Get locale from sessionStorage (stored before OAuth redirect)
-    // sessionStorage에서 로케일 가져오기 (OAuth 리다이렉트 전에 저장됨)
     const getLocale = (): 'ko' | 'en' => {
-      if (typeof window !== 'undefined') {
-        const storedLocale = sessionStorage.getItem('oauth_locale');
-        if (storedLocale && routing.locales.includes(storedLocale as 'ko' | 'en')) {
-          return storedLocale as unknown as 'ko' | 'en';
-        }
+      const storedLocale = safeSessionStorage.getItem('oauth_locale');
+      if (storedLocale && routing.locales.includes(storedLocale as 'ko' | 'en')) {
+        return storedLocale as unknown as 'ko' | 'en';
       }
       return routing.defaultLocale;
     };
 
-    // Handle OAuth error from Google
-    // Google에서 반환된 OAuth 에러 처리
-    if (oauthError) {
-      logger.error('[Auth] Google OAuth error', {
-        error: oauthError,
-        description: errorDescription,
-      });
-      setErrorMessage(errorDescription || 'Google authentication failed. Please try again.');
+    const redirectToLogin = () => {
+      if (typeof window === 'undefined') return;
 
-      setTimeout(() => {
-        const locale = getLocale();
-        router.replace(`/${locale}${ROUTES.LOGIN}`);
-      }, 3000);
-      return;
-    }
+      const locale = getLocale();
+      const loginUrl = `${window.location.origin}/${locale}${ROUTES.LOGIN}`;
+      window.location.href = loginUrl;
+    };
 
-    // Verify state parameter for CSRF protection
-    if (!verifyOAuthState(state)) {
-      logger.error('[Auth] OAuth state verification failed - possible CSRF attack');
-      setErrorMessage('Security verification failed. Please try logging in again.');
+    try {
+      const code = searchParams.get('code');
+      const oauthError = searchParams.get('error');
+      const errorDescription = searchParams.get('error_description');
+      const state = searchParams.get('state');
 
-      // Redirect to login after 3 seconds
-      setTimeout(() => {
-        const locale = getLocale();
-        router.replace(`/${locale}${ROUTES.LOGIN}`);
-      }, 3000);
-      return;
-    }
+      // Log OAuth code for debugging (development only shows raw code)
+      // 디버깅용 OAuth 코드 로그 (개발 환경에서만 원문 출력)
+      if (code) {
+        const isDev = process.env.NODE_ENV === 'development';
+        const maskedCode =
+          code.length <= 12 ? `${code.slice(0, 2)}...${code.slice(-2)}` : `${code.slice(0, 6)}...${code.slice(-6)}`;
 
-    // Process authorization code
-    if (code) {
-      logger.info('[Auth] Google OAuth code received, exchanging for tokens...');
+        console.log('[OAuth][Google] authorization code:', isDev ? code : maskedCode);
+      }
 
-      // Login hook will handle the redirect after successful login
-      login({ code });
-    } else {
+      // Handle OAuth error from Google
+      // Google에서 반환된 OAuth 에러 처리
+      if (oauthError) {
+        logger.error('[Auth] Google OAuth error', {
+          error: oauthError,
+          description: errorDescription,
+        });
+        setErrorMessage(errorDescription || 'Google authentication failed. Please try again.');
+
+        setTimeout(() => {
+          redirectToLogin();
+        }, 3000);
+        return;
+      }
+
+      // Verify state parameter for CSRF protection
+      if (!verifyOAuthState(state)) {
+        logger.error('[Auth] OAuth state verification failed - possible CSRF attack');
+        setErrorMessage('Security verification failed. Please try logging in again.');
+
+        setTimeout(() => {
+          redirectToLogin();
+        }, 3000);
+        return;
+      }
+
+      // Process authorization code
+      if (code) {
+        logger.info('[Auth] Google OAuth code received, exchanging for tokens...');
+
+        // Login hook will handle the redirect after successful login
+        login({ code });
+        return;
+      }
+
       logger.warn('[Auth] No OAuth code found in URL');
       setErrorMessage('Invalid authentication response. Please try again.');
 
-      // Redirect to login after 3 seconds
       setTimeout(() => {
-        const locale = getLocale();
-        router.replace(`/${locale}${ROUTES.LOGIN}`);
+        redirectToLogin();
+      }, 3000);
+    } catch (e) {
+      const handledError = handleAndLogError(e, 'Google OAuth callback');
+      logger.error('[Auth] Google OAuth callback crashed', handledError.toJSON());
+      setErrorMessage('An unexpected error occurred during login. Please try again.');
+
+      setTimeout(() => {
+        redirectToLogin();
       }, 3000);
     }
-  }, [searchParams, login, router]);
+  }, [searchParams, login]);
 
   // Show error message if authentication failed
   if (errorMessage || isError) {
@@ -132,14 +151,14 @@ const GoogleCallbackContent = () => {
     );
   }
 
-  return <Loading />;
+  return <LoadingFallback />;
 };
 
 export const dynamic = 'force-dynamic';
 
 export default function GoogleCallbackPage() {
   return (
-    <Suspense fallback={<Loading />}>
+    <Suspense fallback={<LoadingFallback />}>
       <GoogleCallbackContent />
     </Suspense>
   );

@@ -1,3 +1,5 @@
+import { safeSessionStorage } from '@repo/shared/utils';
+
 /**
  * Generate random string for CSRF protection
  */
@@ -12,9 +14,7 @@ export const generateRandomString = (length: number = 32): string => {
  */
 export const generateOAuthState = (): string => {
   const state = generateRandomString();
-  if (typeof window !== 'undefined') {
-    sessionStorage.setItem('oauth_state', state);
-  }
+  safeSessionStorage.setItem('oauth_state', state);
   return state;
 };
 
@@ -22,12 +22,12 @@ export const generateOAuthState = (): string => {
  * Verify OAuth state parameter
  */
 export const verifyOAuthState = (returnedState: string | null): boolean => {
-  if (typeof window === 'undefined' || !returnedState) {
+  if (!returnedState) {
     return false;
   }
 
-  const storedState = sessionStorage.getItem('oauth_state');
-  sessionStorage.removeItem('oauth_state');
+  const storedState = safeSessionStorage.getItem('oauth_state');
+  safeSessionStorage.removeItem('oauth_state');
 
   return storedState === returnedState;
 };
@@ -73,9 +73,7 @@ export const buildGoogleOAuthUrl = (redirectUri: string, state?: string): string
  * Get OAuth callback redirect URI for Google
  */
 export const getOAuthCallbackUrl = (locale?: string): string => {
-  if (typeof window !== 'undefined' && locale) {
-    sessionStorage.setItem('oauth_locale', locale);
-  }
+  if (locale) safeSessionStorage.setItem('oauth_locale', locale);
 
   const envRedirectUri = process.env.NEXT_PUBLIC_REDIRECT_URI;
   if (envRedirectUri) {
@@ -94,9 +92,7 @@ export const getOAuthCallbackUrl = (locale?: string): string => {
  * Get OAuth callback redirect URI for Apple
  */
 export const getAppleOAuthCallbackUrl = (locale?: string): string => {
-  if (typeof window !== 'undefined' && locale) {
-    sessionStorage.setItem('oauth_locale', locale);
-  }
+  if (locale) safeSessionStorage.setItem('oauth_locale', locale);
 
   const envRedirectUri = process.env.NEXT_PUBLIC_APPLE_REDIRECT_URI;
   if (envRedirectUri) {

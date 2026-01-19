@@ -4,7 +4,7 @@ import { Suspense, useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useLogin } from '@web/features/auth/hooks/use-auth';
 import { verifyOAuthState } from '@web/features/auth/utils';
-import { logger } from '@repo/shared/utils';
+import { handleAndLogError, logger, safeSessionStorage } from '@repo/shared/utils';
 import { LoadingFallback } from '@web/components/ui/loading-fallback';
 import { ROUTES } from '@repo/shared/constants';
 import { routing } from '@web/i18n/routing';
@@ -15,18 +15,10 @@ const AppleCallbackContent = () => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
-    const code = searchParams.get('code');
-    const error = searchParams.get('error');
-    const errorDescription = searchParams.get('error_description');
-    const state = searchParams.get('state');
-    const name = searchParams.get('name') || '';
-
     const getLocale = (): 'ko' | 'en' => {
-      if (typeof window !== 'undefined') {
-        const storedLocale = sessionStorage.getItem('oauth_locale');
-        if (storedLocale && routing.locales.includes(storedLocale as 'ko' | 'en')) {
-          return storedLocale as unknown as 'ko' | 'en';
-        }
+      const storedLocale = safeSessionStorage.getItem('oauth_locale');
+      if (storedLocale && routing.locales.includes(storedLocale as 'ko' | 'en')) {
+        return storedLocale as unknown as 'ko' | 'en';
       }
       return routing.defaultLocale;
     };
@@ -39,36 +31,52 @@ const AppleCallbackContent = () => {
       }
     };
 
-    if (error) {
-      logger.error('[Auth] Apple OAuth error', {
-        error: error as string,
-        description: errorDescription as string | null,
-      });
-      setErrorMessage(errorDescription || 'Apple authentication failed. Please try again.');
+    try {
+      const code = searchParams.get('code');
+      const error = searchParams.get('error');
+      const errorDescription = searchParams.get('error_description');
+      const state = searchParams.get('state');
+      const name = searchParams.get('name') || '';
 
-      setTimeout(() => {
-        redirectToLogin();
-      }, 3000);
-      return;
-    }
+      if (error) {
+        logger.error('[Auth] Apple OAuth error', {
+          error: error as string,
+          description: errorDescription as string | null,
+        });
+        setErrorMessage(errorDescription || 'Apple authentication failed. Please try again.');
 
-    if (!verifyOAuthState(state)) {
-      logger.error('[Auth] OAuth state verification failed - possible CSRF attack');
-      setErrorMessage('Security verification failed. Please try logging in again.');
+        setTimeout(() => {
+          redirectToLogin();
+        }, 3000);
+        return;
+      }
 
-      setTimeout(() => {
-        redirectToLogin();
-      }, 3000);
-      return;
-    }
+      if (!verifyOAuthState(state)) {
+        logger.error('[Auth] OAuth state verification failed - possible CSRF attack');
+        setErrorMessage('Security verification failed. Please try logging in again.');
 
-    if (code) {
-      logger.info('[Auth] Apple OAuth code received, exchanging for tokens...');
+        setTimeout(() => {
+          redirectToLogin();
+        }, 3000);
+        return;
+      }
 
-      login({ code, name });
-    } else {
+      if (code) {
+        logger.info('[Auth] Apple OAuth code received, exchanging for tokens...');
+        login({ code, name });
+        return;
+      }
+
       logger.warn('[Auth] No OAuth code found in URL');
       setErrorMessage('Invalid authentication response. Please try again.');
+
+      setTimeout(() => {
+        redirectToLogin();
+      }, 3000);
+    } catch (e) {
+      const handledError = handleAndLogError(e, 'Apple OAuth callback');
+      logger.error('[Auth] Apple OAuth callback crashed', handledError.toJSON());
+      setErrorMessage('An unexpected error occurred during login. Please try again.');
 
       setTimeout(() => {
         redirectToLogin();
