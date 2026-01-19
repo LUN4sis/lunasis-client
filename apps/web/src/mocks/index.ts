@@ -1,8 +1,4 @@
-import { productsHandlers } from './handlers/products.handlers';
 import { logger, transformError } from '@repo/shared/utils';
-
-// combine all handlers
-const handlers = [...productsHandlers];
 
 /**
  * MSW initialization function
@@ -43,8 +39,15 @@ export const initMocks = async (): Promise<void> => {
   logger.info('[MSW] Initializing MSW...', { isDevelopment, mswEnabled });
 
   try {
-    // dynamic import in browser environment
-    const { setupWorker } = await import('msw/browser');
+    // dynamic import of MSW and handlers in browser environment only
+    const [{ setupWorker }, { productsHandlers }] = await Promise.all([
+      import('msw/browser'),
+      import('./handlers/products.handlers'),
+    ]);
+
+    // combine all handlers
+    const handlers = [...productsHandlers];
+
     const worker = setupWorker(...handlers);
 
     await worker.start({
