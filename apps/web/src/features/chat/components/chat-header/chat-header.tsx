@@ -14,13 +14,20 @@ export const ChatHeader = () => {
 
   return (
     <header className={styles.header}>
-      <Button variant="ghost" fullWidth={false}>
+      <Button variant="ghost" fullWidth={false} aria-label="open sidebar">
         <MenuIcon />
       </Button>
       <div className={styles.title}>
         <p>{formatDate(new Date(), 'fullDate', locale)}</p>
       </div>
-      <Button variant="ghost" fullWidth={false}>
+      {/* temporaray disabled notification button */}
+      <Button
+        variant="ghost"
+        fullWidth={false}
+        disabled
+        Saria-label="notification (coming soon)"
+        className={styles.hide}
+      >
         <BellIcon />
       </Button>
     </header>
