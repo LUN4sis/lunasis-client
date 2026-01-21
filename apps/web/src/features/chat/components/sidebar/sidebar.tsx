@@ -1,174 +1,148 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { XIcon, PlusIcon, MessageSquareIcon, EyeOffIcon } from 'lucide-react';
-import { Button } from '@web/components/ui/button/button';
-
-import { useAuthStore } from '@repo/shared/features/auth/stores/use-auth-store';
+import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
+import { MenuIcon, MessageSquareIcon } from 'lucide-react';
+import { Button } from '@web/components/ui/button';
+import { getErrorMessage } from '@repo/shared/utils';
 import { useChatStore } from '../../stores/use-chat-store';
-import { mockGetChatRooms } from '../../api/mock-chat-api';
+import { useChatRoomsQuery } from '../../hooks';
+import type { ChatRoomItem } from '../../types/chat.type';
 
+import clsx from 'clsx';
+import CreateIcon from '@mui/icons-material/Create';
 import styles from './sidebar.module.scss';
 
-interface ChatRoomItem {
-  chatRoomId: string;
-  title: string;
-}
-
 export const Sidebar = () => {
+  const t = useTranslations('chat.sidebar');
+  const router = useRouter();
+
   const isSidebarOpen = useChatStore((state) => state.isSidebarOpen);
   const toggleSidebar = useChatStore((state) => state.toggleSidebar);
   const currentChatId = useChatStore((state) => state.currentChatId);
   const setCurrentChatId = useChatStore((state) => state.setCurrentChatId);
   const isIncognito = useChatStore((state) => state.isIncognito);
 
-  const { isLoggedIn } = useAuthStore();
+  const { data, isLoading, isError, error, refetch } = useChatRoomsQuery();
 
-  const [chatRooms, setChatRooms] = useState<ChatRoomItem[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-
-  // Fetch chat rooms when sidebar opens
-  useEffect(() => {
-    if (isSidebarOpen && !isIncognito) {
-      const fetchChatRooms = async () => {
-        setIsLoading(true);
-        try {
-          const rooms = await mockGetChatRooms();
-          setChatRooms(rooms);
-        } catch (error) {
-          console.error('Failed to fetch chat rooms:', error);
-        } finally {
-          setIsLoading(false);
-        }
-      };
-      fetchChatRooms();
-    }
-  }, [isSidebarOpen, isIncognito]);
-
-  const handleSelectChat = (chatRoomId: string) => {
-    setCurrentChatId(chatRoomId);
+  const handleToggleSidebar = () => {
     toggleSidebar();
   };
 
-  const handleNewChat = () => {
+  const handleCreateChat = () => {
     setCurrentChatId(null);
-    toggleSidebar();
+    router.push('/chat');
+    handleToggleSidebar();
   };
 
-  const handleOverlayClick = () => {
-    toggleSidebar();
+  const handleClickChatRoom = (chatRoomId: string) => {
+    setCurrentChatId(chatRoomId);
+    router.push(`/chat/${chatRoomId}`);
+    handleToggleSidebar();
   };
 
-  // Handle escape key to close sidebar
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && isSidebarOpen) {
-        toggleSidebar();
-      }
-    };
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [isSidebarOpen, toggleSidebar]);
+  const handleOverlayKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (e.key !== 'Enter' && e.key !== ' ') return;
+    e.preventDefault();
+    handleToggleSidebar();
+  };
 
-  // Prevent body scroll when sidebar is open
-  useEffect(() => {
-    if (isSidebarOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
-    return () => {
-      document.body.style.overflow = '';
-    };
-  }, [isSidebarOpen]);
+  if (!isSidebarOpen) return null;
 
-  // hide sidebar(not logged in)
-  if (!isLoggedIn) {
-    return null;
-  }
+  const chatRooms: ChatRoomItem[] = data?.data ?? [];
 
   return (
-    <>
-      {/* Overlay */}
-      <div
-        className={`${styles.overlay} ${isSidebarOpen ? styles.overlayVisible : ''}`}
-        onClick={handleOverlayClick}
-        aria-hidden="true"
-      />
-
-      {/* Sidebar Panel */}
+    <div
+      className={clsx(styles.overlay, { [styles.overlayVisible]: isSidebarOpen })}
+      onClick={handleToggleSidebar}
+      onKeyDown={handleOverlayKeyDown}
+      role="button"
+      tabIndex={0}
+      aria-label="Close sidebar overlay"
+    >
       <aside
-        className={`${styles.sidebar} ${isSidebarOpen ? styles.sidebarOpen : ''}`}
+        className={clsx(styles.sidebar, { [styles.sidebarOpen]: isSidebarOpen })}
+        onClick={(e) => e.stopPropagation()}
         role="dialog"
         aria-modal="true"
-        aria-label="Chat sidebar"
       >
-        {/* Header */}
         <header className={styles.header}>
-          {isLoggedIn && (
-            <Button
-              variant="ghost"
-              fullWidth={false}
-              onClick={toggleSidebar}
-              aria-label="Close sidebar"
-            >
-              <XIcon />
-            </Button>
-          )}
-          <h2 className={styles.headerTitle}>Chats</h2>
-          <Button variant="ghost" fullWidth={false} onClick={handleNewChat} aria-label="New chat">
-            <PlusIcon />
+          <Button
+            variant="ghost"
+            colorScheme="white"
+            onClick={handleToggleSidebar}
+            aria-label="Close sidebar"
+            className={styles.toggleButton}
+          >
+            <MenuIcon />
+          </Button>
+          <Button
+            variant="ghost"
+            colorScheme="orange"
+            onClick={handleCreateChat}
+            aria-label="Create chat"
+            disabled={isLoading}
+            isLoading={isLoading}
+            className={styles.createButton}
+          >
+            <CreateIcon />
           </Button>
         </header>
 
-        {/* Content */}
         <div className={styles.content}>
-          {isIncognito ? (
-            <div className={styles.incognitoMessage}>
-              <EyeOffIcon className={styles.incognitoIcon} />
-              <p>Incognito Mode</p>
-              <span>Chat history is not saved in incognito mode.</span>
-            </div>
-          ) : isLoading ? (
+          {isLoading && (
             <div className={styles.loading}>
-              <div className={styles.loadingSpinner} />
-              <span>Loading chats...</span>
+              <p>{t('loading')}</p>
             </div>
-          ) : chatRooms.length === 0 ? (
+          )}
+
+          {isError && (
+            <div className={styles.error}>
+              <p>{getErrorMessage(error)}</p>
+              <Button variant="outline" colorScheme="white" onClick={() => refetch()}>
+                {t('retry')}
+              </Button>
+            </div>
+          )}
+
+          {/* Chat list - only show when not in incognito mode */}
+          {!isLoading && !isError && !isIncognito && (
+            <>
+              {chatRooms.length === 0 ? (
+                <div className={styles.emptyState}>
+                  <p>{t('blank')}</p>
+                  <span>{t('blankDescription')}</span>
+                </div>
+              ) : (
+                <ul className={styles.chatList}>
+                  {chatRooms.map((room) => (
+                    <li key={room.chatRoomId}>
+                      <button
+                        className={clsx(styles.chatItem, {
+                          [styles.chatItemActive]: currentChatId === room.chatRoomId,
+                        })}
+                        onClick={() => handleClickChatRoom(room.chatRoomId)}
+                        type="button"
+                      >
+                        <MessageSquareIcon className={styles.chatItemIcon} />
+                        <span className={styles.chatItemTitle}>{room.title}</span>
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </>
+          )}
+
+          {/* Incognito mode message */}
+          {!isLoading && !isError && isIncognito && (
             <div className={styles.emptyState}>
-              <MessageSquareIcon className={styles.emptyIcon} />
-              <p>No chat history</p>
-              <span>Start a new conversation!</span>
+              <p>{t('incognito')}</p>
+              <span>{t('incognitoDescription')}</span>
             </div>
-          ) : (
-            <ul className={styles.chatList}>
-              {chatRooms.map((room) => (
-                <li key={room.chatRoomId}>
-                  <button
-                    className={`${styles.chatItem} ${
-                      currentChatId === room.chatRoomId ? styles.chatItemActive : ''
-                    }`}
-                    onClick={() => handleSelectChat(room.chatRoomId)}
-                  >
-                    <MessageSquareIcon className={styles.chatItemIcon} />
-                    <span className={styles.chatItemTitle}>{room.title}</span>
-                  </button>
-                </li>
-              ))}
-            </ul>
           )}
         </div>
-
-        {/* Footer - Incognito indicator */}
-        {isIncognito && (
-          <footer className={styles.footer}>
-            <div className={styles.incognitoBadge}>
-              <EyeOffIcon />
-              <span>Incognito Active</span>
-            </div>
-          </footer>
-        )}
       </aside>
-    </>
+    </div>
   );
 };

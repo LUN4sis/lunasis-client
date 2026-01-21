@@ -49,7 +49,7 @@ export default function Providers({ children }: ProvidersProps) {
         <MSWProvider>
           <ToastContainer />
           {children}
-          <ReactQueryDevtools initialIsOpen={false} position="bottom" />
+          {/* <ReactQueryDevtools initialIsOpen={false} position="bottom" /> */}
         </MSWProvider>
       </QueryClientProvider>
     </GoogleOAuthProvider>

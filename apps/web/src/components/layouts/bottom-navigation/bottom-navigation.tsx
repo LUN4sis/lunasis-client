@@ -111,6 +111,7 @@ function BottomNavigation() {
                 alt={item.label}
                 width={iconSize}
                 height={iconSize}
+                priority={item.hasSpecialIcon}
                 className={clsx(styles.icon, {
                   [styles.keyframeIcon]: item.hasSpecialIcon,
                 })}

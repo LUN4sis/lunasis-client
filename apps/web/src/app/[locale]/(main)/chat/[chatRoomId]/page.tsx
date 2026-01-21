@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useMemo } from 'react';
 import { useTranslations } from 'next-intl';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
 
 import { ChatHeader } from '@web/features/chat/components/chat-header';
 import { ChatInput } from '@web/features/chat/components/chat-input';
@@ -11,23 +11,22 @@ import { IncognitoBar } from '@web/features/chat/components/incognito-bar';
 import { MessageList, type Message } from '@web/features/chat/components/message-list';
 
 import { SupportedLocale } from '@repo/shared/types';
-import { mockStartChat } from '@web/features/chat/api/mock-chat-api';
+import { mockSendMessage } from '@web/features/chat/api/mock-chat-api';
 import { useChatStore } from '@web/features/chat/stores';
 import { toast } from '@web/components/ui/toast';
 import { getErrorMessage } from '@repo/shared/utils';
 
 import clsx from 'clsx';
-import styles from './chat.module.scss';
+import styles from '../chat.module.scss';
 
-export default function ChatPage() {
+export default function ChatRoomPage() {
   const t = useTranslations('chat');
-  const router = useRouter();
-  const { locale } = useParams();
+  const { locale, chatRoomId } = useParams<{ locale: string; chatRoomId: string }>();
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isInitialized, setIsInitialized] = useState(false);
   const [isMounted, setIsMounted] = useState(true);
-  const { isIncognito, setPendingMessages } = useChatStore();
+  const { isIncognito, pendingMessages, clearPendingMessages } = useChatStore();
 
   // Track component mount state
   useEffect(() => {
@@ -38,6 +37,7 @@ export default function ChatPage() {
   }, []);
 
   // hide bottom nav
+  // 하단 네비게이션 숨기기
   useEffect(() => {
     document.documentElement.style.setProperty('--bottom-nav-height', '0px');
     document.documentElement.style.setProperty('--bottom-nav-display', 'none');
@@ -54,33 +54,56 @@ export default function ChatPage() {
     [isIncognito, t],
   );
 
+  // Initialize messages from pendingMessages or welcome message
+  // pendingMessages가 있으면 초기 메시지로 설정, 없으면 웰컴 메시지 표시
   useEffect(() => {
-    if (!isInitialized) {
-      const welcomeMessage: Message = {
-        id: 'welcome-1',
-        role: 'assistant',
-        content: welcomeText,
-        timestamp: new Date(),
-      };
-      setMessages([welcomeMessage]);
-      setIsInitialized(true);
-    } else {
-      // Update welcome message when incognito mode changes
-      setMessages((prev) => {
-        if (prev.length === 1 && prev[0].id === 'welcome-1') {
-          return [
-            {
-              ...prev[0],
-              content: welcomeText,
-            },
-          ];
-        }
-        return prev;
-      });
+    if (isInitialized) {
+      return;
     }
-  }, [isInitialized, welcomeText]);
 
-  // cleanup object URLs(for memory leak prevention)
+    const initialMessages: Message[] = [];
+
+    // Add welcome message
+    // 웰컴 메시지 추가
+    initialMessages.push({
+      id: 'welcome-1',
+      role: 'assistant',
+      content: welcomeText,
+      timestamp: new Date(),
+    });
+
+    // If we have pending messages from the initial chat, add them
+    // 초기 채팅에서 전달받은 메시지가 있으면 추가
+    if (pendingMessages) {
+      // Add user's question
+      // 사용자 질문 추가
+      initialMessages.push({
+        id: `user-initial`,
+        role: 'user',
+        content: pendingMessages.question,
+        timestamp: pendingMessages.timestamp,
+      });
+
+      // Add AI's answer
+      // AI 응답 추가
+      initialMessages.push({
+        id: `ai-initial`,
+        role: 'assistant',
+        content: pendingMessages.answer,
+        timestamp: pendingMessages.timestamp,
+      });
+
+      // Clear pending messages after use
+      // 사용 후 pending 메시지 초기화
+      clearPendingMessages();
+    }
+
+    setMessages(initialMessages);
+    setIsInitialized(true);
+  }, [isInitialized, welcomeText, pendingMessages, clearPendingMessages]);
+
+  // cleanup object URLs (for memory leak prevention)
+  // 메모리 누수 방지를 위한 object URL 정리
   useEffect(() => {
     return () => {
       messages.forEach((message) => {
@@ -97,40 +120,47 @@ export default function ChatPage() {
     message: string,
     options: { webSearch: boolean; file: File | null },
   ) => {
-    // TODO: Implement webSearch and file attachment
-    void options;
+    // TODO: Implement webSearch
+    const attachments = options.file
+      ? [
+          {
+            type: 'file' as const,
+            url: URL.createObjectURL(options.file),
+            name: options.file.name,
+            size: options.file.size,
+          },
+        ]
+      : undefined;
 
     const userMessage: Message = {
       id: `user-${Date.now()}`,
       role: 'user',
       content: message,
       timestamp: new Date(),
+      attachments,
     };
 
     setMessages((prev) => [...prev, userMessage]);
     setIsLoading(true);
 
     try {
-      // Start new chat - POST /chats
-      // 새 채팅 시작 - chatRoomId와 answer를 받음
-      const response = await mockStartChat(message);
+      // Send message to existing chat room - POST /chats/{chatRoomId}
+      // 기존 채팅방에 메시지 전송
+      const response = await mockSendMessage(chatRoomId, message);
 
       // Check if component is still mounted before updating state
       if (!isMounted) return;
 
-      const timestamp = new Date();
+      // Add AI response
+      // AI 응답 추가
+      const aiMessage: Message = {
+        id: `ai-${Date.now()}`,
+        role: 'assistant',
+        content: response.answer,
+        timestamp: new Date(),
+      };
 
-      // Store pending messages for the chat room page
-      // 채팅방 페이지로 전달할 메시지 저장
-      setPendingMessages({
-        question: message,
-        answer: response.answer,
-        timestamp,
-      });
-
-      // Navigate to chat room page
-      // 채팅방 페이지로 이동
-      router.push(`/${locale}/chat/${response.chatRoomId}`);
+      setMessages((prev) => [...prev, aiMessage]);
     } catch (error) {
       // Only show error if component is still mounted
       if (!isMounted) return;

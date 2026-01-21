@@ -34,6 +34,14 @@
   },
   "chat": {
     "placeholder": "루나에게 무엇이든 물어보세요!",
+    "sidebar": {
+      "loading": "로딩 중...",
+      "retry": "다시 시도",
+      "blank": "채팅 내역이 없습니다.",
+      "blankDescription": "새로운 대화를 시작해보세요!",
+      "incognito": "시크릿 모드입니다",
+      "incognitoDescription": "이 모드에서는 채팅 기록이 저장되지 않습니다."
+    },
     "welcome": {
       "normal": "다시 돌아오신 것을 환영해요!\n준비되면 무엇이든 말해주세요.",
       "incognito": "시크릿 모드입니다.\n\n이 대화는 기록에 남지 않으며 저장되지 않습니다."

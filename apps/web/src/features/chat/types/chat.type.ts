@@ -8,6 +8,11 @@ export interface Attachment {
   name: string;
 }
 
+export interface ChatRoomItem {
+  chatRoomId: string;
+  title: string;
+}
+
 export interface ChatRoom {
   chatRoomId: string;
   createdAt: string;
@@ -30,6 +35,16 @@ export interface ChatMessage {
 // =========================
 
 /**
+ * Pending message for initial chat room navigation
+ * 초기 채팅방 이동 시 전달할 메시지 데이터
+ */
+export interface PendingMessage {
+  question: string;
+  answer: string;
+  timestamp: Date;
+}
+
+/**
  * chat store state interface
  */
 export interface ChatState {
@@ -41,6 +56,12 @@ export interface ChatState {
   isSidebarOpen: boolean;
   /** whether web search is enabled for messages */
   isWebSearchEnabled: boolean;
+  /** whether alert dialog is open */
+  isAlertOpen: boolean;
+  /** anonymous user ID for non-logged-in users */
+  anonymousUserId: string | null;
+  /** pending messages for initial chat room navigation */
+  pendingMessages: PendingMessage | null;
 }
 
 /**
@@ -51,6 +72,10 @@ export interface ChatActions {
   toggleIncognito: () => void;
   toggleSidebar: () => void;
   toggleWebSearch: () => void;
+  setAlertOpen: (open: boolean) => void;
+  setAnonymousUserId: (id: string | null) => void;
+  setPendingMessages: (messages: PendingMessage | null) => void;
+  clearPendingMessages: () => void;
   reset: () => void;
 }
 

@@ -25,10 +25,11 @@ export const ChatHeader = () => {
         fullWidth={false}
         aria-label="open sidebar"
         onClick={toggleSidebar}
-        className={clsx({ [styles.hide]: !isLoggedIn })}
+        className={styles.menuButton}
+        // className={clsx({ [styles.hide]: !isLoggedIn })}
       >
         <MenuIcon />
-      </Button>
+    </Button>
 
       <div className={styles.title}>
         <p>{formatDate(new Date(), 'fullDate', locale)}</p>
@@ -38,7 +39,7 @@ export const ChatHeader = () => {
         variant="ghost"
         fullWidth={false}
         disabled
-        Saria-label="notification (coming soon)"
+        aria-label="notification (coming soon)"
         className={styles.hide}
       >
         <BellIcon />

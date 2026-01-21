@@ -40,13 +40,14 @@ export const initMocks = async (): Promise<void> => {
 
   try {
     // dynamic import of MSW and handlers in browser environment only
-    const [{ setupWorker }, { productsHandlers }] = await Promise.all([
+    const [{ setupWorker }, { productsHandlers }, { chatHandlers }] = await Promise.all([
       import('msw/browser'),
       import('./handlers/products.handlers'),
+      import('./handlers/chat.handlers'),
     ]);
 
     // combine all handlers
-    const handlers = [...productsHandlers];
+    const handlers = [...productsHandlers, ...chatHandlers];
 
     const worker = setupWorker(...handlers);
 
