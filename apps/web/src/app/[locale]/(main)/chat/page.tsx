@@ -6,6 +6,7 @@ import { useParams } from 'next/navigation';
 
 import { ChatHeader } from '@web/features/chat/components/chat-header';
 import { ChatInput } from '@web/features/chat/components/chat-input';
+import { Sidebar } from '@web/features/chat/components/sidebar';
 import { IncognitoBar } from '@web/features/chat/components/incognito-bar';
 import { MessageList, type Message } from '@web/features/chat/components/message-list';
 
@@ -127,6 +128,7 @@ export default function ChatPage() {
 
   return (
     <div className={styles.container}>
+      <Sidebar />
       <div className={styles.top}>
         <ChatHeader />
         <IncognitoBar />
