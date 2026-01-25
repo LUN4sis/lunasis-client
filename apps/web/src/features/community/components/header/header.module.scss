@@ -1,13 +1,42 @@
 @use '@/styles' as *;
 
 .header {
+  position: absolute;
+  top: $spacing-4;
+  left: 1%;
   @include flex(row, space-between, center);
-  padding: $spacing-2;
-  width: 100%;
+  @include size(100%, 2rem);
+  background: inherit;
+  z-index: 10;
+
+  @include respond(mobile) {
+    top: env(safe-area-inset-top, 0);
+    left: 0;
+  }
+
+  @include respond(tablet) {
+    top: $spacing-2;
+    left: 0;
+  }
 
   > button {
     @include size(2rem);
     flex-shrink: 0 !important;
+  }
+
+  .backButton {
+    -webkit-appearance: none;
+    appearance: none;
+    overflow: visible;
+    color: $black;
+
+    .backIcon {
+      @include size(1.5rem);
+      flex-shrink: 0;
+      min-width: 1.5rem;
+      min-height: 1.5rem;
+      fill: $black;
+    }
   }
 }
 

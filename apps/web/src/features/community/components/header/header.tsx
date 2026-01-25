@@ -1,5 +1,4 @@
 import { Button } from '@web/components/ui/button';
-import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import styles from './header.module.scss';
 
 export interface HeaderProps {
@@ -10,11 +9,26 @@ export interface HeaderProps {
 export const Header = ({ handleBackClick, hasSearch = false }: HeaderProps) => {
   return (
     <header className={styles.header}>
-      <Button onClick={handleBackClick} variant="ghost" colorScheme="white">
-        <ArrowBackIosNewIcon fontSize="small" color="inherit" />
+      <Button
+        onClick={handleBackClick}
+        variant="ghost"
+        colorScheme="gray"
+        className={styles.backButton}
+      >
+        <svg
+          className={styles.backIcon}
+          viewBox="0 0 24 24"
+          width={24}
+          height={24}
+          fill="#000000"
+          xmlns="http://www.w3.org/2000/svg"
+          aria-hidden
+        >
+          <path d="M17.51 3.87L15.73 2.1 5.84 12l9.9 9.9 1.77-1.77L9.38 12l8.13-8.13z" />
+        </svg>
       </Button>
       {hasSearch && (
-        <Button variant="ghost" colorScheme="white" className={styles.searchButton}>
+        <Button variant="ghost" colorScheme="gray" className={styles.searchButton}>
           <svg
             className={styles.searchIcon}
             viewBox="0 0 24 24"

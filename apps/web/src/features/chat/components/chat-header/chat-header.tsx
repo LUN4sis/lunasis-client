@@ -25,16 +25,14 @@ export const ChatHeader = () => {
         fullWidth={false}
         aria-label="open sidebar"
         onClick={toggleSidebar}
-        className={styles.menuButton}
-        // className={clsx({ [styles.hide]: !isLoggedIn })}
+        className={clsx(styles.menuButton, { [styles.hide]: !isLoggedIn })}
       >
         <MenuIcon />
-    </Button>
+      </Button>
 
       <div className={styles.title}>
         <p>{formatDate(new Date(), 'fullDate', locale)}</p>
       </div>
-      {/* temporaray disabled notification button */}
       <Button
         variant="ghost"
         fullWidth={false}
