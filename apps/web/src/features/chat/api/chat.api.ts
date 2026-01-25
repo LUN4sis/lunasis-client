@@ -48,6 +48,6 @@ export async function updateChatTitleAPI(chatRoomId: string, title: string):Prom
 /**
  * POST /chats/anonymous - 익명 채팅
  */
-export async function sendAnonymousMessageAPI(userId: string, question: string):Promise<MessageRes> {
-  return api.post<MessageRes, AnonymousReq>(`/chats/anonymous`, { userId, question });
+export async function sendAnonymousMessageAPI(anonymousId: string, question: string):Promise<MessageRes> {
+  return api.post<MessageRes, AnonymousReq>(`/chats/anonymous`, { anonymousId, question });
 }

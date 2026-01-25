@@ -1,21 +1,11 @@
 
+import { v4 as uuidv4 } from 'uuid';
 
 const ANONYMOUS_USER_KEY = 'lunasis_anonymous_user_id';
 const ANONYMOUS_USER_EXPIRY_KEY = 'lunasis_anonymous_user_expiry';
 
-// Default expiry time: 30 days in milliseconds
-const DEFAULT_EXPIRY_MS = 30 * 24 * 60 * 60 * 1000;
-
-/**
- * Generate a random UUID v4
- */
-function generateUUID(): string {
-  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
-    const r = (Math.random() * 16) | 0;
-    const v = c === 'x' ? r : (r & 0x3) | 0x8;
-    return v.toString(16);
-  });
-}
+// Default expiry time: 1 day (24 hours) in milliseconds
+const DEFAULT_EXPIRY_MS = 24 * 60 * 60 * 1000;
 
 /**
  * Get or create anonymous user ID
@@ -23,7 +13,7 @@ function generateUUID(): string {
  */
 export function getAnonymousUserId(): string {
   if (typeof window === 'undefined') {
-    return generateUUID();
+    return uuidv4();
   }
 
   const existingId = localStorage.getItem(ANONYMOUS_USER_KEY);
@@ -38,7 +28,7 @@ export function getAnonymousUserId(): string {
   }
 
   // Generate new ID and store with expiry
-  const newId = generateUUID();
+  const newId = uuidv4();
   const newExpiry = Date.now() + DEFAULT_EXPIRY_MS;
 
   localStorage.setItem(ANONYMOUS_USER_KEY, newId);

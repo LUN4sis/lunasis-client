@@ -58,7 +58,7 @@ export interface QuestionReq {
 }
 
 export interface AnonymousReq {
-  userId: string;
+  anonymousId: string;
   question: string;
 }
 

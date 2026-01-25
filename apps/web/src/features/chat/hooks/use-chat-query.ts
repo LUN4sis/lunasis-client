@@ -87,8 +87,8 @@ export const useCreateAnonymousChatMutation = (options?: CreateChatMutationOptio
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ userId, question }: { userId: string; question: string }) =>
-      sendAnonymousMessageAPI(userId, question),
+    mutationFn: ({ anonymousId, question }: { anonymousId: string; question: string }) =>
+      sendAnonymousMessageAPI(anonymousId, question),
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: chatKeys.rooms() });
       options?.onSuccess?.(data);
@@ -128,13 +128,13 @@ export const useSendMessageMutation = (
  * No automatic retry for mutations
  */
 export const useSendAnonymousMessageMutation = (
-  userId: string,
+  anonymousId: string,
   options?: SendMessageMutationOptions,
 ) => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (question: string) => sendAnonymousMessageAPI(userId, question),
+    mutationFn: (question: string) => sendAnonymousMessageAPI(anonymousId, question),
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: chatKeys.rooms() });
       options?.onSuccess?.(data);
