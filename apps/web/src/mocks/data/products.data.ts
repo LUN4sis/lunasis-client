@@ -1,230 +1,304 @@
-import { Product } from '../types/product.types';
 import { ProductCategory } from '@repo/shared/types';
+
+import { Product } from '../types/product.types';
 
 export const tamponProducts: Product[] = [
   {
-    productId: 'tampax-pearl-regular',
-    name: 'Tampax Pearl Regular Tampons',
+    productId: 'rael-organic-cotton-tampons-super-12p',
+    name: 'Rael Organic Cotton Tampons – Super (12 Count)',
     image:
-      'https://images.unsplash.com/photo-1639671533868-8b642b095390?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fHRhbXBheHxlbnwwfHwwfHx8MA%3D%3D',
-    reviews: 4.7,
-    reviewCount: 12450,
-    price: 8.99,
-    description:
-      'Trusted protection with smooth applicator and leak guard braid for comfortable wear.',
-    badges: ['comfortable', 'leak protection', 'smooth applicator'],
-  },
-  {
-    productId: 'tampax-compak-regular',
-    name: 'Tampax Compak Regular Tampons',
-    image:
-      'https://images.unsplash.com/photo-1734599998093-9bac4f3b787b?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8dGFtcG9uc3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&q=60&w=500',
-    reviews: 4.6,
-    reviewCount: 9870,
-    price: 7.99,
-    description: 'Compact design with smooth applicator for discreet protection.',
-    badges: ['compact', 'discreet', 'smooth applicator'],
-  },
-  {
-    productId: 'playtex-sport-regular',
-    name: 'Playtex Sport Regular Tampons',
-    image:
-      'https://images.unsplash.com/photo-1639671533868-8b642b095390?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fHRhbXBheHxlbnwwfHwwfHx8MA%3D%3D&w=400',
+      'https://img.danawa.com/prod_img/500000/281/188/img/88188281_1.jpg?shrink=330:*&_v=20250424134856',
     reviews: 4.5,
-    reviewCount: 11200,
-    price: 8.49,
-    description: 'Designed for active women with secure fit and leak protection.',
-    badges: ['sport', 'secure fit', 'leak protection'],
+    reviewCount: 9870,
+    price: 7.49,
+    description:
+      'Made with 100% organic cotton for a soft, breathable feel, these Super absorbency tampons offer dependable protection and comfort for moderate to heavy flow days.',
+    badges: [
+      'organic cotton',
+      'super absorbency',
+      'comfortable insert',
+      'breathable',
+      'moderate to heavy flow',
+    ],
   },
   {
-    productId: 'kotex-sport-regular',
-    name: 'Kotex Sport Regular Tampons',
+    productId: 'natracare-tampons-applicator-regular-16p',
+    name: 'Natracare Tampons with Applicator – Regular (16 Count)',
     image:
-      'https://images.unsplash.com/photo-1734599998093-9bac4f3b787b?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8dGFtcG9uc3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&q=60&w=500',
-    reviews: 4.4,
-    reviewCount: 8750,
-    price: 7.79,
-    description: 'Active protection with comfortable fit for all-day wear.',
-    badges: ['active', 'comfortable', 'all-day wear'],
-  },
-  {
-    productId: 'ob-pro-comfort-regular',
-    name: 'o.b. Pro Comfort Regular Tampons',
-    image:
-      'https://images.unsplash.com/photo-1639671533868-8b642b095390?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fHRhbXBheHxlbnwwfHwwfHx8MA%3D%3D&w=400',
-    reviews: 4.3,
-    reviewCount: 6540,
-    price: 6.99,
-    description: 'No applicator needed with soft, comfortable design.',
-    badges: ['no applicator', 'soft', 'comfortable'],
-  },
-  {
-    productId: 'tampax-radiant-regular',
-    name: 'Tampax Radiant Regular Tampons',
-    image:
-      'https://images.unsplash.com/photo-1734599998093-9bac4f3b787b?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8dGFtcG9uc3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&q=60&w=500',
-    reviews: 4.8,
-    reviewCount: 15600,
-    price: 9.49,
-    description: 'Premium protection with smooth applicator and leak guard braid.',
-    badges: ['premium', 'smooth applicator', 'leak guard'],
-  },
-  {
-    productId: 'playtex-gentle-glide-regular',
-    name: 'Playtex Gentle Glide Regular Tampons',
-    image:
-      'https://images.unsplash.com/photo-1639671533868-8b642b095390?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fHRhbXBheHxlbnwwfHwwfHx8MA%3D%3D',
-    reviews: 4.2,
-    reviewCount: 7890,
-    price: 8.29,
-    description: 'Gentle insertion with smooth applicator for comfortable protection.',
-    badges: ['gentle', 'smooth applicator', 'comfortable'],
-  },
-  {
-    productId: 'kotex-u-regular',
-    name: 'Kotex U Regular Tampons',
-    image:
-      'https://images.unsplash.com/photo-1734599998093-9bac4f3b787b?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8dGFtcG9uc3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&q=60&w=500',
-    reviews: 4.1,
-    reviewCount: 5430,
-    price: 7.59,
-    description: 'Modern design with comfortable fit and reliable protection.',
-    badges: ['modern', 'comfortable', 'reliable'],
-  },
-  {
-    productId: 'tampax-pearl-super',
-    name: 'Tampax Pearl Super Tampons',
-    image:
-      'https://images.unsplash.com/photo-1639671533868-8b642b095390?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fHRhbXBheHxlbnwwfHwwfHx8MA%3D%3D',
+      'https://img.danawa.com/prod_img/500000/069/181/img/88181069_1.jpg?shrink=330:*&_v=20250424134143',
     reviews: 4.6,
-    reviewCount: 10200,
-    price: 9.99,
-    description: 'Extra absorbency with smooth applicator for heavy flow days.',
-    badges: ['extra absorbency', 'heavy flow', 'smooth applicator'],
+    reviewCount: 12500,
+    price: 7.49,
+    description:
+      'Eco-friendly tampons with smooth applicators crafted from natural, biodegradable materials. Regular absorbency offers reliable, comfortable protection with easy insertion and gentle removal.',
+    badges: [
+      'applicator included',
+      'regular absorbency',
+      'biodegradable',
+      'eco-friendly',
+      'gentle comfort',
+    ],
   },
   {
-    productId: 'playtex-sport-super',
-    name: 'Playtex Sport Super Tampons',
+    productId: 'pure-cotton-tampons-super-16p',
+    name: 'Pure Cotton Tampons – Super (16 Count)',
     image:
-      'https://images.unsplash.com/photo-1734599998093-9bac4f3b787b?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8dGFtcG9uc3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&q=60&w=500',
-    reviews: 4.4,
-    reviewCount: 9120,
-    price: 8.79,
-    description: 'High absorbency for active women with secure fit.',
-    badges: ['high absorbency', 'active', 'secure fit'],
+      'https://img.danawa.com/prod_img/500000/785/185/img/88185785_1.jpg?shrink=330:*&_v=20250424134629',
+    reviews: 4.5,
+    reviewCount: 9870,
+    price: 7.49,
+    description:
+      'Made from soft, pure cotton for breathable comfort, these Super absorbency tampons deliver dependable protection on moderate to heavy flow days with gentle care for sensitive skin.',
+    badges: [
+      'pure cotton',
+      'super absorbency',
+      'breathable',
+      'gentle on skin',
+      'moderate to heavy flow',
+    ],
+  },
+  {
+    productId: 'happy-moon-day-easy-tampon-super-8p',
+    name: 'Happy Moon Day Easy Tampons – Super (8 Count)',
+    image:
+      'https://img.danawa.com/prod_img/500000/873/181/img/88181873_1.jpg?shrink=330:*&_v=20251226045312',
+    reviews: 4.5,
+    reviewCount: 9870,
+    price: 7.49,
+    description:
+      'Super absorbency tampons designed for easy, comfortable insertion and reliable protection. Smooth surface and secure fit make these ideal for moderate to heavy flow days.',
+    badges: [
+      'super absorbency',
+      'easy insertion',
+      'comfortable fit',
+      'smooth surface',
+      'moderate to heavy flow',
+    ],
+  },
+  {
+    productId: 'white-oh-my-tampon-super-24p',
+    name: 'White Oh My Tampons – Super (24 Count)',
+    image:
+      'https://img.danawa.com/prod_img/500000/708/182/img/93182708_1.jpg?shrink=330:*&_v=20250815045442',
+    reviews: 4.5,
+    reviewCount: 9870,
+    price: 7.49,
+    description:
+      'Super absorbency tampons crafted for dependable protection on moderate to heavy flow days, featuring a smooth design for comfortable, confident wear throughout the day.',
+    badges: [
+      'super absorbency',
+      'comfortable wear',
+      'smooth design',
+      'moderate to heavy flow',
+      'dependable protection',
+    ],
+  },
+  {
+    productId: 'pure-cotton-tampons-regular-128p',
+    name: 'Pure Cotton Tampons – Regular (128 Count)',
+    image:
+      'https://img.danawa.com/prod_img/500000/538/183/img/88183538_1.jpg?shrink=330:*&_v=20250424134416',
+    reviews: 4.5,
+    reviewCount: 9870,
+    price: 7.49,
+    description:
+      'Soft and breathable pure cotton tampons with regular absorbency, offering comfortable, reliable protection for light to moderate flow days and gentle care for sensitive skin.',
+    badges: [
+      'pure cotton',
+      'regular absorbency',
+      'breathable',
+      'comfortable',
+      'light to moderate flow',
+    ],
+  },
+  {
+    productId: 'tempo-natural-super-80p',
+    name: 'Tempo Natural Tampons – Super (80 Count)',
+    image:
+      'https://img.danawa.com/prod_img/500000/314/188/img/88188314_1.jpg?shrink=330:*&_v=20250424134858',
+    reviews: 4.5,
+    reviewCount: 9870,
+    price: 7.49,
+    description:
+      'Natural fiber tampons with super absorbency designed for dependable protection on moderate to heavy flow days, offering breathable comfort and a smooth feel for everyday confidence.',
+    badges: [
+      'natural fibers',
+      'super absorbency',
+      'breathable',
+      'smooth feel',
+      'moderate to heavy flow',
+    ],
+  },
+  {
+    productId: 'tempo-new-natural-super-96p',
+    name: 'Tempo New Natural Tampons – Super (96 Count)',
+    image:
+      'https://img.danawa.com/prod_img/500000/398/179/img/88179398_1.jpg?shrink=330:*&_v=20250424134001',
+    reviews: 4.5,
+    reviewCount: 9870,
+    price: 7.49,
+    description:
+      'Enhanced natural fiber tampons with super absorbency for reliable protection on moderate to heavy flow days, featuring a smooth, breathable design for all-day comfort and confidence.',
+    badges: [
+      'natural fibers',
+      'super absorbency',
+      'breathable design',
+      'smooth feel',
+      'all-day comfort',
+    ],
+  },
+  {
+    productId: 'tempo-original-super-30p',
+    name: 'Tempo Original Tampons – Super (30 Count)',
+    image:
+      'https://img.danawa.com/prod_img/500000/787/189/img/88189787_1.jpg?shrink=330:*&_v=20250424135031',
+    reviews: 4.5,
+    reviewCount: 9870,
+    price: 7.49,
+    description:
+      'Classic Tempo Original tampons with Super absorbency deliver reliable protection on moderate to heavy flow days. Designed for a smooth, comfortable fit and confidence throughout your daily routine.',
+    badges: [
+      'super absorbency',
+      'classic design',
+      'comfortable fit',
+      'daily confidence',
+      'moderate to heavy flow',
+    ],
+  },
+  {
+    productId: 'pure-cotton-tampons-regular-8p',
+    name: 'Pure Cotton Tampons – Regular (8 Count)',
+    image:
+      'https://img.danawa.com/prod_img/500000/842/924/img/48924842_1.jpg?shrink=330:*&_v=20250426050527',
+    reviews: 4.5,
+    reviewCount: 9870,
+    price: 7.49,
+    description:
+      'Soft, breathable pure cotton tampons with regular absorbency, offering gentle, reliable protection for light to moderate flow days and comfortable wear throughout the day.',
+    badges: [
+      'pure cotton',
+      'regular absorbency',
+      'breathable',
+      'gentle comfort',
+      'light to moderate flow',
+    ],
   },
 ];
 
 export const sanitaryPadProducts: Product[] = [
   {
-    productId: 'always-ultra-thin',
-    name: 'Always Ultra Thin Pads',
+    productId: 'rael-organic-cotton-cover-medium-14p',
+    name: 'Rael Organic Cotton Cover Pads – Medium (14 Count)',
     image:
-      'https://images.unsplash.com/photo-1618111415604-afe870dbb72a?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8c2FuaXRhcnklMjBwcm9kdWN0fGVufDB8fDB8fHww&auto=format&fit=crop&q=60&w=500',
+      'https://img.danawa.com/prod_img/500000/877/220/img/6220877_1.jpg?shrink=330:*&_v=20250714144454',
     reviews: 4.5,
     reviewCount: 9870,
     price: 7.49,
-    description: 'Thin yet absorbent, ideal for day-long freshness with wings for secure fit.',
-    badges: ['thin', 'fresh scent', 'absorbent core', 'wings'],
+    description:
+      'Made with certified organic cotton top sheet, these medium-flow pads provide breathable comfort and reliable absorption while being gentle on sensitive skin.',
+    badges: ['organic cotton', 'medium flow', 'breathable', 'hypoallergenic', 'soft cover'],
   },
   {
-    productId: 'always-infinity-flexfoam',
-    name: 'Always Infinity FlexFoam Pads',
+    productId: 'dearskin-real-modal-medium-96p',
+    name: 'DearSkin Real Modal Cover Pads – Medium (96 Count)',
     image:
-      'https://images.unsplash.com/photo-1734599998093-9bac4f3b787b?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTh8fHNhbml0YXJ5JTIwcGFkfGVufDB8fDB8fHww&auto=format&fit=crop&q=60&w=500',
-    reviews: 4.7,
-    reviewCount: 12300,
-    price: 8.99,
-    description: 'Flexible foam core that moves with you for all-day comfort.',
-    badges: ['flexible', 'foam core', 'all-day comfort'],
-  },
-  {
-    productId: 'kotex-u-ultra-thin',
-    name: 'Kotex U Ultra Thin Pads',
-    image:
-      'https://images.unsplash.com/photo-1618111415604-afe870dbb72a?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8c2FuaXRhcnklMjBwcm9kdWN0fGVufDB8fDB8fHww&auto=format&fit=crop&q=60&w=500',
-    reviews: 4.3,
-    reviewCount: 7650,
-    price: 6.99,
-    description: 'Modern ultra-thin design with reliable protection and comfort.',
-    badges: ['ultra-thin', 'modern', 'reliable'],
-  },
-  {
-    productId: 'always-radiant-ultra-thin',
-    name: 'Always Radiant Ultra Thin Pads',
-    image:
-      'https://images.unsplash.com/photo-1734599998093-9bac4f3b787b?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTh8fHNhbml0YXJ5JTIwcGFkfGVufDB8fDB8fHww&auto=format&fit=crop&q=60&w=500',
-    reviews: 4.6,
-    reviewCount: 10800,
-    price: 8.49,
-    description: 'Premium ultra-thin protection with wings for secure fit.',
-    badges: ['premium', 'ultra-thin', 'wings'],
-  },
-  {
-    productId: 'playtex-sport-ultra-thin',
-    name: 'Playtex Sport Ultra Thin Pads',
-    image:
-      'https://images.unsplash.com/photo-1618111415604-afe870dbb72a?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8c2FuaXRhcnklMjBwcm9kdWN0fGVufDB8fDB8fHww&auto=format&fit=crop&q=60&w=500',
-    reviews: 4.4,
-    reviewCount: 8920,
-    price: 7.79,
-    description: 'Designed for active women with secure fit and leak protection.',
-    badges: ['sport', 'active', 'secure fit'],
-  },
-  {
-    productId: 'always-overnight-ultra-thin',
-    name: 'Always Overnight Ultra Thin Pads',
-    image:
-      'https://images.unsplash.com/photo-1734599998093-9bac4f3b787b?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTh8fHNhbml0YXJ5JTIwcGFkfGVufDB8fDB8fHww&auto=format&fit=crop&q=60&w=500',
-    reviews: 4.8,
-    reviewCount: 13400,
-    price: 9.29,
-    description: 'Extra long protection for overnight wear with wings.',
-    badges: ['overnight', 'extra long', 'wings'],
-  },
-  {
-    productId: 'kotex-sport-ultra-thin',
-    name: 'Kotex Sport Ultra Thin Pads',
-    image:
-      'https://images.unsplash.com/photo-1618111415604-afe870dbb72a?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8c2FuaXRhcnklMjBwcm9kdWN0fGVufDB8fDB8fHww&auto=format&fit=crop&q=60&w=500',
-    reviews: 4.2,
-    reviewCount: 6780,
-    price: 7.19,
-    description: 'Active protection with comfortable fit for all-day wear.',
-    badges: ['sport', 'active', 'comfortable'],
-  },
-  {
-    productId: 'always-daily-liners',
-    name: 'Always Daily Liners',
-    image:
-      'https://images.unsplash.com/photo-1734599998093-9bac4f3b787b?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTh8fHNhbml0YXJ5JTIwcGFkfGVufDB8fDB8fHww&auto=format&fit=crop&q=60&w=500',
-    reviews: 4.1,
-    reviewCount: 5430,
-    price: 5.99,
-    description: 'Light protection for daily freshness and confidence.',
-    badges: ['daily', 'light protection', 'freshness'],
-  },
-  {
-    productId: 'carefree-acti-fresh',
-    name: 'Carefree Acti-Fresh Liners',
-    image:
-      'https://images.unsplash.com/photo-1618111415604-afe870dbb72a?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8c2FuaXRhcnklMjBwcm9kdWN0fGVufDB8fDB8fHww&auto=format&fit=crop&q=60&w=500',
-    reviews: 4.0,
-    reviewCount: 4320,
-    price: 4.99,
-    description: 'Fresh scent protection for daily confidence and comfort.',
-    badges: ['fresh scent', 'daily', 'confidence'],
-  },
-  {
-    productId: 'always-pure-cotton',
-    name: 'Always Pure Cotton Pads',
-    image:
-      'https://images.unsplash.com/photo-1734599998093-9bac4f3b787b?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTh8fHNhbml0YXJ5JTIwcGFkfGVufDB8fDB8fHww&auto=format&fit=crop&q=60&w=500',
+      'https://img.danawa.com/prod_img/500000/920/179/img/88179920_1.jpg?shrink=330:*&_v=20250424134032',
     reviews: 4.5,
-    reviewCount: 9120,
-    price: 8.79,
-    description: '100% cotton top sheet for sensitive skin with wings.',
-    badges: ['cotton', 'sensitive skin', 'wings'],
+    reviewCount: 9870,
+    price: 7.49,
+    description:
+      'Featuring a silky-soft real modal cover, these medium-flow pads offer smooth comfort, excellent breathability, and dependable absorption for all-day wear.',
+    badges: ['modal cover', 'medium flow', 'ultra soft', 'breathable', 'daily comfort'],
+  },
+  {
+    productId: 'innersia-the-prism-medium-40p',
+    name: 'Innersia The Prism Pads – Medium (40 Count)',
+    image:
+      'https://img.danawa.com/prod_img/500000/290/179/img/88179290_1.jpg?shrink=330:*&_v=20250424133955',
+    reviews: 4.5,
+    reviewCount: 9870,
+    price: 7.49,
+    description:
+      'Designed with advanced Prism absorption structure, these medium-flow pads deliver fast fluid locking, a slim fit, and a dry, comfortable feel throughout the day.',
+    badges: ['fast absorption', 'medium flow', 'slim fit', 'dry touch', 'leak protection'],
+  },
+  {
+    productId: 'white-super-absorbent-medium-18p',
+    name: 'White Super Absorbent Pads – Medium (18 Count)',
+    image:
+      'https://img.danawa.com/prod_img/500000/043/177/img/88177043_1.jpg?shrink=330:*&_v=20250424133738',
+    reviews: 4.5,
+    reviewCount: 9870,
+    price: 7.49,
+    description:
+      'Built with a high-capacity absorbent core, these medium-flow pads quickly lock in moisture to keep you dry and confident, offering secure protection for everyday use.',
+    badges: ['super absorbent', 'medium flow', 'leak protection', 'dry feel', 'secure fit'],
+  },
+  {
+    productId: 'hye-daily-slim-overnight-48p',
+    name: 'Hye Daily Slim Overnight Pads (48 Count)',
+    image:
+      'https://img.danawa.com/prod_img/500000/296/182/img/88182296_1.jpg?shrink=330:*&_v=20250424134300',
+    reviews: 4.5,
+    reviewCount: 9870,
+    price: 7.49,
+    description:
+      'Slim yet highly absorbent overnight pads designed for extended protection while you sleep, offering a secure fit and reliable leak defense without bulk.',
+    badges: ['overnight', 'slim fit', 'high absorbency', 'leak guard', 'night protection'],
+  },
+  {
+    productId: 'lanature-signature-natureback-ultra-large-40p',
+    name: 'LaNature Signature NatureBack Ultra Pads with Wings – Large (40 Count)',
+    image:
+      'https://img.danawa.com/prod_img/500000/227/224/img/88224227_1.jpg?shrink=330:*&_v=20250425095253',
+    reviews: 4.5,
+    reviewCount: 9870,
+    price: 7.49,
+    description:
+      'Ultra absorbent large pads with secure wings and a NatureBack breathable back layer, delivering enhanced leak protection and all-day comfort for everyday or heavy flow needs.',
+    badges: [
+      'ultra absorbent',
+      'large size',
+      'winged design',
+      'breathable back',
+      'leak protection',
+    ],
+  },
+  {
+    productId: 'natracare-ultra-pads-wing-medium-120p',
+    name: 'Natracare Ultra Pads with Wings – Medium (120 Count)',
+    image:
+      'https://img.danawa.com/prod_img/500000/198/981/img/5981198_1.jpg?shrink=330:*&_v=20250714144450',
+    reviews: 4.5,
+    reviewCount: 18146,
+    price: 7.49,
+    description:
+      'Plastic-free, slim and ultra absorbent medium-flow pads with wings made from organic cotton and natural materials for breathable comfort and secure protection during your period. Certified biodegradable and gentle on sensitive skin. :contentReference[oaicite:0]{index=0}',
+    badges: ['organic cotton', 'plastic-free', 'medium flow', 'breathable', 'biodegradable'],
+  },
+  {
+    productId: 'organicbon-ultra-slim-medium-90p',
+    name: 'OrganicBon Ultra Slim Medium Pads (90 Count)',
+    image:
+      'https://img.danawa.com/prod_img/500000/229/189/img/88189229_1.jpg?shrink=330:*&_v=20251130050219',
+    reviews: 4.7,
+    reviewCount: 50,
+    price: 7.49,
+    description:
+      'Certified organic cotton ultra-slim pads with winged design for a breathable, natural feel and dependable medium-flow protection that stays comfortable all day. Organic materials are gentle on sensitive skin for everyday use. :contentReference[oaicite:0]{index=0}',
+    badges: ['organic cotton', 'ultra slim', 'medium flow', 'winged design', 'breathable'],
+  },
+  {
+    productId: 'hye-daily-slim-large-56p',
+    name: 'Hye Daily Slim Large Pads (56 Count)',
+    image:
+      'https://img.danawa.com/prod_img/500000/281/182/img/88182281_1.jpg?shrink=330:*&_v=20250424134259',
+    reviews: 4.5,
+    reviewCount: 9870,
+    price: 7.49,
+    description:
+      'Slim large-size pads designed for daily use with enhanced coverage and a breathable fit that keeps you comfortable and protected throughout the day.',
+    badges: ['large size', 'slim fit', 'daily use', 'breathable', 'extended coverage'],
   },
 ];
 
