@@ -1,7 +1,8 @@
-import axios, { AxiosError } from 'axios';
-import { api } from '@web/api/api';
-import { handleApiError } from '@repo/shared/utils';
 import { ApiResponse, AppError, ErrorCode } from '@repo/shared/types';
+import { handleApiError } from '@repo/shared/utils';
+import { api } from '@web/api/api';
+import axios, { AxiosError } from 'axios';
+
 import { SubmitRequest, SubmitResponse } from '../types/onboarding.type';
 
 export async function checkNicknameAPI(nickname: string): Promise<{ ok: true }> {

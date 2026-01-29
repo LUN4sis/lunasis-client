@@ -1,6 +1,7 @@
 import { useCallback } from 'react';
-import { useOnboardingStore } from '../stores/use-onboarding-store';
+
 import { Insurance, ProductCategory } from '../constants/onboarding.constants';
+import { useOnboardingStore } from '../stores/use-onboarding-store';
 
 export function useOnboardingInterests() {
   const store = useOnboardingStore();

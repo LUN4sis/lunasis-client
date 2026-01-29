@@ -1,18 +1,15 @@
 'use client';
 
-import { useState, useCallback } from 'react';
-import { useRouter } from 'next/navigation';
-import { withAuth } from '@web/features/auth';
-
-import { Title } from '@web/features/onboarding';
-import { Input } from '@web/components/ui/input';
-import { Button } from '@web/components/ui/button';
-import { toast } from '@web/components/ui/toast';
 import { ROUTES } from '@repo/shared/constants';
-
 import { useAuthStore } from '@repo/shared/features/auth';
-import { useNicknameValidation, useOnboardingStore } from '@web/features/onboarding';
 import { logger, transformError } from '@repo/shared/utils';
+import { Button } from '@web/components/ui/button';
+import { Input } from '@web/components/ui/input';
+import { toast } from '@web/components/ui/toast';
+import { withAuth } from '@web/features/auth';
+import { Title, useNicknameValidation, useOnboardingStore } from '@web/features/onboarding';
+import { useRouter } from 'next/navigation';
+import { useCallback, useState } from 'react';
 
 import styles from '../onboarding.module.scss';
 

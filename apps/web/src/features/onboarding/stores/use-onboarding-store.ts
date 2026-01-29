@@ -1,9 +1,9 @@
+import { isLocalStorageAvailable, logger } from '@repo/shared/utils';
 import { create } from 'zustand';
-import { persist, createJSONStorage } from 'zustand/middleware';
-import { logger } from '@repo/shared/utils';
-import { isLocalStorageAvailable } from '@repo/shared/utils';
-import type { OnboardingState, BirthDateSelection } from '../types/onboarding.type';
+import { createJSONStorage, persist } from 'zustand/middleware';
+
 import { Insurance, ProductCategory } from '../constants/onboarding.constants';
+import type { BirthDateSelection, OnboardingState } from '../types/onboarding.type';
 
 interface OnboardingStoreState extends OnboardingState {
   setNickname: (nickname: string) => void;
