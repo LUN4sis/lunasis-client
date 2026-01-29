@@ -1,6 +1,7 @@
 import { create } from 'zustand';
-import { persist, createJSONStorage } from 'zustand/middleware';
-import type { AuthState, AuthProfile, TokenUpdatePayload } from '../types/store.type';
+import { createJSONStorage, persist } from 'zustand/middleware';
+
+import type { AuthProfile, AuthState, TokenUpdatePayload } from '../types/store.type';
 
 const initialState = {
   accessToken: null,

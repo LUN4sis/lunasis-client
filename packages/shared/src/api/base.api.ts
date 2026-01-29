@@ -5,6 +5,7 @@ import axios, {
   AxiosResponse,
   InternalAxiosRequestConfig,
 } from 'axios';
+
 import { API_CONFIG } from '@repo/shared/constants/config';
 import type { ApiResponse } from '@repo/shared/types/api.type';
 import type { ApiErrorResponse } from '@repo/shared/types/error.type';

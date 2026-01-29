@@ -1,4 +1,5 @@
 import { Category, getCategoryDisplay } from '@repo/shared/constants';
+
 import { CommunityCategory } from '../types';
 
 export const COMMUNITY_CATEGORIES: Category<CommunityCategory>[] = [

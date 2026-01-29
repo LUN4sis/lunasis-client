@@ -1,5 +1,6 @@
-import { CommunityCategory } from './category.type';
 import type { ApiResponse } from '@repo/shared/types';
+
+import { CommunityCategory } from './category.type';
 
 // ===========================
 // Core Types

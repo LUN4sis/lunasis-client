@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
-import { ProductFilters, ProductStore, ProductCategory } from '../types/product.type';
+
+import { ProductCategory, ProductFilters, ProductStore } from '../types/product.type';
 
 /**
  * set initial filters

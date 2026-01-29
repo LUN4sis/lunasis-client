@@ -1,5 +1,6 @@
-import type { LoginResponse, RefreshTokenResponse } from '../types/auth.type';
 import { createApiClient } from '@repo/shared/api';
+
+import type { LoginResponse, RefreshTokenResponse } from '../types/auth.type';
 
 const API_BASE_URL =
   (typeof process !== 'undefined' && process.env.NEXT_PUBLIC_API_URL) ||
