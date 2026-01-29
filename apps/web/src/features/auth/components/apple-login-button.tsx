@@ -1,11 +1,12 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
-import { useParams } from 'next/navigation';
-import { Button } from '@web/components/ui/button';
-import Image from 'next/image';
-import { buildAppleOAuthUrl, getAppleOAuthCallbackUrl } from '@web/features/auth/utils';
 import { logger } from '@repo/shared/utils';
+import { Button } from '@web/components/ui/button';
+import { buildAppleOAuthUrl, getAppleOAuthCallbackUrl } from '@web/features/auth/utils';
+import Image from 'next/image';
+import { useParams } from 'next/navigation';
+import { useTranslations } from 'next-intl';
+
 import styles from './login-button.module.scss';
 
 /**

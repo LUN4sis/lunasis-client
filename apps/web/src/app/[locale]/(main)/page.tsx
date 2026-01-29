@@ -1,9 +1,9 @@
-import Link from 'next/link';
-import Image from 'next/image';
 import { ROUTES } from '@repo/shared/constants';
 import { DEFAULT_BLUR_DATA_URL } from '@web/lib/constants';
-
 import clsx from 'clsx';
+import Image from 'next/image';
+import Link from 'next/link';
+
 import styles from './main.module.scss';
 
 const MAIN_ITEMS = [

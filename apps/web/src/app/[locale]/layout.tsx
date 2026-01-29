@@ -1,15 +1,15 @@
+import '../globals.scss';
+
+import { Providers, ViewportHeightSetter } from '@web/components/layouts';
+import { Loading } from '@web/components/ui/loading';
+import { TokenExpirationHandler } from '@web/features/auth/components/token-expiration-handler';
+import { routing } from '@web/i18n/routing';
 import type { Metadata } from 'next';
 import { DM_Sans } from 'next/font/google';
-import { NextIntlClientProvider, hasLocale } from 'next-intl';
-import { getMessages, setRequestLocale } from 'next-intl/server';
 import { notFound } from 'next/navigation';
+import { hasLocale,NextIntlClientProvider } from 'next-intl';
+import { getMessages, setRequestLocale } from 'next-intl/server';
 import { Suspense } from 'react';
-import { Providers, ViewportHeightSetter } from '@web/components/layouts';
-import { TokenExpirationHandler } from '@web/features/auth/components/token-expiration-handler';
-import { Loading } from '@web/components/ui/loading';
-import { routing } from '@web/i18n/routing';
-
-import '../globals.scss';
 
 const dmSans = DM_Sans({
   variable: '--font-dm-sans',

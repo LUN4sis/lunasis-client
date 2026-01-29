@@ -1,13 +1,13 @@
 'use client';
 
-import { Suspense, useEffect, useState } from 'react';
-import { useSearchParams } from 'next/navigation';
-import { useLogin } from '@web/features/auth/hooks/use-auth';
-import { verifyOAuthState } from '@web/features/auth/utils';
+import { ROUTES } from '@repo/shared/constants';
 import { handleAndLogError, logger, safeSessionStorage } from '@repo/shared/utils';
 import { LoadingFallback } from '@web/components/ui/loading-fallback';
-import { ROUTES } from '@repo/shared/constants';
+import { useLogin } from '@web/features/auth/hooks/use-auth';
+import { verifyOAuthState } from '@web/features/auth/utils';
 import { routing } from '@web/i18n/routing';
+import { useSearchParams } from 'next/navigation';
+import { Suspense, useEffect, useState } from 'react';
 
 const AppleCallbackContent = () => {
   const searchParams = useSearchParams();

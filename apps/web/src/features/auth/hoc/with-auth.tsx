@@ -1,10 +1,10 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
-import { useEffect, useState, ComponentType, ReactNode } from 'react';
 import { useAuthStore } from '@repo/shared/features/auth';
+import { ERROR_MESSAGES, ErrorCode } from '@repo/shared/types';
 import { logger } from '@repo/shared/utils';
-import { ErrorCode, ERROR_MESSAGES } from '@repo/shared/types';
+import { useRouter } from 'next/navigation';
+import { ComponentType, ReactNode, useEffect, useState } from 'react';
 
 import styles from './with-auth.module.scss';
 

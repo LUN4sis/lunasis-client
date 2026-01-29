@@ -1,22 +1,21 @@
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
-import { useTranslations } from 'next-intl';
-import { useParams } from 'next/navigation';
-
+import { useAuthStore } from '@repo/shared/features/auth';
+import { SupportedLocale } from '@repo/shared/types';
+import { getErrorMessage } from '@repo/shared/utils';
+import { toast } from '@web/components/ui/toast';
+import { sendAnonymousMessageAPI, sendMessageAPI } from '@web/features/chat/api/chat.api';
 import { ChatHeader } from '@web/features/chat/components/chat-header';
 import { ChatInput } from '@web/features/chat/components/chat-input';
-import { Sidebar } from '@web/features/chat/components/sidebar';
 import { IncognitoBar } from '@web/features/chat/components/incognito-bar';
-import { MessageList, type Message } from '@web/features/chat/components/message-list';
-
-import { SupportedLocale } from '@repo/shared/types';
-import { mockSendMessage } from '@web/features/chat/api/mock-chat-api';
+import { type Message, MessageList } from '@web/features/chat/components/message-list';
+import { Sidebar } from '@web/features/chat/components/sidebar';
 import { useChatStore } from '@web/features/chat/stores';
-import { toast } from '@web/components/ui/toast';
-import { getErrorMessage } from '@repo/shared/utils';
-
 import clsx from 'clsx';
+import { useParams } from 'next/navigation';
+import { useTranslations } from 'next-intl';
+import { useEffect, useMemo, useState } from 'react';
+
 import styles from '../chat.module.scss';
 
 export default function ChatRoomPage() {
@@ -26,13 +25,26 @@ export default function ChatRoomPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [isInitialized, setIsInitialized] = useState(false);
   const [isMounted, setIsMounted] = useState(true);
-  const { isIncognito, pendingMessages, clearPendingMessages } = useChatStore();
+  const [isReady, setIsReady] = useState(false);
+  const isLoggedIn = useAuthStore((s) => s.isLoggedIn);
+  const { isIncognito, pendingMessages, clearPendingMessages, setCurrentChatId } = useChatStore();
+  const isAnonymous = isIncognito || !isLoggedIn;
 
-  // Track component mount state
+  // currentChatId를 URL params와 동기화 (익명: chatRoomId=anonymousId, 로그인: chatRoomId=서버 ID)
+  useEffect(() => {
+    if (chatRoomId) setCurrentChatId(chatRoomId);
+  }, [chatRoomId, setCurrentChatId]);
+
+  // Track component mount state and trigger fade-in
   useEffect(() => {
     setIsMounted(true);
+    // Delay to allow hydration to complete before showing content
+    const timer = requestAnimationFrame(() => {
+      setIsReady(true);
+    });
     return () => {
       setIsMounted(false);
+      cancelAnimationFrame(timer);
     };
   }, []);
 
@@ -144,22 +156,19 @@ export default function ChatRoomPage() {
     setIsLoading(true);
 
     try {
-      // Send message to existing chat room - POST /chats/{chatRoomId}
-      // 기존 채팅방에 메시지 전송
-      const response = await mockSendMessage(chatRoomId, message);
+      const res = isAnonymous
+        ? await sendAnonymousMessageAPI(chatRoomId, message)
+        : await sendMessageAPI(chatRoomId, message);
 
-      // Check if component is still mounted before updating state
       if (!isMounted) return;
+      if (!res.success || !res.data) throw new Error(res.message ?? '요청에 실패했습니다.');
 
-      // Add AI response
-      // AI 응답 추가
       const aiMessage: Message = {
         id: `ai-${Date.now()}`,
         role: 'assistant',
-        content: response.answer,
+        content: res.data.answer,
         timestamp: new Date(),
       };
-
       setMessages((prev) => [...prev, aiMessage]);
     } catch (error) {
       // Only show error if component is still mounted
@@ -177,7 +186,7 @@ export default function ChatRoomPage() {
   };
 
   return (
-    <div className={styles.container}>
+    <div className={clsx(styles.container, { [styles.ready]: isReady })}>
       <Sidebar />
       <div className={styles.top}>
         <ChatHeader />

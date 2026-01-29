@@ -1,7 +1,7 @@
 'use server';
 
 import type { ExchangeResponse } from '@repo/shared/features/auth';
-import { googleLoginAPI, appleLoginAPI, logoutAPI } from '@repo/shared/features/auth/api/auth.api';
+import { appleLoginAPI, googleLoginAPI, logoutAPI } from '@repo/shared/features/auth/api/auth.api';
 import { ErrorCode } from '@repo/shared/types';
 import { AxiosError } from 'axios';
 

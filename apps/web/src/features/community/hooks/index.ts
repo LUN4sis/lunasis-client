@@ -1,5 +1,6 @@
+import { communityKeys, createCommunityHooks } from '@repo/shared/features/community/hooks';
+
 import { communityApi } from '../api';
-import { createCommunityHooks, communityKeys } from '@repo/shared/features/community/hooks';
 
 const hooks = createCommunityHooks(communityApi);
 

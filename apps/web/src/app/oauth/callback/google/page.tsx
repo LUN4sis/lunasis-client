@@ -1,13 +1,13 @@
 'use client';
 
-import { Suspense, useEffect, useState } from 'react';
-import { useSearchParams } from 'next/navigation';
-import { useLogin } from '@web/features/auth/hooks/use-auth';
-import { verifyOAuthState } from '@web/features/auth/utils';
+import { ROUTES } from '@repo/shared/constants';
 import { handleAndLogError, logger, safeSessionStorage } from '@repo/shared/utils';
 import { LoadingFallback } from '@web/components/ui/loading-fallback';
-import { ROUTES } from '@repo/shared/constants';
+import { useLogin } from '@web/features/auth/hooks/use-auth';
+import { verifyOAuthState } from '@web/features/auth/utils';
 import { routing } from '@web/i18n/routing';
+import { useSearchParams } from 'next/navigation';
+import { Suspense, useEffect, useState } from 'react';
 
 const GoogleCallbackContent = () => {
   const searchParams = useSearchParams();
@@ -42,7 +42,9 @@ const GoogleCallbackContent = () => {
       if (code) {
         const isDev = process.env.NODE_ENV === 'development';
         const maskedCode =
-          code.length <= 12 ? `${code.slice(0, 2)}...${code.slice(-2)}` : `${code.slice(0, 6)}...${code.slice(-6)}`;
+          code.length <= 12
+            ? `${code.slice(0, 2)}...${code.slice(-2)}`
+            : `${code.slice(0, 6)}...${code.slice(-6)}`;
 
         console.log('[OAuth][Google] authorization code:', isDev ? code : maskedCode);
       }
