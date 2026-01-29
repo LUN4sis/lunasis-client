@@ -1,6 +1,6 @@
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import { Button } from '@web/components/ui/button';
 
-import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import styles from './header.module.scss';
 
 export interface HeaderProps {

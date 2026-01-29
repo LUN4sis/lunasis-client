@@ -1,7 +1,8 @@
+import { Product, ProductCategory } from '@repo/shared/types';
 import { useMemo } from 'react';
-import { ProductCategory, Product } from '@repo/shared/types';
-import { useProductData, useProductsByCategory } from './use-products';
+
 import { generateProductSlug } from '../utils/slug.utils';
+import { useProductData, useProductsByCategory } from './use-products';
 
 /**
  * Custom hook to get full product data from cache or list

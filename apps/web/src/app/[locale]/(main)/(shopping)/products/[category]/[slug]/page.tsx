@@ -1,23 +1,21 @@
 'use client';
 
-import { useState, useCallback, useMemo } from 'react';
-import { useRouter, useParams, useSearchParams } from 'next/navigation';
-
+import { Header } from '@products/components/header';
 import { ROUTES } from '@repo/shared/constants';
 import { ProductCategory } from '@repo/shared/types';
 import { handleApiError } from '@repo/shared/utils';
-import { dynamicWithSkeleton } from '@web/lib/utils';
-import { RatingSkeleton, ProductImageSkeleton } from '@web/components/ui/skeleton';
+import { ProductImageSkeleton, RatingSkeleton } from '@web/components/ui/skeleton';
 import { Tab } from '@web/components/ui/tab';
-
-import { Header } from '@products/components/header';
 import {
-  useProductDetail,
-  useFullProductData,
   BadgeList,
   PriceSection,
   ReviewSection,
+  useFullProductData,
+  useProductDetail,
 } from '@web/features/products';
+import { dynamicWithSkeleton } from '@web/lib/utils';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
+import { useCallback, useMemo, useState } from 'react';
 
 import styles from './products.module.scss';
 

@@ -34,11 +34,13 @@
   .reviewInfo {
     @include flex(row, end, center);
     gap: $spacing-2;
+  }
 
-    > img {
-      @include size(5rem, auto);
-      object-fit: cover;
-    }
+  .mallLogoImage {
+    width: 5rem;
+    height: auto;
+    object-fit: contain;
+    flex-shrink: 0;
   }
 }
 
@@ -63,9 +65,9 @@
   .reviewInfo {
     gap: $spacing-1;
 
-    > img {
-      @include size(2.9rem, auto);
-      object-fit: cover;
+    .mallLogoImage {
+      width: 2.9rem;
+      height: auto;
     }
   }
 
