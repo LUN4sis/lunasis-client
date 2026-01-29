@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
-import { StyleSheet, View } from 'react-native';
 import { Text } from '@/components/Themed';
-import { Stack, useRouter, useLocalSearchParams } from 'expo-router';
+import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
+import { StyleSheet, View } from 'react-native';
 
 export default function OAuthCallbackScreen() {
   const router = useRouter();
