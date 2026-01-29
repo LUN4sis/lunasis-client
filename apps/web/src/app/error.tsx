@@ -1,9 +1,9 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { RotateCcw, Home } from 'lucide-react';
 import { logger } from '@repo/shared/utils';
 import { ROUTES } from '@web/lib/constants';
+import { Home, RotateCcw } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 import styles from './error.module.scss';
 

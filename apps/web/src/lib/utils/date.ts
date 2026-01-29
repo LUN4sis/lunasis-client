@@ -1,6 +1,7 @@
 import { SupportedLocale } from '@repo/shared/types';
 import { format } from 'date-fns';
-import { ko, enUS } from 'date-fns/locale';
+import { enUS, ko } from 'date-fns/locale';
+
 /**
  * DateOptions:
  * - fullDate: February 4th, 2025

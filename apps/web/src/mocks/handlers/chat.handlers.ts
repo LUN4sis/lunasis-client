@@ -1,112 +1,117 @@
+import type { ChatRoom, ChatStart } from '@web/features/chat/types/api.type';
 import { http, HttpResponse } from 'msw';
-import type { ApiResponse } from '@repo/shared/types';
-import {
-  createMockAnonymousMessageResponse,
-  createMockSendMessageResponse,
-  createMockStartChatResponse,
-  createMockUpdateTitleResponse,
-  getMockChatMessagesResponse,
-  getMockChatRoomsResponse,
-} from '@web/features/chat/data';
+
+import { findMockAnswerForQuestion, mockChatRooms, mockChatRoomsById } from '../data/chat.data';
 
 const baseUrl = '/api';
 
-/**
- * Simulate network delay (300-900ms)
- * 네트워크 지연 시뮬레이션 (300-900ms)
- */
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+const getRandomDelay = () => Math.floor(Math.random() * 800) + 600;
 
-const getRandomDelay = () => Math.floor(Math.random() * 600) + 300;
+/** 채팅 메시지 전송(POST) 시 시뮬레이션 지연 ~7초 */
+const CHAT_SEND_DELAY_MS = 7000;
 
-const badRequest = (message: string): HttpResponse => {
-  const body: ApiResponse<never> = {
-    success: false,
-    message,
-    code: 400,
-    error: { code: 'VALIDATION_ERROR', message },
-  };
-  return HttpResponse.json(body, { status: 400 });
-};
+/** POST /chats 시 사용할 새 방 ID 생성 (mock 전용) */
+let mockRoomIdCounter = 100;
+function generateMockChatRoomId(): string {
+  return `mock-chat-${String(mockRoomIdCounter++).padStart(3, '0')}`;
+}
 
-/**
- * MSW handlers for chat endpoints
- * 채팅 API 목업 핸들러
- */
+/** 질문에서 채팅방 제목 생성 (첫 30자) */
+function titleFromQuestion(question: string): string {
+  const t = question.trim();
+  return t.length > 30 ? t.slice(0, 27) + '...' : t;
+}
+
 export const chatHandlers = [
-  // GET /chats - chat room list
+  // GET /api/chats - 채팅방 목록
   http.get(`${baseUrl}/chats`, async () => {
     await delay(getRandomDelay());
-    return HttpResponse.json(getMockChatRoomsResponse());
+    const list: ChatRoom[] = mockChatRooms.map((r) => ({
+      chatRoomId: r.chatRoomId,
+      title: r.title,
+    }));
+    return HttpResponse.json({ success: true, data: list });
   }),
 
-  // POST /chats - start chat
-  http.post(`${baseUrl}/chats`, async ({ request }) => {
-    await delay(getRandomDelay());
-
-    const body = (await request.json().catch(() => null)) as { question?: unknown } | null;
-    const question = typeof body?.question === 'string' ? body.question.trim() : '';
-    if (!question) return badRequest('question은 필수입니다.');
-
-    return HttpResponse.json(createMockStartChatResponse(question));
-  }),
-
-  // GET /chats/:chatRoomId - restore messages
+  // GET /api/chats/:chatRoomId - 대화 내용
   http.get(`${baseUrl}/chats/:chatRoomId`, async ({ params }) => {
     await delay(getRandomDelay());
-
-    const chatRoomId = String(params.chatRoomId ?? '').trim();
-    if (!chatRoomId) return badRequest('chatRoomId가 올바르지 않습니다.');
-
-    const response = getMockChatMessagesResponse(chatRoomId);
-    const status = response.success ? 200 : 404;
-    return HttpResponse.json(response, { status });
+    const id = params.chatRoomId as string;
+    const room = mockChatRoomsById.get(id);
+    if (!room) {
+      return HttpResponse.json(
+        { success: false, message: 'Chat room not found.' },
+        { status: 404 },
+      );
+    }
+    return HttpResponse.json({ success: true, data: room.chats });
   }),
 
-  // POST /chats/:chatRoomId - send message
-  http.post(`${baseUrl}/chats/:chatRoomId`, async ({ params, request }) => {
-    await delay(getRandomDelay());
-
-    const chatRoomId = String(params.chatRoomId ?? '').trim();
-    if (!chatRoomId) return badRequest('chatRoomId가 올바르지 않습니다.');
-
-    const body = (await request.json().catch(() => null)) as { question?: unknown } | null;
+  // POST /api/chats - 채팅 시작 (새 방 생성 + 첫 답변)
+  http.post(`${baseUrl}/chats`, async ({ request }) => {
+    await delay(CHAT_SEND_DELAY_MS);
+    const body = (await request.json()) as { question?: string };
     const question = typeof body?.question === 'string' ? body.question.trim() : '';
-    if (!question) return badRequest('question은 필수입니다.');
-
-    const response = createMockSendMessageResponse(chatRoomId, question);
-    const status = response.success ? 200 : 404;
-    return HttpResponse.json(response, { status });
+    if (!question) {
+      return HttpResponse.json(
+        { success: false, message: 'A question is required.' },
+        { status: 400 },
+      );
+    }
+    const answer = findMockAnswerForQuestion(question);
+    const chatRoomId = generateMockChatRoomId();
+    const title = titleFromQuestion(question);
+    const res: ChatStart = { chatRoomId, title, answer };
+    return HttpResponse.json({ success: true, data: res });
   }),
 
-  // POST /chats/:chatRoomId/title - update title
-  http.post(`${baseUrl}/chats/:chatRoomId/title`, async ({ params, request }) => {
-    await delay(getRandomDelay());
-
-    const chatRoomId = String(params.chatRoomId ?? '').trim();
-    if (!chatRoomId) return badRequest('chatRoomId가 올바르지 않습니다.');
-
-    const body = (await request.json().catch(() => null)) as { title?: unknown } | null;
-    const title = typeof body?.title === 'string' ? body.title.trim() : '';
-    if (!title) return badRequest('title은 필수입니다.');
-
-    const response = createMockUpdateTitleResponse(chatRoomId, title);
-    const status = response.success ? 200 : 404;
-    return HttpResponse.json(response, { status });
-  }),
-
-  // POST /chats/anonymous - anonymous chat
+  // POST /api/chats/anonymous - 익명 채팅 (:chatRoomId 보다 먼저 선언해야 'anonymous'가 path param으로 잡히지 않음)
   http.post(`${baseUrl}/chats/anonymous`, async ({ request }) => {
-    await delay(getRandomDelay());
-
-    const body = (await request.json().catch(() => null)) as { userId?: unknown; question?: unknown } | null;
-    const userId = typeof body?.userId === 'string' ? body.userId.trim() : '';
+    await delay(CHAT_SEND_DELAY_MS);
+    const body = (await request.json()) as { anonymousId?: string; question?: string };
     const question = typeof body?.question === 'string' ? body.question.trim() : '';
-    if (!userId) return badRequest('userId는 필수입니다.');
-    if (!question) return badRequest('question은 필수입니다.');
+    if (!question) {
+      return HttpResponse.json(
+        { success: false, message: 'A question is required.' },
+        { status: 400 },
+      );
+    }
+    const answer = findMockAnswerForQuestion(question);
+    return HttpResponse.json({ success: true, data: { answer } });
+  }),
 
-    return HttpResponse.json(createMockAnonymousMessageResponse(question));
+  // POST /api/chats/:chatRoomId - continue conversation
+  http.post(`${baseUrl}/chats/:chatRoomId`, async ({ params, request }) => {
+    await delay(CHAT_SEND_DELAY_MS);
+    const id = params.chatRoomId as string;
+    const body = (await request.json()) as { question?: string };
+    const question = typeof body?.question === 'string' ? body.question.trim() : '';
+    if (!question) {
+      return HttpResponse.json(
+        { success: false, message: 'A question is required.' },
+        { status: 400 },
+      );
+    }
+    const room = mockChatRoomsById.get(id);
+    const prefix = 12; // match prefix for English phrases
+    const answer = room
+      ? (room.chats.find(
+          (c) =>
+            c.question.toLowerCase().includes(question.slice(0, prefix).toLowerCase()) ||
+            question.toLowerCase().includes(c.question.slice(0, prefix).toLowerCase()),
+        )?.answer ?? findMockAnswerForQuestion(question))
+      : findMockAnswerForQuestion(question);
+    return HttpResponse.json({ success: true, data: { answer } });
+  }),
+
+  // POST /api/chats/:chatRoomId/title - 제목 수정
+  http.post(`${baseUrl}/chats/:chatRoomId/title`, async ({ params, request }) => {
+    await delay(300);
+    const body = (await request.json()) as { title?: string };
+    const _title = typeof body?.title === 'string' ? body.title : '';
+    void params;
+    void _title;
+    return HttpResponse.json({ success: true });
   }),
 ];
-
-

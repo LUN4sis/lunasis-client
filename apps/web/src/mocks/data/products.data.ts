@@ -5,7 +5,7 @@ import { Product } from '../types/product.types';
 export const tamponProducts: Product[] = [
   {
     productId: 'rael-organic-cotton-tampons-super-12p',
-    name: 'Rael Organic Cotton Tampons – Super (12 Count)',
+    name: 'Rael Organic Cotton Tampons – Super',
     image:
       'https://img.danawa.com/prod_img/500000/281/188/img/88188281_1.jpg?shrink=330:*&_v=20250424134856',
     reviews: 4.5,
@@ -23,7 +23,7 @@ export const tamponProducts: Product[] = [
   },
   {
     productId: 'natracare-tampons-applicator-regular-16p',
-    name: 'Natracare Tampons with Applicator – Regular (16 Count)',
+    name: 'Natracare Tampons with Applicator – Regular',
     image:
       'https://img.danawa.com/prod_img/500000/069/181/img/88181069_1.jpg?shrink=330:*&_v=20250424134143',
     reviews: 4.6,
@@ -41,7 +41,7 @@ export const tamponProducts: Product[] = [
   },
   {
     productId: 'pure-cotton-tampons-super-16p',
-    name: 'Pure Cotton Tampons – Super (16 Count)',
+    name: 'Pure Cotton Tampons – Super',
     image:
       'https://img.danawa.com/prod_img/500000/785/185/img/88185785_1.jpg?shrink=330:*&_v=20250424134629',
     reviews: 4.5,
@@ -59,7 +59,7 @@ export const tamponProducts: Product[] = [
   },
   {
     productId: 'happy-moon-day-easy-tampon-super-8p',
-    name: 'Happy Moon Day Easy Tampons – Super (8 Count)',
+    name: 'Happy Moon Day Easy Tampons – Super',
     image:
       'https://img.danawa.com/prod_img/500000/873/181/img/88181873_1.jpg?shrink=330:*&_v=20251226045312',
     reviews: 4.5,
@@ -77,7 +77,7 @@ export const tamponProducts: Product[] = [
   },
   {
     productId: 'white-oh-my-tampon-super-24p',
-    name: 'White Oh My Tampons – Super (24 Count)',
+    name: 'White Oh My Tampons – Super',
     image:
       'https://img.danawa.com/prod_img/500000/708/182/img/93182708_1.jpg?shrink=330:*&_v=20250815045442',
     reviews: 4.5,
@@ -95,7 +95,7 @@ export const tamponProducts: Product[] = [
   },
   {
     productId: 'pure-cotton-tampons-regular-128p',
-    name: 'Pure Cotton Tampons – Regular (128 Count)',
+    name: 'Pure Cotton Tampons – Regular',
     image:
       'https://img.danawa.com/prod_img/500000/538/183/img/88183538_1.jpg?shrink=330:*&_v=20250424134416',
     reviews: 4.5,
@@ -113,7 +113,7 @@ export const tamponProducts: Product[] = [
   },
   {
     productId: 'tempo-natural-super-80p',
-    name: 'Tempo Natural Tampons – Super (80 Count)',
+    name: 'Tempo Natural Tampons – Super',
     image:
       'https://img.danawa.com/prod_img/500000/314/188/img/88188314_1.jpg?shrink=330:*&_v=20250424134858',
     reviews: 4.5,
@@ -131,7 +131,7 @@ export const tamponProducts: Product[] = [
   },
   {
     productId: 'tempo-new-natural-super-96p',
-    name: 'Tempo New Natural Tampons – Super (96 Count)',
+    name: 'Tempo New Natural Tampons – Super',
     image:
       'https://img.danawa.com/prod_img/500000/398/179/img/88179398_1.jpg?shrink=330:*&_v=20250424134001',
     reviews: 4.5,
@@ -149,7 +149,7 @@ export const tamponProducts: Product[] = [
   },
   {
     productId: 'tempo-original-super-30p',
-    name: 'Tempo Original Tampons – Super (30 Count)',
+    name: 'Tempo Original Tampons – Super',
     image:
       'https://img.danawa.com/prod_img/500000/787/189/img/88189787_1.jpg?shrink=330:*&_v=20250424135031',
     reviews: 4.5,
@@ -167,7 +167,7 @@ export const tamponProducts: Product[] = [
   },
   {
     productId: 'pure-cotton-tampons-regular-8p',
-    name: 'Pure Cotton Tampons – Regular (8 Count)',
+    name: 'Pure Cotton Tampons – Regular',
     image:
       'https://img.danawa.com/prod_img/500000/842/924/img/48924842_1.jpg?shrink=330:*&_v=20250426050527',
     reviews: 4.5,
@@ -188,7 +188,7 @@ export const tamponProducts: Product[] = [
 export const sanitaryPadProducts: Product[] = [
   {
     productId: 'rael-organic-cotton-cover-medium-14p',
-    name: 'Rael Organic Cotton Cover Pads – Medium (14 Count)',
+    name: 'Rael Organic Cotton Cover Pads – Medium',
     image:
       'https://img.danawa.com/prod_img/500000/877/220/img/6220877_1.jpg?shrink=330:*&_v=20250714144454',
     reviews: 4.5,
@@ -200,7 +200,7 @@ export const sanitaryPadProducts: Product[] = [
   },
   {
     productId: 'dearskin-real-modal-medium-96p',
-    name: 'DearSkin Real Modal Cover Pads – Medium (96 Count)',
+    name: 'DearSkin Real Modal Cover Pads – Medium',
     image:
       'https://img.danawa.com/prod_img/500000/920/179/img/88179920_1.jpg?shrink=330:*&_v=20250424134032',
     reviews: 4.5,
@@ -212,7 +212,7 @@ export const sanitaryPadProducts: Product[] = [
   },
   {
     productId: 'innersia-the-prism-medium-40p',
-    name: 'Innersia The Prism Pads – Medium (40 Count)',
+    name: 'Innersia The Prism Pads – Medium',
     image:
       'https://img.danawa.com/prod_img/500000/290/179/img/88179290_1.jpg?shrink=330:*&_v=20250424133955',
     reviews: 4.5,
@@ -224,7 +224,7 @@ export const sanitaryPadProducts: Product[] = [
   },
   {
     productId: 'white-super-absorbent-medium-18p',
-    name: 'White Super Absorbent Pads – Medium (18 Count)',
+    name: 'White Super Absorbent Pads – Medium',
     image:
       'https://img.danawa.com/prod_img/500000/043/177/img/88177043_1.jpg?shrink=330:*&_v=20250424133738',
     reviews: 4.5,
@@ -236,7 +236,7 @@ export const sanitaryPadProducts: Product[] = [
   },
   {
     productId: 'hye-daily-slim-overnight-48p',
-    name: 'Hye Daily Slim Overnight Pads (48 Count)',
+    name: 'Hye Daily Slim Overnight Pads',
     image:
       'https://img.danawa.com/prod_img/500000/296/182/img/88182296_1.jpg?shrink=330:*&_v=20250424134300',
     reviews: 4.5,
@@ -248,7 +248,7 @@ export const sanitaryPadProducts: Product[] = [
   },
   {
     productId: 'lanature-signature-natureback-ultra-large-40p',
-    name: 'LaNature Signature NatureBack Ultra Pads with Wings – Large (40 Count)',
+    name: 'LaNature Signature NatureBack Ultra Pads with Wings – Large',
     image:
       'https://img.danawa.com/prod_img/500000/227/224/img/88224227_1.jpg?shrink=330:*&_v=20250425095253',
     reviews: 4.5,
@@ -266,7 +266,7 @@ export const sanitaryPadProducts: Product[] = [
   },
   {
     productId: 'natracare-ultra-pads-wing-medium-120p',
-    name: 'Natracare Ultra Pads with Wings – Medium (120 Count)',
+    name: 'Natracare Ultra Pads with Wings – Medium',
     image:
       'https://img.danawa.com/prod_img/500000/198/981/img/5981198_1.jpg?shrink=330:*&_v=20250714144450',
     reviews: 4.5,
@@ -278,7 +278,7 @@ export const sanitaryPadProducts: Product[] = [
   },
   {
     productId: 'organicbon-ultra-slim-medium-90p',
-    name: 'OrganicBon Ultra Slim Medium Pads (90 Count)',
+    name: 'OrganicBon Ultra Slim Medium Pads',
     image:
       'https://img.danawa.com/prod_img/500000/229/189/img/88189229_1.jpg?shrink=330:*&_v=20251130050219',
     reviews: 4.7,
@@ -290,7 +290,7 @@ export const sanitaryPadProducts: Product[] = [
   },
   {
     productId: 'hye-daily-slim-large-56p',
-    name: 'Hye Daily Slim Large Pads (56 Count)',
+    name: 'Hye Daily Slim Large Pads',
     image:
       'https://img.danawa.com/prod_img/500000/281/182/img/88182281_1.jpg?shrink=330:*&_v=20250424134259',
     reviews: 4.5,
