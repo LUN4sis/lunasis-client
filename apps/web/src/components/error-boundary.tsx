@@ -1,8 +1,8 @@
 'use client';
 
-import { Component, ReactNode } from 'react';
 import { logger } from '@repo/shared/utils';
 import { Button } from '@web/components/ui/button';
+import { Component, ReactNode } from 'react';
 
 import styles from './error-boundary.module.scss';
 

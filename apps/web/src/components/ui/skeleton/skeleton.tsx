@@ -1,5 +1,6 @@
-import styles from './skeleton.module.scss';
 import clsx from 'clsx';
+
+import styles from './skeleton.module.scss';
 
 interface SkeletonProps {
   className?: string;

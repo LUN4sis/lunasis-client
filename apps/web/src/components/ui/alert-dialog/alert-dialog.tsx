@@ -1,9 +1,10 @@
 'use client';
 
 import { useEffect } from 'react';
+
 import { Button } from '../button/button';
-import type { AlertDialogProps } from './types';
 import styles from './alert-dialog.module.scss';
+import type { AlertDialogProps } from './types';
 
 export const AlertDialog = ({
   open,

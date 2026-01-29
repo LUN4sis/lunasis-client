@@ -1,4 +1,5 @@
 import { useTranslations } from 'next-intl';
+
 import styles from './spinner.module.scss';
 
 export const Spinner: React.FC = () => {
