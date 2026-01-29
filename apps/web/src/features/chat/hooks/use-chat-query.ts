@@ -1,12 +1,13 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+
 import {
-  getChatRoomsAPI,
   getChatMessagesAPI,
-  startChatAPI,
-  sendMessageAPI,
+  getChatRoomsAPI,
   sendAnonymousMessageAPI,
+  sendMessageAPI,
+  startChatAPI,
 } from '../api/chat.api';
-import { mockGetChatRooms } from '../api/mock-chat-api';
+import type { ChatStartRes, MessageRes } from '../types/api.type';
 
 // ============================================================================
 // Query Keys
@@ -25,17 +26,16 @@ export const chatKeys = {
 
 /**
  * Get chat rooms list
- * Uses mock API directly for development
- * 개발용 mock API 직접 사용
  */
 export const useChatRoomsQuery = () => {
   return useQuery({
     queryKey: chatKeys.rooms(),
     queryFn: async () => {
-      // Use mock API directly until MSW is properly configured
-      // MSW가 제대로 설정될 때까지 mock API 직접 사용
-      const rooms = await mockGetChatRooms();
-      return { data: rooms };
+      const res = await getChatRoomsAPI();
+      if (!res.success || !res.data) {
+        throw new Error(res.message ?? '채팅방 목록을 불러올 수 없습니다.');
+      }
+      return { data: res.data };
     },
   });
 };
@@ -57,7 +57,7 @@ export const useChatMessagesQuery = (chatRoomId: string | null) => {
 // ============================================================================
 
 interface CreateChatMutationOptions {
-  onSuccess?: (data: any) => void;
+  onSuccess?: (data: ChatStartRes | MessageRes) => void;
   onError?: (error: unknown) => void;
 }
 
@@ -98,7 +98,7 @@ export const useCreateAnonymousChatMutation = (options?: CreateChatMutationOptio
 };
 
 interface SendMessageMutationOptions {
-  onSuccess?: (data: any) => void;
+  onSuccess?: (data: MessageRes) => void;
   onError?: (error: unknown) => void;
 }
 

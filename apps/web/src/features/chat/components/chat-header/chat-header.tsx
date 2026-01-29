@@ -1,14 +1,14 @@
 'use client';
 
-import { MenuIcon, BellIcon } from 'lucide-react';
-import { useParams } from 'next/navigation';
+import { useAuthStore } from '@repo/shared/features/auth/stores/use-auth-store';
+import { SupportedLocale } from '@repo/shared/types';
 import { Button } from '@web/components/ui/button/button';
 import { formatDate } from '@web/lib/utils';
-import { SupportedLocale } from '@repo/shared/types';
-import { useChatStore } from '../../stores/use-chat-store';
-import { useAuthStore } from '@repo/shared/features/auth/stores/use-auth-store';
-
 import clsx from 'clsx';
+import { BellIcon, MenuIcon } from 'lucide-react';
+import { useParams } from 'next/navigation';
+
+import { useChatStore } from '../../stores/use-chat-store';
 import styles from './chat-header.module.scss';
 
 export const ChatHeader = () => {

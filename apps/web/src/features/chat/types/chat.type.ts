@@ -58,10 +58,10 @@ export interface ChatState {
   isWebSearchEnabled: boolean;
   /** whether alert dialog is open */
   isAlertOpen: boolean;
-  /** anonymous user ID for non-logged-in users */
-  anonymousUserId: string | null;
   /** pending messages for initial chat room navigation */
   pendingMessages: PendingMessage | null;
+  /** whether store has been hydrated from localStorage */
+  isHydrated: boolean;
 }
 
 /**
@@ -73,10 +73,10 @@ export interface ChatActions {
   toggleSidebar: () => void;
   toggleWebSearch: () => void;
   setAlertOpen: (open: boolean) => void;
-  setAnonymousUserId: (id: string | null) => void;
   setPendingMessages: (messages: PendingMessage | null) => void;
   clearPendingMessages: () => void;
   reset: () => void;
+  setHydrated: (hydrated: boolean) => void;
 }
 
 /** complete chat store interface */

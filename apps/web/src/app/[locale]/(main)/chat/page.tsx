@@ -1,22 +1,22 @@
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
-import { useTranslations } from 'next-intl';
-import { useParams, useRouter } from 'next/navigation';
-
+import { useAuthStore } from '@repo/shared/features/auth';
+import { SupportedLocale } from '@repo/shared/types';
+import { getErrorMessage } from '@repo/shared/utils';
+import { toast } from '@web/components/ui/toast';
+import { sendAnonymousMessageAPI, startChatAPI } from '@web/features/chat/api/chat.api';
 import { ChatHeader } from '@web/features/chat/components/chat-header';
 import { ChatInput } from '@web/features/chat/components/chat-input';
-import { Sidebar } from '@web/features/chat/components/sidebar';
 import { IncognitoBar } from '@web/features/chat/components/incognito-bar';
-import { MessageList, type Message } from '@web/features/chat/components/message-list';
-
-import { SupportedLocale } from '@repo/shared/types';
-import { mockStartChat } from '@web/features/chat/api/mock-chat-api';
+import { type Message, MessageList } from '@web/features/chat/components/message-list';
+import { Sidebar } from '@web/features/chat/components/sidebar';
 import { useChatStore } from '@web/features/chat/stores';
-import { toast } from '@web/components/ui/toast';
-import { getErrorMessage } from '@repo/shared/utils';
-
+import { getAnonymousUserId } from '@web/features/chat/utils/anonymous-user';
 import clsx from 'clsx';
+import { useParams, useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
+import { useEffect, useMemo, useState } from 'react';
+
 import styles from './chat.module.scss';
 
 export default function ChatPage() {
@@ -27,13 +27,21 @@ export default function ChatPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [isInitialized, setIsInitialized] = useState(false);
   const [isMounted, setIsMounted] = useState(true);
-  const { isIncognito, setPendingMessages } = useChatStore();
+  const [isReady, setIsReady] = useState(false);
+  const isLoggedIn = useAuthStore((s) => s.isLoggedIn);
+  const { isIncognito, setPendingMessages, setCurrentChatId } = useChatStore();
+  const isAnonymous = isIncognito || !isLoggedIn;
 
-  // Track component mount state
+  // Track component mount state and trigger fade-in
   useEffect(() => {
     setIsMounted(true);
+    // Delay to allow hydration to complete before showing content
+    const timer = requestAnimationFrame(() => {
+      setIsReady(true);
+    });
     return () => {
       setIsMounted(false);
+      cancelAnimationFrame(timer);
     };
   }, []);
 
@@ -111,35 +119,29 @@ export default function ChatPage() {
     setIsLoading(true);
 
     try {
-      // Start new chat - POST /chats
-      // 새 채팅 시작 - chatRoomId와 answer를 받음
-      const response = await mockStartChat(message);
-
-      // Check if component is still mounted before updating state
-      if (!isMounted) return;
-
-      const timestamp = new Date();
-
-      // Store pending messages for the chat room page
-      // 채팅방 페이지로 전달할 메시지 저장
-      setPendingMessages({
-        question: message,
-        answer: response.answer,
-        timestamp,
-      });
-
-      // Navigate to chat room page
-      // 채팅방 페이지로 이동
-      router.push(`/${locale}/chat/${response.chatRoomId}`);
+      if (isAnonymous) {
+        const anonymousId = getAnonymousUserId();
+        const res = await sendAnonymousMessageAPI(anonymousId, message);
+        if (!isMounted) return;
+        if (!res.success || !res.data) throw new Error(res.message ?? '요청에 실패했습니다.');
+        setCurrentChatId(anonymousId);
+        setPendingMessages({ question: message, answer: res.data.answer, timestamp: new Date() });
+        router.push(`/${locale}/chat/${anonymousId}`);
+      } else {
+        const res = await startChatAPI(message);
+        if (!isMounted) return;
+        if (!res.success || !res.data) throw new Error(res.message ?? '요청에 실패했습니다.');
+        const timestamp = new Date();
+        setCurrentChatId(res.data.chatRoomId);
+        setPendingMessages({ question: message, answer: res.data.answer, timestamp });
+        router.push(`/${locale}/chat/${res.data.chatRoomId}`);
+      }
     } catch (error) {
-      // Only show error if component is still mounted
       if (!isMounted) return;
 
-      // Use standardized error handling
       const errorMessage = getErrorMessage(error);
       toast.error(errorMessage);
     } finally {
-      // Only update loading state if component is still mounted
       if (isMounted) {
         setIsLoading(false);
       }
@@ -147,7 +149,7 @@ export default function ChatPage() {
   };
 
   return (
-    <div className={styles.container}>
+    <div className={clsx(styles.container, { [styles.ready]: isReady })}>
       <Sidebar />
       <div className={styles.top}>
         <ChatHeader />
@@ -161,7 +163,6 @@ export default function ChatPage() {
       >
         <MessageList messages={messages} isLoading={isLoading} locale={locale as SupportedLocale} />
       </div>
-
       <div className={styles.bottom}>
         <ChatInput onSend={handleSend} disabled={isLoading} />
       </div>
