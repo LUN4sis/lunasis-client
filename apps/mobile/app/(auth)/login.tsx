@@ -1,6 +1,6 @@
-import { StyleSheet, View } from 'react-native';
 import { Text } from '@/components/Themed';
 import { Stack } from 'expo-router';
+import { StyleSheet, View } from 'react-native';
 
 export default function LoginScreen() {
   return (

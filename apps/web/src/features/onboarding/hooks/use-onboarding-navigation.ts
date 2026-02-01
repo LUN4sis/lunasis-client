@@ -1,8 +1,8 @@
-import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 import { ROUTES } from '@repo/shared/constants';
 import { logger } from '@repo/shared/utils';
 import { toast } from '@web/components/ui/toast';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 
 interface NavigationGuardOptions {
   requireNickname?: boolean;

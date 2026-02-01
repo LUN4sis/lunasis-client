@@ -1,5 +1,6 @@
-import styles from './tab.module.scss';
 import clsx from 'clsx';
+
+import styles from './tab.module.scss';
 
 interface TabProps {
   tabs: {

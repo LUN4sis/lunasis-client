@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
+
 import styles from './toast.module.scss';
 
 export type ToastType = 'success' | 'error' | 'warning' | 'info';

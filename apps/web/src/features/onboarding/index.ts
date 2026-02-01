@@ -1,21 +1,21 @@
 // Hooks
-export { useNicknameValidation } from './hooks/use-onboarding-validation';
-export {
-  useOnboardingNavigationGuard,
-  useOnboardingComplete,
-} from './hooks/use-onboarding-navigation';
-export { useOnboardingInterests } from './hooks/use-onboarding-interests';
 export { useBirthdateValidation } from './hooks/use-birthdate-validation';
+export { useOnboardingInterests } from './hooks/use-onboarding-interests';
+export {
+  useOnboardingComplete,
+  useOnboardingNavigationGuard,
+} from './hooks/use-onboarding-navigation';
+export { useNicknameValidation } from './hooks/use-onboarding-validation';
 
 // Components
-export { Title } from './components/title';
 export { CategorySection } from './components/category-section';
+export { Title } from './components/title';
 
 // Stores
 export { useOnboardingStore } from './stores/use-onboarding-store';
 
 // Actions
-export { registerUser, checkNickname } from './actions/onboarding.actions';
+export { checkNickname, registerUser } from './actions/onboarding.actions';
 
 // Constants
 export * from './constants/onboarding.constants';

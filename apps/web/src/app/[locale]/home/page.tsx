@@ -1,6 +1,6 @@
 'use client';
 
-import { withAuth, LogoutButton } from '@web/features/auth';
+import { LogoutButton, withAuth } from '@web/features/auth';
 
 function HomePage() {
   return (

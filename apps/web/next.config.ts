@@ -31,6 +31,14 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: '**.googleusercontent.com',
       },
+      {
+        protocol: 'https',
+        hostname: 'img.danawa.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'i.pravatar.cc',
+      },
     ],
     qualities: [75, 85, 90, 100],
   },

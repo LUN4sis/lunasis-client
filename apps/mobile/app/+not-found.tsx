@@ -1,5 +1,5 @@
-import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { Stack, useRouter } from 'expo-router';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 /**
  * 404 에러 핸들러

@@ -1,17 +1,17 @@
 'use client';
 
-import Image from 'next/image';
-import { useParams } from 'next/navigation';
-import {
-  buildGoogleOAuthUrl,
-  getOAuthCallbackUrl,
-  buildAppleOAuthUrl,
-  getAppleOAuthCallbackUrl,
-} from '@web/features/auth/utils';
 import { logger } from '@repo/shared/utils';
 import { Button } from '@web/components/ui/button';
-
+import {
+  buildAppleOAuthUrl,
+  buildGoogleOAuthUrl,
+  getAppleOAuthCallbackUrl,
+  getOAuthCallbackUrl,
+} from '@web/features/auth/utils';
 import clsx from 'clsx';
+import Image from 'next/image';
+import { useParams } from 'next/navigation';
+
 import styles from './login.module.scss';
 
 /**
@@ -46,11 +46,6 @@ export default function LoginPage() {
     try {
       const redirectUri = getAppleOAuthCallbackUrl(locale);
       const appleAuthUrl = buildAppleOAuthUrl(redirectUri);
-
-      logger.info('[Auth] Redirecting to Apple OAuth', {
-        redirectUri,
-        locale,
-      });
 
       window.location.href = appleAuthUrl;
     } catch (error) {

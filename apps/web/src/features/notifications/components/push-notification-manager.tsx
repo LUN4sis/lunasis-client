@@ -1,15 +1,16 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { subscribeUser, unsubscribeUser, sendNotification } from '../actions/notifications.actions';
-import { NOTIFICATION_CONFIG, MESSAGES } from '@repo/shared/constants';
+import { MESSAGES, NOTIFICATION_CONFIG } from '@repo/shared/constants';
 import { logger, transformError } from '@repo/shared/utils';
 import {
   isIOS,
-  isStandalone,
   isPushNotificationSupported,
+  isStandalone,
   urlBase64ToUint8Array,
 } from '@web/features/pwa/utils/pwa.utils';
+import { useEffect, useState } from 'react';
+
+import { sendNotification, subscribeUser, unsubscribeUser } from '../actions/notifications.actions';
 
 function PushNotificationManager() {
   const [mounted, setMounted] = useState(false);
@@ -38,9 +39,8 @@ function PushNotificationManager() {
 
   async function initializePushNotification() {
     try {
-      const { registerServiceWorker } = await import(
-        '@web/features/pwa/services/register-service-worker'
-      );
+      const { registerServiceWorker } =
+        await import('@web/features/pwa/services/register-service-worker');
       const registration = await registerServiceWorker();
       if (registration) {
         const sub = await registration.pushManager.getSubscription();

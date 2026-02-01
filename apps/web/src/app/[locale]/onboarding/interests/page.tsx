@@ -1,27 +1,24 @@
 'use client';
 
-import { useCallback } from 'react';
-import { useRouter } from 'next/navigation';
-import { withAuth } from '@web/features/auth';
-
-import { Title, CategorySection } from '@web/features/onboarding';
+import { ROUTES } from '@repo/shared/constants';
+import { logger, transformError } from '@repo/shared/utils';
 import { Button } from '@web/components/ui/button';
 import { toast } from '@web/components/ui/toast';
-import { ROUTES } from '@repo/shared/constants';
+import { withAuth } from '@web/features/auth';
 import {
+  CategorySection,
   COMMUNITY_OPTIONS,
+  Insurance,
   INSURANCE_OPTIONS,
   PRODUCT_OPTIONS,
-  Insurance,
   ProductCategory,
-} from '@web/features/onboarding';
-
-import {
-  useOnboardingStore,
-  useOnboardingNavigationGuard,
+  Title,
   useOnboardingInterests,
+  useOnboardingNavigationGuard,
+  useOnboardingStore,
 } from '@web/features/onboarding';
-import { logger, transformError } from '@repo/shared/utils';
+import { useRouter } from 'next/navigation';
+import { useCallback } from 'react';
 
 import styles from '../onboarding.module.scss';
 

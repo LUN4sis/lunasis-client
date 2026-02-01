@@ -1,14 +1,15 @@
 'use server';
 
-import { checkNicknameAPI, registerUserAPI } from '../api/onboarding.api';
-import { SubmitRequest, SubmitResponse } from '../types/onboarding.type';
-import {
-  createSuccessResponse,
-  createErrorResponseFromUnknown,
-} from '@web/lib/utils/server-action';
 import { ApiResponse } from '@repo/shared/types';
-import { nicknameSchema, ageSchema } from '../schemas/validation.schemas';
-import { validateForServer, validateFieldsForServer } from '../utils/validation.utils';
+import {
+  createErrorResponseFromUnknown,
+  createSuccessResponse,
+} from '@web/lib/utils/server-action';
+
+import { checkNicknameAPI, registerUserAPI } from '../api/onboarding.api';
+import { ageSchema, nicknameSchema } from '../schemas/validation.schemas';
+import { SubmitRequest, SubmitResponse } from '../types/onboarding.type';
+import { validateFieldsForServer, validateForServer } from '../utils/validation.utils';
 
 export async function checkNickname(nickname: string): Promise<ApiResponse<{ ok: true }>> {
   try {

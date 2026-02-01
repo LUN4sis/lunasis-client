@@ -1,6 +1,7 @@
 @use '@/styles' as *;
 
 .container {
+  position: relative;
   @include full-screen-container;
   @include hide-scrollbar;
   @include safe-area-inset(padding, all);

@@ -3,14 +3,15 @@
 .bottomNavigation {
   @include pwa-container;
   position: fixed;
-  bottom: 0;
+  /* iOS Safari: 0px 단위 명시 시 fixed 하단 정렬이 더 안정적으로 동작 (스크롤 시 safe-area 이탈 완화) */
+  bottom: 0px;
   left: 0;
   right: 0;
   z-index: 130;
   background-color: $white;
   min-height: var(--bottom-nav-height);
-  will-change: transform;
-  transform: translateZ(0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
 
   display: flex;
   justify-content: space-evenly;
@@ -19,30 +20,9 @@
   display: var(--bottom-nav-display, flex);
 
   @include respond(mobile) {
-    position: fixed;
-    top: calc(
-      var(--initial-vh, 100lvh) - var(--bottom-nav-height) - env(safe-area-inset-bottom, 0px)
-    );
-    bottom: auto;
-    left: 0;
-    right: 0;
-    height: calc(var(--bottom-nav-height) + env(safe-area-inset-bottom, 0px));
-
-    padding-bottom: env(safe-area-inset-bottom, 0px);
-
-    transform: translate3d(0, 0, 0);
+    bottom: 0px;
+    -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
-    will-change: auto;
-
-    transition: none !important;
-    contain: layout style paint;
-    isolation: isolate;
-
-    @supports not (height: 100lvh) {
-      top: calc(
-        var(--initial-vh, 100vh) - var(--bottom-nav-height) - env(safe-area-inset-bottom, 0px)
-      );
-    }
   }
 }
 

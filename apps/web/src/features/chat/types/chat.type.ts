@@ -8,6 +8,11 @@ export interface Attachment {
   name: string;
 }
 
+export interface ChatRoomItem {
+  chatRoomId: string;
+  title: string;
+}
+
 export interface ChatRoom {
   chatRoomId: string;
   createdAt: string;
@@ -30,6 +35,16 @@ export interface ChatMessage {
 // =========================
 
 /**
+ * Pending message for initial chat room navigation
+ * 초기 채팅방 이동 시 전달할 메시지 데이터
+ */
+export interface PendingMessage {
+  question: string;
+  answer: string;
+  timestamp: Date;
+}
+
+/**
  * chat store state interface
  */
 export interface ChatState {
@@ -41,6 +56,12 @@ export interface ChatState {
   isSidebarOpen: boolean;
   /** whether web search is enabled for messages */
   isWebSearchEnabled: boolean;
+  /** whether alert dialog is open */
+  isAlertOpen: boolean;
+  /** pending messages for initial chat room navigation */
+  pendingMessages: PendingMessage | null;
+  /** whether store has been hydrated from localStorage */
+  isHydrated: boolean;
 }
 
 /**
@@ -51,7 +72,11 @@ export interface ChatActions {
   toggleIncognito: () => void;
   toggleSidebar: () => void;
   toggleWebSearch: () => void;
+  setAlertOpen: (open: boolean) => void;
+  setPendingMessages: (messages: PendingMessage | null) => void;
+  clearPendingMessages: () => void;
   reset: () => void;
+  setHydrated: (hydrated: boolean) => void;
 }
 
 /** complete chat store interface */

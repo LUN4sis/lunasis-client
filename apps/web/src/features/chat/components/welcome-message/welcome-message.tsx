@@ -1,8 +1,8 @@
 'use client';
 
+import clsx from 'clsx';
 import { useTranslations } from 'next-intl';
 
-import clsx from 'clsx';
 import styles from './welcome-message.module.scss';
 
 export type WelcomeMessageType = 'first-time' | 'returning' | 'incognito';

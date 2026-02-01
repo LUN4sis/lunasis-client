@@ -1,6 +1,6 @@
 'use client';
 
-import { ComponentType, Suspense, ReactNode } from 'react';
+import { ComponentType, ReactNode, Suspense } from 'react';
 
 export function withSuspense<P extends object>(Component: ComponentType<P>, fallback?: ReactNode) {
   const WrappedComponent = (props: P) => {

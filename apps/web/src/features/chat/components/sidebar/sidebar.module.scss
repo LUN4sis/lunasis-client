@@ -1,0 +1,333 @@
+@use '@/styles' as *;
+
+// ==================================================
+// Constants / 상수
+// ==================================================
+$sidebar-width: 17.5rem;
+$pwa-max-width: 884px;
+$pwa-half-width: 442px;
+$pwa-desktop-breakpoint: 885px;
+
+@mixin in-pwa-container-desktop {
+  @media (min-width: $pwa-desktop-breakpoint) {
+    @content;
+  }
+}
+
+// ==================================================
+// Reusable placeholders / 재사용 플레이스홀더
+// ==================================================
+%icon-button {
+  @include size(2.5rem);
+  min-width: 2.5rem;
+  min-height: 2.5rem;
+  padding: 0;
+  @include prevent-tap-highlight;
+}
+
+%state-container {
+  @include flex-column-center;
+  padding: $spacing-8;
+  gap: $spacing-3;
+  text-align: center;
+}
+
+// ==================================================
+// Overlay (Backdrop) / 오버레이
+// ==================================================
+.overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba($black, 0.5);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    opacity 0.25s ease,
+    visibility 0.25s ease;
+  z-index: 999;
+
+  // Limit overlay to PWA container width on desktop
+  // 데스크탑에서 PWA 컨테이너 폭으로 제한
+  @include in-pwa-container-desktop {
+    left: calc(50% - #{$pwa-half-width});
+    right: calc(50% - #{$pwa-half-width});
+  }
+}
+
+.overlayVisible {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+// ==================================================
+// Sidebar Panel / 사이드바 패널
+// ==================================================
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  height: 100%;
+  width: $sidebar-width;
+  max-width: 85vw;
+  background-color: $white;
+  box-shadow: $box-shadow-xl;
+  transform: translateX(calc(-50% - #{$sidebar-width}));
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+  z-index: 1000;
+  @include flex-column;
+
+  @include in-pwa-container-desktop {
+    left: calc(50% - #{$pwa-half-width});
+    transform: translateX(-#{$sidebar-width});
+  }
+}
+
+.sidebarOpen {
+  transform: translateX(-50%);
+
+  @include in-pwa-container-desktop {
+    transform: translateX(0);
+  }
+}
+
+.toggleButton {
+  @extend %icon-button;
+
+  svg {
+    @include size(1.5rem);
+    transition: transform 0.18s ease;
+  }
+
+  transition: transform 0.18s ease;
+
+  &:active {
+    transform: scale(0.96);
+
+    svg {
+      transform: scale(0.95) rotate(-8deg);
+    }
+  }
+}
+
+.createButton {
+  @extend %icon-button;
+
+  svg {
+    @include size(1.5rem);
+    transition: transform 0.18s ease;
+  }
+
+  transition: transform 0.18s ease;
+
+  &:active {
+    transform: scale(0.96);
+
+    svg {
+      transform: scale(0.95) rotate(6deg);
+    }
+  }
+}
+
+// ==================================================
+// Header / 헤더
+// ==================================================
+.header {
+  @include flex(row, space-between, center);
+  padding: $spacing-3 $spacing-4;
+  border-bottom: 1px solid $gray-150;
+  flex-shrink: 0;
+
+  button {
+    @include prevent-tap-highlight;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .overlay {
+    transition: none;
+  }
+
+  .sidebar {
+    transition: none;
+  }
+
+  .toggleButton,
+  .createButton {
+    transition: none;
+
+    svg {
+      transition: none;
+    }
+  }
+}
+
+// ==================================================
+// Content / 컨텐츠
+// ==================================================
+.content {
+  flex: 1;
+  overflow-y: auto;
+  padding: $spacing-3 0;
+  @include hide-scrollbar;
+}
+
+// ==================================================
+// Chat List / 채팅 목록
+// ==================================================
+.chatList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+
+  > li {
+    margin: 0;
+    padding: 0;
+  }
+}
+
+.chatItem {
+  @include flex(row, flex-start, center, $spacing-3);
+  width: 100%;
+  padding: $spacing-3 $spacing-4;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+  transition: background-color 0.2s ease;
+  @include prevent-tap-highlight;
+
+  &:hover {
+    background-color: $gray-100;
+  }
+
+  &:active {
+    background-color: $gray-150;
+  }
+
+  &:focus-visible {
+    outline: 2px solid $purple-500;
+    outline-offset: -2px;
+  }
+}
+
+.chatItemActive {
+  background-color: $gray-100;
+  border-left: 3px solid $purple;
+  padding-left: calc(#{$spacing-4} - 3px);
+}
+
+.chatItemIcon {
+  @include size(1.25rem);
+  color: $gray-500;
+  flex-shrink: 0;
+}
+
+.chatItemTitle {
+  flex: 1;
+  min-width: 0;
+  font-size: $font-size-lg;
+  color: $gray-800;
+  @include text-ellipsis;
+}
+
+// ==================================================
+// State Blocks (Empty/Loading/Error) / 상태 블록 (비어있음/로딩/에러)
+// ==================================================
+.emptyState {
+  @extend %state-container;
+  color: $gray-500;
+
+  p {
+    margin: 0;
+    font-size: $font-size-xl;
+    font-weight: $font-weight-medium;
+    color: $gray-700;
+  }
+
+  span {
+    font-size: $font-size-base;
+    color: $gray-500;
+  }
+}
+
+.loading {
+  @extend %state-container;
+  color: $gray-500;
+
+  p {
+    margin: 0;
+    font-size: $font-size-base;
+    color: $gray-500;
+  }
+}
+
+.error {
+  @extend %state-container;
+  color: $gray-600;
+
+  p {
+    margin: 0;
+    font-size: $font-size-base;
+    color: $gray-700;
+  }
+}
+
+// ==================================================
+// Mobile / 모바일
+// ==================================================
+@include respond(mobile) {
+  .sidebar {
+    // Mobile drawer: slide from the left edge (more natural than center-based transform)
+    // 모바일 드로어: 화면 왼쪽에서 슬라이드(센터 기준 변형보다 자연스러움)
+    left: 0;
+    width: min(85vw, 20rem);
+    max-width: none;
+    height: 100dvh;
+    transform: translate3d(-100%, 0, 0);
+    border-top-right-radius: $radius-xl;
+    border-bottom-right-radius: $radius-xl;
+  }
+
+  .sidebarOpen {
+    transform: translate3d(0, 0, 0);
+  }
+
+  .header {
+    // Safe-area support for notched devices (iOS PWA)
+    // 노치 디바이스(iOS PWA) 안전영역 대응
+    padding: calc(#{$spacing-2} + env(safe-area-inset-top)) $spacing-2 $spacing-2;
+
+    button {
+      min-width: 2.75rem;
+      min-height: 2.75rem;
+      touch-action: manipulation;
+    }
+
+    button svg {
+      @include size(1.5rem);
+    }
+  }
+
+  .content {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    padding-bottom: calc(#{$spacing-3} + env(safe-area-inset-bottom));
+  }
+
+  .chatItem {
+    padding: $spacing-4;
+    min-height: 3.5rem;
+    touch-action: manipulation;
+  }
+
+  .chatItemIcon {
+    @include size(1.5rem);
+  }
+
+  .chatItemTitle {
+    font-size: $font-size-xl;
+  }
+}

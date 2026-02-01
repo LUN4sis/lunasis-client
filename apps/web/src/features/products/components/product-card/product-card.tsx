@@ -1,13 +1,11 @@
-import { memo, useState } from 'react';
-
-import { useIsDesktop } from '@web/lib/hooks';
-import { Badge } from '@web/components/ui/badge';
-import { Rating } from '@web/components/ui/rating';
-
 import { ProductImage } from '@products/components/product-image';
 import { formatPrice } from '@products/utils';
-
 import type { Product } from '@repo/shared/types';
+import { Badge } from '@web/components/ui/badge';
+import { Rating } from '@web/components/ui/rating';
+import { useIsDesktop } from '@web/lib/hooks';
+import { memo, useState } from 'react';
+
 import styles from './product-card.module.scss';
 
 export interface ProductCardProps {

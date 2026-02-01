@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import { useOnboardingStore } from '../stores/use-onboarding-store';
+
 import { checkNickname } from '../actions/onboarding.actions';
 import { nicknameSchema } from '../schemas/validation.schemas';
-import { validate } from '../utils/validation.utils';
-import type { ValidationResult } from '../utils/validation.utils';
+import { useOnboardingStore } from '../stores/use-onboarding-store';
+import { validate, type ValidationResult } from '../utils/validation.utils';
 
 export function useNicknameValidation() {
   const [result, setResult] = useState<ValidationResult>({

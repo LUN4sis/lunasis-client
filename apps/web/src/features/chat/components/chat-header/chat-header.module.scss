@@ -18,6 +18,11 @@
   }
 }
 
+.hide {
+  // hide visually but keep layout space
+  visibility: hidden;
+}
+
 @include respond(mobile) {
   .header {
     padding: $spacing-2 $spacing-2;

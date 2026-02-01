@@ -1,9 +1,11 @@
 'use client';
 
-import { useEffect, useRef, useCallback } from 'react';
-import { useAuthStore } from '../stores/use-auth-store';
-import { shouldAutoLogout, getNextExpirationCheckDelay } from '../utils/token-manager';
+import { useCallback, useEffect, useRef } from 'react';
+
 import { logger } from '@repo/shared/utils';
+
+import { useAuthStore } from '../stores/use-auth-store';
+import { getNextExpirationCheckDelay, shouldAutoLogout } from '../utils/token-manager';
 
 /**
  * Monitor token expiration and auto-logout

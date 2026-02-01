@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+
 import { isIOS, isStandalone } from '../utils/pwa.utils';
 
 function InstallPrompt() {

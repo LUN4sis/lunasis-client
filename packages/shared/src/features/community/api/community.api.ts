@@ -1,15 +1,15 @@
 import type { BaseApi } from '../../../api';
-import type {
-  Post,
-  Comment,
-  CreatePostRequest,
-  UpdatePostRequest,
-  CreateCommentRequest,
-  UpdateCommentRequest,
-  PostsPageResponse,
-  CommunityCategory,
-} from '../types';
 import { COMMUNITY_API_ENDPOINTS, COMMUNITY_PAGINATION } from '../constants';
+import type {
+  Comment,
+  CommunityCategory,
+  CreateCommentRequest,
+  CreatePostRequest,
+  Post,
+  PostsPageResponse,
+  UpdateCommentRequest,
+  UpdatePostRequest,
+} from '../types';
 
 interface GetPostsParams {
   category?: CommunityCategory;

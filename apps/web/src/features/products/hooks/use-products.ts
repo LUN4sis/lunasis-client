@@ -1,16 +1,16 @@
-import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { getProductsAPI, getProductDetailAPI, getProductBundleAPI } from '../api/products.api';
-import { ProductCategory } from '@repo/shared/types';
-
-import type {
-  Product,
-  GetProductsParams,
-  GetProductDetailParams,
-  GetProductBundleParams,
+import { isAuthError } from '@repo/shared/features/auth/constants/auth.constants';
+import {
+  type GetProductBundleParams,
+  type GetProductDetailParams,
+  type GetProductsParams,
+  isAppError,
+  type Product,
+  ProductCategory,
 } from '@repo/shared/types';
 import { logger, transformError } from '@repo/shared/utils';
-import { isAppError } from '@repo/shared/types';
-import { isAuthError } from '@repo/shared/features/auth/constants/auth.constants';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+
+import { getProductBundleAPI, getProductDetailAPI, getProductsAPI } from '../api/products.api';
 
 export const productKeys = {
   all: ['products'] as const,

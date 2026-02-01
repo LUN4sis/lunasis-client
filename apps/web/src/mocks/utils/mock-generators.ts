@@ -1,12 +1,11 @@
-import { Review, ProductDetail, Mall } from '../types/product.types';
-import { Product } from '../types/product.types';
 import {
-  profileImages,
-  nicknames,
-  mallLogos,
-  reviewTemplates,
   mallData,
+  mallLogos,
+  nicknames,
+  profileImages,
+  reviewTemplates,
 } from '../constants/mock-data';
+import { Mall, Product, ProductDetail, Review } from '../types/product.types';
 
 // generate random review id
 export const generateReviewId = (): string => `review_${Math.random().toString(36).substr(2, 9)}`;
@@ -19,9 +18,20 @@ export const generateRandomDate = (): string => {
   return randomDate.toISOString();
 };
 
-// generate reviews
+// Fisher–Yates shuffle
+const shuffle = <T>(arr: T[]): T[] => {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+};
+
+// generate reviews (아바타: 셔플 후 순번 할당으로 겹치지 않게)
 export const generateReviews = (reviewCount: number): Review[] => {
   const reviews: Review[] = [];
+  const shuffledProfiles = shuffle(profileImages);
 
   for (let i = 0; i < reviewCount; i++) {
     const isPositive = Math.random() > 0.2; // 80% positive reviews
@@ -41,7 +51,7 @@ export const generateReviews = (reviewCount: number): Review[] => {
 
     reviews.push({
       id: generateReviewId(),
-      profileImg: profileImages[Math.floor(Math.random() * profileImages.length)],
+      profileImg: shuffledProfiles[i % shuffledProfiles.length],
       nickname: nicknames[Math.floor(Math.random() * nicknames.length)],
       content: template,
       createdAt: generateRandomDate(),

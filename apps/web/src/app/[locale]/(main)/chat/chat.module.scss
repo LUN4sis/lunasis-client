@@ -11,6 +11,12 @@
   max-height: 100vh;
   max-height: 100dvh;
   position: relative;
+  opacity: 0;
+  transition: opacity 0.15s ease-out;
+
+  &.ready {
+    opacity: 1;
+  }
 
   // ios Safari fallback
   @supports not (height: 100dvh) {
@@ -47,7 +53,11 @@
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
   background-color: $gray-50;
-  transition: background-color 0.3s ease-in-out;
+
+  // Only apply transition after container is ready (prevents initial flicker)
+  .ready & {
+    transition: background-color 0.3s ease-in-out;
+  }
 
   &.incognito {
     background-color: $gray-600;

@@ -1,8 +1,7 @@
-import { memo } from 'react';
-import { Button } from '@web/components/ui/button';
-import type { ButtonColorScheme, ButtonVariant } from '@web/components/ui/button';
-
+import { Button, type ButtonColorScheme, type ButtonVariant } from '@web/components/ui/button';
 import clsx from 'clsx';
+import { memo } from 'react';
+
 import styles from './selection-group.module.scss';
 
 interface SelectionGroupProps<T extends string> {

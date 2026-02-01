@@ -1,8 +1,9 @@
-import { http, HttpResponse } from 'msw';
 import { ProductCategory } from '@repo/shared/types';
+import { http, HttpResponse } from 'msw';
+
 import { mockProductsByCategory } from '../data/products.data';
-import { generateProductDetail, generateReviews, generateMallList } from '../utils/mock-generators';
 import { Mall, ProductDetail, ReviewResponse, ReviewsPageResponse } from '../types/product.types';
+import { generateMallList, generateProductDetail, generateReviews } from '../utils/mock-generators';
 
 const baseUrl = '/api';
 
@@ -119,22 +120,25 @@ const getMallList = (bundleId: string) => {
 };
 
 /**
- * MSW handlers
+ * GET /products?category={category}
+ * Ranking 페이지(useProductsByCategory) 및 제품 목록 공통
+ */
+export const productsListHandler = http.get(`${baseUrl}/products`, ({ request }) => {
+  const url = new URL(request.url);
+  const category = url.searchParams.get('category') as ProductCategory | null;
+
+  if (!category) {
+    return HttpResponse.json({ message: 'Category parameter is required' }, { status: 400 });
+  }
+
+  const products = mockProductsByCategory[category] ?? [];
+  return HttpResponse.json(products);
+});
+
+/**
+ * MSW handlers (productsListHandler는 ranking.handlers에서 등록)
  */
 export const productsHandlers = [
-  // GET /products?category={category}
-  http.get(`${baseUrl}/products`, ({ request }) => {
-    const url = new URL(request.url);
-    const category = url.searchParams.get('category') as ProductCategory | null;
-
-    if (!category) {
-      return HttpResponse.json({ message: 'Category parameter is required' }, { status: 400 });
-    }
-
-    const products = mockProductsByCategory[category] ?? [];
-    return HttpResponse.json(products);
-  }),
-
   // GET /products/:productId
   http.get(`${baseUrl}/products/:productId`, async ({ params }) => {
     await delay(getRandomDelay());

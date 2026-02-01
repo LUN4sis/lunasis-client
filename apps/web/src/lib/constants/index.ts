@@ -1,11 +1,10 @@
+export * from './breakpoints';
+export * from './image';
+export { getApiUrl } from '@repo/shared/api/base.api';
 export {
-  ROUTES,
   NAVIGATION_SEGMENTS,
+  type NavigationSegment,
   type RouteKey,
   type RoutePath,
-  type NavigationSegment,
+  ROUTES,
 } from '@repo/shared/constants';
-
-export { getApiUrl } from '@repo/shared/api/base.api';
-export * from './image';
-export * from './breakpoints';

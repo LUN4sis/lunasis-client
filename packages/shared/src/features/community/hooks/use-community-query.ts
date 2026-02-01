@@ -1,25 +1,26 @@
 import {
-  useQuery,
-  useMutation,
   useInfiniteQuery,
+  useMutation,
+  useQuery,
   useQueryClient,
-  type UseQueryOptions,
-  type UseMutationOptions,
-  type UseInfiniteQueryOptions,
   type InfiniteData,
+  type UseInfiniteQueryOptions,
+  type UseMutationOptions,
+  type UseQueryOptions,
 } from '@tanstack/react-query';
+
 import type { CommunityApi } from '../api';
-import type {
-  Post,
-  Comment,
-  CreatePostRequest,
-  UpdatePostRequest,
-  CreateCommentRequest,
-  UpdateCommentRequest,
-  PostsPageResponse,
-  CommunityCategory,
-} from '../types';
 import { COMMUNITY_PAGINATION } from '../constants';
+import type {
+  Comment,
+  CommunityCategory,
+  CreateCommentRequest,
+  CreatePostRequest,
+  Post,
+  PostsPageResponse,
+  UpdateCommentRequest,
+  UpdatePostRequest,
+} from '../types';
 
 export const communityKeys = {
   all: ['community'] as const,

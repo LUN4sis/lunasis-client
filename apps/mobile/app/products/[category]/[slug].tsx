@@ -1,6 +1,6 @@
-import { StyleSheet, View, ScrollView } from 'react-native';
 import { Text } from '@/components/Themed';
 import { Stack, useLocalSearchParams } from 'expo-router';
+import { ScrollView, StyleSheet, View } from 'react-native';
 
 export default function ProductDetailScreen() {
   const { category, slug } = useLocalSearchParams<{ category: string; slug: string }>();

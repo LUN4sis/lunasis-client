@@ -1,10 +1,10 @@
 'use client';
 
-import Image from 'next/image';
 import clsx from 'clsx';
-import { useImageError } from '../../hooks/use-image-error';
-import { COMMON_IMAGE_PROPS, PRODUCT_IMAGE_SIZES } from '../../constants/image.constants';
+import Image from 'next/image';
 
+import { COMMON_IMAGE_PROPS, PRODUCT_IMAGE_SIZES } from '../../constants/image.constants';
+import { useImageError } from '../../hooks/use-image-error';
 import styles from './product-image.module.scss';
 
 export interface ProductImageProps {

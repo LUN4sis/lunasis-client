@@ -1,6 +1,7 @@
-import { View, Text, StyleSheet, Pressable } from 'react-native';
-import { Stack, useRouter } from 'expo-router';
 import { useEffect } from 'react';
+import { Stack, useRouter } from 'expo-router';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
+
 import { logger } from '@repo/shared/utils';
 
 interface ErrorProps {

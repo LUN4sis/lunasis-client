@@ -1,22 +1,68 @@
 import { MallData } from '../types/product.types';
 
+/** Review 탭 아바타: 리뷰 15~34개 시 겹치지 않도록 40개, Pravatar(안정) + 검증된 Unsplash */
 export const profileImages = [
-  'https://images.unsplash.com/photo-1619895862022-09114b41f16f?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fCVFRCU5NCU4NCVFQiVBMSU5QyVFRCU5NSU4NCUyMCVFQyU4MiVBQyVFQyVBNyU4NHxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&q=60&w=500',
-  'https://images.unsplash.com/photo-1603415526960-f7e0328c63b1?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8JUVEJTk0JTg0JUVCJUExJTlDJUVEJTk1JTg0JTIwJUVDJTgyJUFDJUVDJUE3JTg0fGVufDB8fDB8fHww&auto=format&fit=crop&q=60&w=500',
-  'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face',
-  'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face',
-  'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop&crop=face',
-  'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop&crop=face',
-  'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100&h=100&fit=crop&crop=face',
-  'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=100&h=100&fit=crop&crop=face',
+  // Pravatar (1~70 고정 아바타, 404 없음)
+  'https://i.pravatar.cc/100?img=1',
+  'https://i.pravatar.cc/100?img=2',
+  'https://i.pravatar.cc/100?img=3',
+  'https://i.pravatar.cc/100?img=4',
+  'https://i.pravatar.cc/100?img=5',
+  'https://i.pravatar.cc/100?img=6',
+  'https://i.pravatar.cc/100?img=7',
+  'https://i.pravatar.cc/100?img=8',
+  'https://i.pravatar.cc/100?img=9',
+  'https://i.pravatar.cc/100?img=10',
+  'https://i.pravatar.cc/100?img=11',
+  'https://i.pravatar.cc/100?img=12',
+  'https://i.pravatar.cc/100?img=13',
+  'https://i.pravatar.cc/100?img=14',
+  'https://i.pravatar.cc/100?img=15',
+  'https://i.pravatar.cc/100?img=16',
+  'https://i.pravatar.cc/100?img=17',
+  'https://i.pravatar.cc/100?img=18',
+  'https://i.pravatar.cc/100?img=19',
+  'https://i.pravatar.cc/100?img=20',
+  'https://i.pravatar.cc/100?img=21',
+  'https://i.pravatar.cc/100?img=22',
+  'https://i.pravatar.cc/100?img=23',
+  'https://i.pravatar.cc/100?img=24',
+  'https://i.pravatar.cc/100?img=25',
+  'https://i.pravatar.cc/100?img=26',
+  'https://i.pravatar.cc/100?img=27',
+  'https://i.pravatar.cc/100?img=28',
+  'https://i.pravatar.cc/100?img=29',
+  'https://i.pravatar.cc/100?img=30',
+  'https://i.pravatar.cc/100?img=31',
+  'https://i.pravatar.cc/100?img=32',
+  'https://i.pravatar.cc/100?img=33',
+  'https://i.pravatar.cc/100?img=34',
+  'https://i.pravatar.cc/100?img=35',
+  'https://i.pravatar.cc/100?img=36',
+  'https://i.pravatar.cc/100?img=37',
+  'https://i.pravatar.cc/100?img=38',
+  'https://i.pravatar.cc/100?img=39',
+  'https://i.pravatar.cc/100?img=40',
 ];
 
-export const mallLogos = [
-  'https://images.unsplash.com/photo-1653667203890-ab66f7af406d?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8bWFsbCUyMGxvZ298ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&q=60&w=500',
-  'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=50&h=50',
-  'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=50&h=50',
-  'https://images.unsplash.com/photo-1556742111-a301076d9d18?w=50&h=50',
+/** Amazon, Coupang BI - Price 탭 및 Review 탭 로고에 공통 사용 */
+export const mallData: MallData[] = [
+  {
+    name: 'Amazon',
+    url: 'https://amazon.com',
+    image: '/brands/Amazon.png',
+    priceModifier: 0,
+  },
+  {
+    name: 'Coupang',
+    url: 'https://coupang.com',
+    image: '/brands/Coupang.png',
+    priceModifier: 0.15,
+  },
 ];
+
+/** Review 탭 mall 로고: mallData의 Amazon, Coupang BI 경로 사용 */
+export const mallLogos = mallData.map((m) => m.image);
 
 export const nicknames = [
   'Sarah M.',
@@ -79,18 +125,3 @@ export const reviewTemplates = {
     'Disappointing. Not worth the price.',
   ],
 };
-
-export const mallData: MallData[] = [
-  {
-    name: 'Amazon',
-    url: 'https://amazon.com',
-    image: '/brands/Amazon.png',
-    priceModifier: 0,
-  },
-  {
-    name: 'Coupang',
-    url: 'https://coupang.com',
-    image: '/brands/Coupang.png',
-    priceModifier: 0.15,
-  },
-];

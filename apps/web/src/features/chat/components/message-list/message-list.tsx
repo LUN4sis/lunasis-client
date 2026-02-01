@@ -1,13 +1,16 @@
 'use client';
 
-import { useRef, useEffect } from 'react';
-import Image from 'next/image';
-import clsx from 'clsx';
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
-import { formatDate } from '@web/lib/utils/date';
 import { SupportedLocale } from '@repo/shared/types';
 import { useChatStore } from '@web/features/chat/stores';
 import type { MessageRole } from '@web/features/chat/types';
+import { formatDate } from '@web/lib/utils/date';
+import clsx from 'clsx';
+import Image from 'next/image';
+import { useEffect, useRef } from 'react';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+
 import styles from './message-list.module.scss';
 
 export interface Attachment {
@@ -116,7 +119,9 @@ export function MessageList({ messages, isLoading = false, locale }: MessageList
               )}
 
               <div className={clsx(styles.bubble, { [styles.user]: message.role === 'user' })}>
-                <p className={styles.messageContent}>{message.content}</p>
+                <div className={styles.messageContent}>
+                  <ReactMarkdown remarkPlugins={[remarkGfm]}>{message.content}</ReactMarkdown>
+                </div>
               </div>
             </div>
           </div>

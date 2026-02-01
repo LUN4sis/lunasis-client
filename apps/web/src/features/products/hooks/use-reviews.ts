@@ -1,6 +1,6 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { getReviewsAPI } from '../api/reviews.api';
 
+import { getReviewsAPI } from '../api/reviews.api';
 import type { GetReviewsResponse } from '../types/review.type';
 
 interface UseReviewsParams {

@@ -1,5 +1,5 @@
-import { StyleSheet, View } from 'react-native';
 import { Text } from '@/components/Themed';
+import { StyleSheet, View } from 'react-native';
 
 export default function ChatScreen() {
   return (

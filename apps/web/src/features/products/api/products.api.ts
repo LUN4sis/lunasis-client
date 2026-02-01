@@ -1,13 +1,13 @@
-import { apiClient } from '@web/api/api';
 import type {
-  GetProductsParams,
-  GetProductsResponse,
-  GetProductDetailParams,
-  GetProductDetailResponse,
   GetProductBundleParams,
   GetProductBundleResponse,
+  GetProductDetailParams,
+  GetProductDetailResponse,
+  GetProductsParams,
+  GetProductsResponse,
 } from '@repo/shared/types';
 import { handleApiError } from '@repo/shared/utils';
+import { apiClient } from '@web/api/api';
 
 /**
  * get products list by params

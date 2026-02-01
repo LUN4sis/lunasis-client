@@ -1,7 +1,8 @@
 'use client';
 
-import styles from './rating.module.scss';
 import clsx from 'clsx';
+
+import styles from './rating.module.scss';
 
 export interface RatingProps {
   rating: number;

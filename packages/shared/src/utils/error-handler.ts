@@ -1,18 +1,20 @@
 import axios, { AxiosError } from 'axios';
-import {
-  AppError,
-  ERROR_MESSAGES,
-  HTTP_ERROR_MESSAGES,
-  ErrorCode,
-  ApiErrorResponse,
-  NetworkError,
-  AuthError,
-  PermissionError,
-  ValidationError,
-  ServerError,
-  SERVER_ERROR_MESSAGES,
-} from '@repo/shared/types/error.type';
+
 import { isDevelopment } from '@repo/shared/constants/config';
+import {
+  ApiErrorResponse,
+  AppError,
+  AuthError,
+  ERROR_MESSAGES,
+  ErrorCode,
+  HTTP_ERROR_MESSAGES,
+  NetworkError,
+  PermissionError,
+  SERVER_ERROR_MESSAGES,
+  ServerError,
+  ValidationError,
+} from '@repo/shared/types/error.type';
+
 import { logger } from './logger';
 
 // ===========================

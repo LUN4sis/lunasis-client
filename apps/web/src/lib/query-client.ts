@@ -1,5 +1,5 @@
-import { QueryClient } from '@tanstack/react-query';
 import { isRetryableError } from '@repo/shared/utils';
+import { QueryClient } from '@tanstack/react-query';
 
 export const queryClient = new QueryClient({
   defaultOptions: {

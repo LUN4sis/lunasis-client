@@ -1,22 +1,19 @@
 'use client';
 
-import { usePathname, useRouter, useSelectedLayoutSegments } from 'next/navigation';
-import { useLocale, useTranslations } from 'next-intl';
-import Image from 'next/image';
-
-import { ROUTES, NAVIGATION_SEGMENTS } from '@repo/shared/constants';
-import { Button } from '@web/components/ui/button';
-import { routeUtils } from '@web/lib/utils';
-
-import ChatIcon from '@web/assets/icons/chat.svg';
+import { NAVIGATION_SEGMENTS, ROUTES } from '@repo/shared/constants';
 import CalendarIcon from '@web/assets/icons/calendar.svg';
+import ChatIcon from '@web/assets/icons/chat.svg';
 import ProductIcon from '@web/assets/icons/keyframes.svg';
 import ProfileIcon from '@web/assets/icons/profile.svg';
-
-import type { NavItem, NavItemConfig } from './types';
-
+import { Button } from '@web/components/ui/button';
+import { routeUtils } from '@web/lib/utils';
 import clsx from 'clsx';
+import Image from 'next/image';
+import { usePathname, useRouter, useSelectedLayoutSegments } from 'next/navigation';
+import { useLocale, useTranslations } from 'next-intl';
+
 import styles from './bottom-navigation.module.scss';
+import type { NavItem, NavItemConfig } from './types';
 
 const DEFAULT_ICON_SIZE = 24;
 const PRODUCT_ICON_SIZE = 28;
@@ -38,8 +35,12 @@ const NAVIGATION_CONFIG: NavItemConfig[] = [
     label: 'product',
     iconSize: PRODUCT_ICON_SIZE,
     hasSpecialIcon: true,
-    activeRoutes: [ROUTES.RANKING, ROUTES.PRODUCTS],
-    activeSegments: [NAVIGATION_SEGMENTS.PRODUCTS, NAVIGATION_SEGMENTS.SHOPPING],
+    activeRoutes: [ROUTES.RANKING, ROUTES.PRODUCTS, ROUTES.COMMUNITY],
+    activeSegments: [
+      NAVIGATION_SEGMENTS.PRODUCTS,
+      NAVIGATION_SEGMENTS.SHOPPING,
+      NAVIGATION_SEGMENTS.COMMUNITY,
+    ],
   },
   {
     path: ROUTES.PROFILE,
@@ -111,6 +112,7 @@ function BottomNavigation() {
                 alt={item.label}
                 width={iconSize}
                 height={iconSize}
+                priority={item.hasSpecialIcon}
                 className={clsx(styles.icon, {
                   [styles.keyframeIcon]: item.hasSpecialIcon,
                 })}

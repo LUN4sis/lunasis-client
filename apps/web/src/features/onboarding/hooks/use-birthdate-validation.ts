@@ -1,7 +1,8 @@
-import { useState, useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useState } from 'react';
+
 import { useOnboardingStore } from '../stores/use-onboarding-store';
-import { calculateAge, isBirthValid } from '../utils/validation.utils';
 import type { BirthDateSelection } from '../types/onboarding.type';
+import { calculateAge, isBirthValid } from '../utils/validation.utils';
 
 interface BirthdateValidationState {
   isValid: boolean;

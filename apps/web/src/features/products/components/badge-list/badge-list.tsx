@@ -1,7 +1,7 @@
 import { Badge } from '@web/components/ui/badge';
 import type { ButtonColorScheme } from '@web/components/ui/button/types';
-
 import clsx from 'clsx';
+
 import styles from './badge-list.module.scss';
 
 export interface BadgeListProps {

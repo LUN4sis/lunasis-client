@@ -3,14 +3,15 @@
  * React Native AsyncStorage를 사용하는 인증 스토어
  */
 
+import { asyncStorageAdapter } from '@/src/lib/storage-adapter';
 import { create } from 'zustand';
-import { persist, createJSONStorage } from 'zustand/middleware';
+import { createJSONStorage, persist } from 'zustand/middleware';
+
 import type {
+  AuthProfile,
   AuthState,
   TokenUpdatePayload,
-  AuthProfile,
 } from '@repo/shared/features/auth/types/store.type';
-import { asyncStorageAdapter } from '@/src/lib/storage-adapter';
 
 /**
  * 인증 스토어 (React Native용)

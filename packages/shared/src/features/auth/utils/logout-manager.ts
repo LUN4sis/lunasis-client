@@ -1,5 +1,6 @@
-import { useAuthStore } from '../stores/use-auth-store';
 import { logger, transformError } from '@repo/shared/utils';
+
+import { useAuthStore } from '../stores/use-auth-store';
 
 export interface LogoutDependencies {
   clearQueryCache?: () => void;

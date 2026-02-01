@@ -1,4 +1,14 @@
 import { logger, transformError } from '@repo/shared/utils';
+import { http, passthrough } from 'msw';
+
+/**
+ * Community: GET /api/posts is mocked; other /api/posts*, /api/comments* passthrough to real server.
+ * communityHandlers (GET /api/posts) must run before passthrough so the mock takes precedence.
+ */
+const communityPassthroughHandlers = [
+  http.all('/api/posts*', () => passthrough()),
+  http.all('/api/comments*', () => passthrough()),
+];
 
 /**
  * MSW initialization function
@@ -40,13 +50,27 @@ export const initMocks = async (): Promise<void> => {
 
   try {
     // dynamic import of MSW and handlers in browser environment only
-    const [{ setupWorker }, { productsHandlers }] = await Promise.all([
+    const [
+      { setupWorker },
+      { rankingHandlers },
+      { productsHandlers },
+      { chatHandlers },
+      { communityHandlers },
+    ] = await Promise.all([
       import('msw/browser'),
+      import('./handlers/ranking.handlers'),
       import('./handlers/products.handlers'),
+      import('./handlers/chat.handlers'),
+      import('./handlers/community.handlers'),
     ]);
 
-    // combine all handlers
-    const handlers = [...productsHandlers];
+    const handlers = [
+      ...communityHandlers,
+      ...communityPassthroughHandlers,
+      ...rankingHandlers,
+      ...productsHandlers,
+      ...chatHandlers,
+    ];
 
     const worker = setupWorker(...handlers);
 
