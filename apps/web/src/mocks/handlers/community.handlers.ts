@@ -5,7 +5,7 @@ import {
   type PostListItem,
   type PostsPageData,
 } from '@repo/shared/features/community/types';
-import { http,HttpResponse } from 'msw';
+import { http, HttpResponse } from 'msw';
 
 import { mockPostsByCategory } from '../data/community.data';
 
@@ -16,15 +16,23 @@ const getRandomDelay = () => Math.floor(Math.random() * 500) + 300;
 
 const defaultSort = { sorted: false, empty: true, unsorted: true };
 
-function findPostWithCategory(postId: string): { item: PostListItem; category: CommunityCategory } | undefined {
-  for (const [cat, list] of Object.entries(mockPostsByCategory) as [CommunityCategory, PostListItem[]][]) {
+function findPostWithCategory(
+  postId: string,
+): { item: PostListItem; category: CommunityCategory } | undefined {
+  for (const [cat, list] of Object.entries(mockPostsByCategory) as [
+    CommunityCategory,
+    PostListItem[],
+  ][]) {
     const found = list.find((p) => p.postId === postId);
     if (found) return { item: found, category: cat };
   }
   return undefined;
 }
 
-function toPostDetail(item: PostListItem, category?: CommunityCategory): PostDetail & { category?: CommunityCategory } {
+function toPostDetail(
+  item: PostListItem,
+  category?: CommunityCategory,
+): PostDetail & { category?: CommunityCategory } {
   const detail: PostDetail & { category?: CommunityCategory } = {
     postId: item.postId,
     author: item.author,
@@ -124,34 +132,25 @@ export const communityPostsHandler = http.get(`${baseUrl}/posts`, async ({ reque
 /**
  * GET /api/posts/:postId - 게시글 상세 (usePostDetailQuery)
  */
-export const postDetailHandler = http.get(
-  `${baseUrl}/posts/:postId`,
-  async ({ params }) => {
-    await delay(getRandomDelay());
-    const postId = params.postId as string;
-    const result = findPostWithCategory(postId);
-    if (!result) {
-      return HttpResponse.json(
-        { success: false, message: 'Post not found.' },
-        { status: 404 },
-      );
-    }
-    return HttpResponse.json({ success: true, data: toPostDetail(result.item, result.category) });
-  },
-);
+export const postDetailHandler = http.get(`${baseUrl}/posts/:postId`, async ({ params }) => {
+  await delay(getRandomDelay());
+  const postId = params.postId as string;
+  const result = findPostWithCategory(postId);
+  if (!result) {
+    return HttpResponse.json({ success: false, message: 'Post not found.' }, { status: 404 });
+  }
+  return HttpResponse.json({ success: true, data: toPostDetail(result.item, result.category) });
+});
 
 /**
  * GET /api/comments/:postId - 댓글 목록 (useCommentsQuery)
  */
-export const commentsHandler = http.get(
-  `${baseUrl}/comments/:postId`,
-  async ({ params }) => {
-    await delay(getRandomDelay());
-    const postId = params.postId as string;
-    const comments = buildMockComments(postId);
-    return HttpResponse.json({ success: true, data: comments });
-  },
-);
+export const commentsHandler = http.get(`${baseUrl}/comments/:postId`, async ({ params }) => {
+  await delay(getRandomDelay());
+  const postId = params.postId as string;
+  const comments = buildMockComments(postId);
+  return HttpResponse.json({ success: true, data: comments });
+});
 
 /**
  * Community MSW handlers.
@@ -160,8 +159,4 @@ export const commentsHandler = http.get(
  * - GET /api/comments/:postId: 댓글 mock
  * - 나머지 /api/posts*, /api/comments*: passthrough (실제 서버로)
  */
-export const communityHandlers = [
-  communityPostsHandler,
-  postDetailHandler,
-  commentsHandler,
-];
+export const communityHandlers = [communityPostsHandler, postDetailHandler, commentsHandler];

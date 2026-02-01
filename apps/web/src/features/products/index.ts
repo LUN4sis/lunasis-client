@@ -12,7 +12,7 @@ export * from './hooks/use-full-product-data';
 export * from './hooks/use-image-error';
 export * from './hooks/use-products';
 export * from './hooks/use-reviews';
-export type { GetReviewsRequest, GetReviewsResponse,Review } from './types/review.type';
+export type { GetReviewsRequest, GetReviewsResponse, Review } from './types/review.type';
 export * from './utils/price.utils';
 export * from './utils/slug.utils';
 export type {

@@ -48,9 +48,7 @@ function SelectionGroupComponent<T extends string>({
         },
         className,
       )}
-      style={
-        layout === 'grid' ? { gridTemplateColumns: `repeat(${gridColumns}, 1fr)` } : undefined
-      }
+      style={layout === 'grid' ? { gridTemplateColumns: `repeat(${gridColumns}, 1fr)` } : undefined}
       role="group"
       aria-label={ariaLabel}
     >

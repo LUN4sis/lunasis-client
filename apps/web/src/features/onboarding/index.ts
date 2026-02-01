@@ -15,7 +15,7 @@ export { Title } from './components/title';
 export { useOnboardingStore } from './stores/use-onboarding-store';
 
 // Actions
-export { checkNickname,registerUser } from './actions/onboarding.actions';
+export { checkNickname, registerUser } from './actions/onboarding.actions';
 
 // Constants
 export * from './constants/onboarding.constants';

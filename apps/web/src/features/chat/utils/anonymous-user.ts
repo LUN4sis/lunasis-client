@@ -1,4 +1,3 @@
-
 import { v4 as uuidv4 } from 'uuid';
 
 const ANONYMOUS_USER_KEY = 'lunasis_anonymous_user_id';

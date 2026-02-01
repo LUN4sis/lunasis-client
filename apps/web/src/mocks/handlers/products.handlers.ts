@@ -1,5 +1,5 @@
 import { ProductCategory } from '@repo/shared/types';
-import { http,HttpResponse } from 'msw';
+import { http, HttpResponse } from 'msw';
 
 import { mockProductsByCategory } from '../data/products.data';
 import { Mall, ProductDetail, ReviewResponse, ReviewsPageResponse } from '../types/product.types';

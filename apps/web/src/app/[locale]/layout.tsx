@@ -7,7 +7,7 @@ import { routing } from '@web/i18n/routing';
 import type { Metadata } from 'next';
 import { DM_Sans } from 'next/font/google';
 import { notFound } from 'next/navigation';
-import { hasLocale,NextIntlClientProvider } from 'next-intl';
+import { hasLocale, NextIntlClientProvider } from 'next-intl';
 import { getMessages, setRequestLocale } from 'next-intl/server';
 import { Suspense } from 'react';
 

@@ -41,7 +41,12 @@ export const useChatStore = create<ChatStore>()(
         };
       }),
       partialize: (state) => {
-        const { pendingMessages: _pm, anonymousUserId: _au, isHydrated: _ih, ...rest } = state as ChatState & {
+        const {
+          pendingMessages: _pm,
+          anonymousUserId: _au,
+          isHydrated: _ih,
+          ...rest
+        } = state as ChatState & {
           anonymousUserId?: string | null;
           isHydrated?: boolean;
         };

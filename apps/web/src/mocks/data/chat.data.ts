@@ -186,7 +186,8 @@ export const mockChatRooms: MockChatRoom[] = [
     chats: [
       {
         chatId: 'c9-1',
-        question: 'If I haven’t had sex with a male partner, should I still say I’ve had sexual experience at the OB-GYN?',
+        question:
+          'If I haven’t had sex with a male partner, should I still say I’ve had sexual experience at the OB-GYN?',
         answer:
           'You **don’t have to share every detail**, but it helps to give information that’s relevant to your care.\n\n---\n\n**What they’re usually asking:**\n\n• Whether you’ve had **certain kinds of physical contact** — not your partner’s gender\n\n**You can say, for example:**\n\n• *“I haven’t had penetrative sex.”* — if you haven’t had vaginal penetration\n• *“I haven’t had vaginal sex, but I have had other contact.”* — if other contact could affect symptoms or the exam\n\n---\n\nThat’s often enough for them to choose the **right exam and care**.',
         image: null,
