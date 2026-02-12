@@ -10,7 +10,7 @@ export interface BadgeProps {
   onClick?: (e: React.MouseEvent) => void;
 }
 
-export function Badge({ text, colorScheme = 'purple', size = 'md', onClick }: BadgeProps) {
+export const Badge = ({ text, colorScheme = 'purple', size = 'md', onClick }: BadgeProps) => {
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (onClick && (e.key === 'Enter' || e.key === ' ')) {
       e.preventDefault();
@@ -34,4 +34,4 @@ export function Badge({ text, colorScheme = 'purple', size = 'md', onClick }: Ba
       {text}
     </span>
   );
-}
+};

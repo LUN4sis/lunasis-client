@@ -12,7 +12,7 @@ interface TabProps {
   onTabChange: (tabId: string) => void;
 }
 
-export function Tab({ tabs, activeTab, onTabChange }: TabProps) {
+export const Tab = ({ tabs, activeTab, onTabChange }: TabProps) => {
   return (
     <div className={styles.container}>
       <div className={styles.tabList} role="tablist">
@@ -44,4 +44,4 @@ export function Tab({ tabs, activeTab, onTabChange }: TabProps) {
       ))}
     </div>
   );
-}
+};
