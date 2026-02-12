@@ -2,6 +2,7 @@
 
 import { logger } from '@repo/shared/utils';
 import { ROUTES } from '@web/lib/constants';
+import clsx from 'clsx';
 import { Home, RotateCcw } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
@@ -49,7 +50,7 @@ const Error = ({ error, reset }: ErrorProps) => {
 
   return (
     <div className={styles.container}>
-      <div className={`${styles.content} ${mounted ? styles.mounted : ''}`}>
+      <div className={clsx(styles.content, mounted && styles.mounted)}>
         <div className={styles.graphic} role="img" aria-label="Error occurred">
           <div className={styles.shakeWrapper}>
             {/* Planet */}

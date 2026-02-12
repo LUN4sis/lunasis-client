@@ -38,7 +38,7 @@
   cursor: pointer;
   transition: all 0.3s ease-in-out;
 
-  &:hover:not(.tab--active) {
+  &:hover:not(.tabActive) {
     color: $gray-600;
   }
 
@@ -47,7 +47,7 @@
     color: $purple-800;
   }
 
-  &--active {
+  &Active {
     color: $purple-800;
   }
 
@@ -60,7 +60,7 @@
 .tabPanel {
   display: none;
 
-  &--active {
+  &Active {
     display: block;
   }
 }

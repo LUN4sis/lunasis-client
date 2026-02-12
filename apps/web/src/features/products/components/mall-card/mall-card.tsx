@@ -14,15 +14,29 @@ export interface MallCardProps {
   onClick?: (url: string) => void;
 }
 
-export function MallCard({ mall, onClick }: MallCardProps) {
+export const MallCard = ({ mall, onClick }: MallCardProps) => {
   const { imageSrc, handleError } = useImageError(mall.image);
 
   const handleClick = () => {
     onClick?.(mall.url);
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      handleClick();
+    }
+  };
+
   return (
-    <article className={styles.card} onClick={handleClick}>
+    <article
+      className={styles.card}
+      onClick={handleClick}
+      onKeyDown={handleKeyDown}
+      role="button"
+      tabIndex={0}
+      aria-label={`View ${mall.name} at ${formatPrice(mall.price)}`}
+    >
       <div className={styles.imageContainer}>
         <Image
           src={imageSrc}
@@ -38,4 +52,4 @@ export function MallCard({ mall, onClick }: MallCardProps) {
       <span className={styles.price}>{formatPrice(mall.price)}</span>
     </article>
   );
-}
+};

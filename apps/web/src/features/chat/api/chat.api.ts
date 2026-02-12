@@ -1,3 +1,5 @@
+import { handleApiError } from '@repo/shared/utils';
+
 import { api } from '@web/api/api';
 
 import type {
@@ -14,35 +16,55 @@ import type {
  * GET /chats - 채팅방 목록
  */
 export async function getChatRoomsAPI(): Promise<ChatRoomRes> {
-  return api.get<ChatRoomRes>('/chats');
+  try {
+    return await api.get<ChatRoomRes>('/chats');
+  } catch (error) {
+    throw handleApiError(error);
+  }
 }
 
 /**
  * POST /chats - 채팅 시작
  */
 export async function startChatAPI(question: string): Promise<ChatStartRes> {
-  return api.post<ChatStartRes, QuestionReq>('/chats', { question });
+  try {
+    return await api.post<ChatStartRes, QuestionReq>('/chats', { question });
+  } catch (error) {
+    throw handleApiError(error);
+  }
 }
 
 /**
  * GET /chats/{chatRoomId} - 대화 내용 복원
  */
 export async function getChatMessagesAPI(chatRoomId: string): Promise<ChatMessagesRes> {
-  return api.get<ChatMessagesRes>(`/chats/${chatRoomId}`);
+  try {
+    return await api.get<ChatMessagesRes>(`/chats/${chatRoomId}`);
+  } catch (error) {
+    throw handleApiError(error);
+  }
 }
 
 /**
  * POST /chats/{chatRoomId} - 채팅 전송
  */
 export async function sendMessageAPI(chatRoomId: string, question: string): Promise<MessageRes> {
-  return api.post<MessageRes, QuestionReq>(`/chats/${chatRoomId}`, { question });
+  try {
+    return await api.post<MessageRes, QuestionReq>(`/chats/${chatRoomId}`, { question });
+  } catch (error) {
+    throw handleApiError(error);
+  }
 }
 
 /**
  * POST /chats/{chatRoomId}/title - 채팅방 제목 수정
  */
 export async function updateChatTitleAPI(chatRoomId: string, title: string): Promise<void> {
-  return api.post<void, UpdateTitleReq>(`/chats/${chatRoomId}/title`, { title });
+  try {
+    return await api.post<void, UpdateTitleReq>(`/chats/${chatRoomId}/title`, { title });
+  } catch (error) {
+    throw handleApiError(error);
+  }
 }
 
 /**
@@ -52,5 +74,9 @@ export async function sendAnonymousMessageAPI(
   anonymousId: string,
   question: string,
 ): Promise<MessageRes> {
-  return api.post<MessageRes, AnonymousReq>(`/chats/anonymous`, { anonymousId, question });
+  try {
+    return await api.post<MessageRes, AnonymousReq>(`/chats/anonymous`, { anonymousId, question });
+  } catch (error) {
+    throw handleApiError(error);
+  }
 }

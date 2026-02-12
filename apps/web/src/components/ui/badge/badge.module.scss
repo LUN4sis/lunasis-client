@@ -13,7 +13,7 @@
   max-width: 100%;
   text-overflow: ellipsis;
 
-  &--sm {
+  &Sm {
     padding: 0.19rem 0.56rem;
     font-size: $font-size-sm;
 
@@ -22,7 +22,7 @@
     }
   }
 
-  &--md {
+  &Md {
     padding: 0.2rem 0.86rem;
     font-size: $font-size-base;
 
@@ -31,7 +31,7 @@
     }
   }
 
-  &--lg {
+  &Lg {
     padding: 0.29rem 1rem;
     font-size: $font-size-lg;
 
@@ -40,23 +40,23 @@
     }
   }
 
-  &--purple {
+  &Purple {
     background-color: $purple-300;
   }
 
-  &--orange {
+  &Orange {
     background-color: $orange-100;
   }
 
-  &--pink {
+  &Pink {
     background-color: $red-300;
   }
 
-  &--white {
+  &White {
     background-color: $white;
   }
 
-  &--gray {
+  &Gray {
     background-color: $gray-100;
   }
 }
