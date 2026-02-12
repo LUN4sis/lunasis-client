@@ -1,5 +1,6 @@
 'use client';
 
+import clsx from 'clsx';
 import { useEffect } from 'react';
 
 import styles from './toast.module.scss';
@@ -23,7 +24,7 @@ export function Toast({ message, type = 'info', duration = 3000, onClose }: Toas
   }, [duration, onClose]);
 
   return (
-    <div className={`${styles.toast} ${styles[type]}`} role="alert">
+    <div className={clsx(styles.toast, styles[type])} role="alert">
       <div className={styles.content}>
         <span className={styles.icon}>{getIcon(type)}</span>
         <p className={styles.message}>{message}</p>
