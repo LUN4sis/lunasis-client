@@ -14,7 +14,7 @@ export interface MallCardProps {
   onClick?: (url: string) => void;
 }
 
-export function MallCard({ mall, onClick }: MallCardProps) {
+export const MallCard = ({ mall, onClick }: MallCardProps) => {
   const { imageSrc, handleError } = useImageError(mall.image);
 
   const handleClick = () => {
@@ -52,4 +52,4 @@ export function MallCard({ mall, onClick }: MallCardProps) {
       <span className={styles.price}>{formatPrice(mall.price)}</span>
     </article>
   );
-}
+};
