@@ -1,11 +1,10 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
-  getChatMessagesAPI,
   getChatRoomsAPI,
-  sendAnonymousMessageAPI,
-  sendMessageAPI,
+  getChatMessagesAPI,
   startChatAPI,
+  sendMessageAPI,
+  sendAnonymousMessageAPI,
 } from '../api/chat.api';
 import type { ChatStartRes, MessageRes } from '../types/api.type';
 
@@ -26,17 +25,12 @@ export const chatKeys = {
 
 /**
  * Get chat rooms list
+ * Automatically retries on network/server errors
  */
 export const useChatRoomsQuery = () => {
   return useQuery({
     queryKey: chatKeys.rooms(),
-    queryFn: async () => {
-      const res = await getChatRoomsAPI();
-      if (!res.success || !res.data) {
-        throw new Error(res.message ?? '채팅방 목록을 불러올 수 없습니다.');
-      }
-      return { data: res.data };
-    },
+    queryFn: getChatRoomsAPI,
   });
 };
 
@@ -87,8 +81,8 @@ export const useCreateAnonymousChatMutation = (options?: CreateChatMutationOptio
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ anonymousId, question }: { anonymousId: string; question: string }) =>
-      sendAnonymousMessageAPI(anonymousId, question),
+    mutationFn: ({ userId, question }: { userId: string; question: string }) =>
+      sendAnonymousMessageAPI(userId, question),
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: chatKeys.rooms() });
       options?.onSuccess?.(data);
@@ -128,13 +122,13 @@ export const useSendMessageMutation = (
  * No automatic retry for mutations
  */
 export const useSendAnonymousMessageMutation = (
-  anonymousId: string,
+  userId: string,
   options?: SendMessageMutationOptions,
 ) => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (question: string) => sendAnonymousMessageAPI(anonymousId, question),
+    mutationFn: (question: string) => sendAnonymousMessageAPI(userId, question),
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: chatKeys.rooms() });
       options?.onSuccess?.(data);
