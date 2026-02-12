@@ -1,65 +1,74 @@
 'use client';
 
-import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import TamponIcon from '@mui/icons-material/PriorityHighRounded';
-import PadIcon from '@web/assets/icons/pad-outline.svg';
-import PackageIcon from '@web/assets/icons/package-outline.svg';
-import { SelectionGroup } from '@web/components/ui/selection-group';
+import { ChevronRight } from 'lucide-react';
+import clsx from 'clsx';
 
 import styles from './starter-review.module.scss';
 
 type PackageType = 'tampon' | 'pad' | 'both';
 
+const CATEGORIES: Array<{
+  key: PackageType;
+  title: string;
+  description: string;
+  variant: 'both' | 'tampon' | 'pad';
+}> = [
+  {
+    key: 'both',
+    title: '탐폰 + 생리대',
+    description: '모든 제품 리뷰하기',
+    variant: 'both',
+  },
+  {
+    key: 'tampon',
+    title: '탐폰',
+    description: '탐폰 제품만 리뷰하기',
+    variant: 'tampon',
+  },
+  {
+    key: 'pad',
+    title: '생리대',
+    description: '생리대 제품만 리뷰하기',
+    variant: 'pad',
+  },
+];
+
 export default function StarterReviewPage() {
   const router = useRouter();
-  const [selectedPackage, setSelectedPackage] = useState<PackageType | null>(null);
 
-  const handleSelect = (key: PackageType) => {
-    setSelectedPackage(key);
-    // 순위 매기기 페이지로 이동
+  const handleCategorySelect = (key: PackageType) => {
     router.push(`/starter-review/ranking?type=${key}`);
   };
 
-  const options = [
-    {
-      key: 'tampon' as PackageType,
-      display: '탐폰만',
-      subtitle: '탐폰 제품만 포함된 패키지',
-      icon: <TamponIcon />,
-    },
-    {
-      key: 'pad' as PackageType,
-      display: '생리대만',
-      subtitle: '생리대 제품만 포함된 패키지',
-      icon: PadIcon,
-    },
-    {
-      key: 'both' as PackageType,
-      display: '탐폰 + 생리대',
-      subtitle: '두 종류 모두 포함된 패키지',
-      icon: PackageIcon,
-    },
-  ];
-
   return (
-    <section className={styles.container}>
+    <main className={styles.container} role="main">
       <div className={styles.content}>
-        <div className={styles.header}>
-          <h1 className={styles.title}>패키지 선택</h1>
-          <p className={styles.description}>받으신 패키지 종류를 선택해주세요</p>
-        </div>
+        <header className={styles.header}>
+          <h1 className={styles.title}>스타터 패키지 리뷰</h1>
+          <p className={styles.description}>받으신 제품 카테고리를 선택해주세요</p>
+        </header>
 
-        <SelectionGroup
-          options={options}
-          selectedValue={selectedPackage ?? ('' as PackageType)}
-          onSelect={handleSelect}
-          layout="vertical"
-          colorScheme="purple"
-          showChevron={true}
-          ariaLabel="패키지 종류 선택"
-        />
+        <nav className={styles.options} aria-label="제품 카테고리 선택">
+          {CATEGORIES.map((category) => (
+            <button
+              key={category.key}
+              type="button"
+              onClick={() => handleCategorySelect(category.key)}
+              className={clsx(styles.option, styles[`option--${category.variant}`])}
+              aria-label={`${category.title}: ${category.description}`}
+            >
+              <div className={styles.optionContent}>
+                <h2 className={styles.optionTitle}>{category.title}</h2>
+                <p className={styles.optionDescription}>{category.description}</p>
+              </div>
+              <div className={styles.optionIndicator} aria-hidden>
+                <ChevronRight />
+              </div>
+            </button>
+          ))}
+        </nav>
       </div>
-    </section>
+    </main>
   );
 }
