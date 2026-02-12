@@ -21,8 +21,22 @@ export function MallCard({ mall, onClick }: MallCardProps) {
     onClick?.(mall.url);
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      handleClick();
+    }
+  };
+
   return (
-    <article className={styles.card} onClick={handleClick}>
+    <article
+      className={styles.card}
+      onClick={handleClick}
+      onKeyDown={handleKeyDown}
+      role="button"
+      tabIndex={0}
+      aria-label={`View ${mall.name} at ${formatPrice(mall.price)}`}
+    >
       <div className={styles.imageContainer}>
         <Image
           src={imageSrc}
