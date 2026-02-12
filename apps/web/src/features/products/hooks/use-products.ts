@@ -1,4 +1,5 @@
 import { isAuthError } from '@repo/shared/features/auth/constants/auth.constants';
+import { isDevelopment } from '@repo/shared/constants/config';
 import {
   type GetProductBundleParams,
   type GetProductDetailParams,
@@ -154,7 +155,13 @@ export function useProductPrefetch() {
           }
         }
       }
-    } catch {}
+    } catch (error) {
+      if (isDevelopment()) {
+        logger.warn('[useProductPrefetch] Failed to prefetch product data:', {
+          error,
+        });
+      }
+    }
   };
 
   const prefetchProductsByCategory = (category: ProductCategory) => {
