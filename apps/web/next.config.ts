@@ -39,6 +39,26 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'i.pravatar.cc',
       },
+      {
+        protocol: 'https',
+        hostname: 'contents.lotteon.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'shopping-phinf.pstatic.net',
+      },
+      {
+        protocol: 'https',
+        hostname: 'malltail-addon.makeshop.co.kr',
+      },
+      {
+        protocol: 'https',
+        hostname: 'cimg.cowave.kr',
+      },
+      {
+        protocol: 'https',
+        hostname: 'image.auction.co.kr',
+      },
     ],
     qualities: [75, 85, 90, 100],
   },
@@ -81,7 +101,7 @@ const nextConfig: NextConfig = {
           {
             key: 'Content-Security-Policy',
             value:
-              "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline' https://accounts.google.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://*.googleusercontent.com; font-src 'self'; connect-src 'self' https://accounts.google.com; frame-src 'self' https://accounts.google.com; object-src 'none'; frame-ancestors 'none';",
+              "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline' https://accounts.google.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://*.googleusercontent.com https://img.danawa.com https://contents.lotteon.com https://shopping-phinf.pstatic.net https://malltail-addon.makeshop.co.kr https://cimg.cowave.kr https://image.auction.co.kr https://images.unsplash.com https://plus.unsplash.com https://i.pravatar.cc; font-src 'self'; connect-src 'self' https://accounts.google.com; frame-src 'self' https://accounts.google.com; object-src 'none'; frame-ancestors 'none';",
           },
           {
             key: 'Permissions-Policy',
