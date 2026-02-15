@@ -14,6 +14,9 @@ interface WelcomeMessageProps {
 export function WelcomeMessage({ type }: WelcomeMessageProps) {
   const t = useTranslations('chat.welcomeScreen');
 
+  // Convert kebab-case to camelCase for SCSS class names
+  const typeClass = type.replace(/-([a-z])/g, (g) => g[1].toUpperCase());
+
   const renderContent = () => {
     switch (type) {
       case 'first-time':
@@ -76,7 +79,7 @@ export function WelcomeMessage({ type }: WelcomeMessageProps) {
   };
 
   return (
-    <div className={clsx(styles.container, styles[type])}>
+    <div className={clsx(styles.container, styles[typeClass])}>
       <div className={styles.content}>{renderContent()}</div>
     </div>
   );
