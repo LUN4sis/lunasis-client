@@ -1,19 +1,14 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useAuthStore } from '../stores';
 
 /**
  * Track zustand auth store hydration status
  * Returns true when the store has been rehydrated from localStorage
+ *
+ * This hook uses the _hasHydrated flag set by onRehydrateStorage
+ * to ensure we only use auth state after persist middleware has loaded from storage
  */
 export function useAuthStoreHydration() {
-  const [hydrated, setHydrated] = useState(false);
-
-  useEffect(() => {
-    // Mark as hydrated after initial render
-    // This ensures we wait for zustand persist to rehydrate from localStorage
-    setHydrated(true);
-  }, []);
-
-  return hydrated;
+  return useAuthStore((state) => state._hasHydrated);
 }

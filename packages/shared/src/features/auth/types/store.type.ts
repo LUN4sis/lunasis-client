@@ -25,8 +25,10 @@ export interface AuthState {
   firstLogin: boolean;
 
   isLoggedIn: boolean;
+  _hasHydrated: boolean;
 
   updateTokens: (payload: TokenUpdatePayload) => void;
   setProfile: (profile: AuthProfile) => void;
   clearAuth: () => void;
+  setHasHydrated: (hasHydrated: boolean) => void;
 }

@@ -12,6 +12,7 @@ const initialState = {
   firstLogin: false,
   privateChat: false,
   isLoggedIn: false,
+  _hasHydrated: false,
 };
 
 export const useAuthStore = create<AuthState>()(
@@ -36,7 +37,9 @@ export const useAuthStore = create<AuthState>()(
           privateChat: profile.privateChat,
         }),
 
-      clearAuth: () => set(initialState),
+      clearAuth: () => set({ ...initialState, _hasHydrated: true }),
+
+      setHasHydrated: (hasHydrated: boolean) => set({ _hasHydrated: hasHydrated }),
     }),
     {
       name: 'auth-storage',
@@ -84,6 +87,7 @@ export const useAuthStore = create<AuthState>()(
       onRehydrateStorage: () => (state) => {
         if (state) {
           state.isLoggedIn = !!state.accessToken;
+          state._hasHydrated = true;
         }
       },
     },
