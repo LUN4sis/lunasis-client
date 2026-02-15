@@ -62,7 +62,6 @@ export const useAuthStore = create<AuthState>()(
         nickname: state.nickname,
         firstLogin: state.firstLogin,
         privateChat: state.privateChat,
-        isLoggedIn: state.isLoggedIn,
       }),
       migrate: (persistedState: any, version: number) => {
         if (!persistedState) {
@@ -78,17 +77,21 @@ export const useAuthStore = create<AuthState>()(
             nickname: persistedState?.nickname ?? null,
             privateChat: persistedState?.privateChat ?? false,
             firstLogin: persistedState?.firstLogin ?? false,
-            isLoggedIn: persistedState?.isLoggedIn ?? false,
           };
         }
 
         return persistedState;
       },
-      onRehydrateStorage: () => (state) => {
-        if (state) {
-          state.isLoggedIn = !!state.accessToken;
-          state._hasHydrated = true;
+      onRehydrateStorage: () => (state, error) => {
+        if (error) {
+          console.warn('[auth-storage] Rehydration error:', error);
         }
+        // Always set hydrated flag, and compute isLoggedIn from accessToken
+        const isLoggedIn = !!state?.accessToken;
+        useAuthStore.setState({
+          _hasHydrated: true,
+          isLoggedIn,
+        });
       },
     },
   ),
