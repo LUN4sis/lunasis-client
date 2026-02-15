@@ -6,6 +6,7 @@ import { logger } from '@repo/shared/utils';
 
 import { useAuthStore } from '../stores/use-auth-store';
 import { getNextExpirationCheckDelay, shouldAutoLogout } from '../utils/token-manager';
+import { refreshTokenAPI } from '../api/auth.api';
 
 /**
  * Monitor token expiration and auto-logout
@@ -13,7 +14,8 @@ import { getNextExpirationCheckDelay, shouldAutoLogout } from '../utils/token-ma
  * @param onLogout - callback function to perform logout
  */
 export function useTokenExpiration(onLogout: () => void) {
-  const { accessTokenIssuedAt, refreshTokenIssuedAt, isLoggedIn } = useAuthStore();
+  const { accessTokenIssuedAt, refreshTokenIssuedAt, isLoggedIn, refreshToken } = useAuthStore();
+
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const onLogoutRef = useRef(onLogout);
 
@@ -31,6 +33,11 @@ export function useTokenExpiration(onLogout: () => void) {
     if (!isLoggedIn) {
       logger.info('[TokenExpiration] User not logged in, skipping check');
       return;
+    }
+
+    if (accessTokenIssuedAt === null || refreshTokenIssuedAt === null) {
+      logger.info('[TokenExpiration] No tokens found, refreshing tokens');
+      refreshTokenAPI(refreshToken ?? '');
     }
 
     // check if auto-logout is required

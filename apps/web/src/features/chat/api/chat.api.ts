@@ -1,3 +1,4 @@
+import type { ExtendedAxiosRequestConfig } from '@repo/shared/api/base.api';
 import { api } from '@web/api/api';
 
 import type {
@@ -52,5 +53,8 @@ export async function sendAnonymousMessageAPI(
   anonymousId: string,
   question: string,
 ): Promise<MessageRes> {
-  return api.post<MessageRes, AnonymousReq>(`/chats/anonymous`, { anonymousId, question });
+  const config: ExtendedAxiosRequestConfig = {
+    skipAuth: true, // 익명 채팅은 Authorization 헤더가 없어야 함
+  };
+  return api.post<MessageRes, AnonymousReq>(`/chats/anonymous`, { anonymousId, question }, config);
 }

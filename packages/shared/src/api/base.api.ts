@@ -14,6 +14,12 @@ import { transformAxiosError } from '@repo/shared/utils';
 // ===========================
 // Types & Interfaces
 // ===========================
+
+/** Extended Axios request config with custom flags */
+export interface ExtendedAxiosRequestConfig extends AxiosRequestConfig {
+  /** Skip authentication header for anonymous requests */
+  skipAuth?: boolean;
+}
 export interface BaseApiConfig {
   baseURL: string;
   timeout?: number;
