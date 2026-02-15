@@ -74,9 +74,17 @@ export async function sendAnonymousMessageAPI(
   anonymousId: string,
   question: string,
 ): Promise<MessageRes> {
-  try {
-    return await api.post<MessageRes, AnonymousReq>(`/chats/anonymous`, { anonymousId, question });
-  } catch (error) {
-    throw handleApiError(error);
-  }
+  // Authorization 헤더를 제거하기 위해 transformRequest 사용
+  return api.post<MessageRes, AnonymousReq>(
+    `/chats/anonymous`,
+    { anonymousId, question },
+    {
+      transformRequest: [
+        (data, headers) => {
+          delete headers.Authorization;
+          return JSON.stringify(data);
+        },
+      ],
+    },
+  );
 }
