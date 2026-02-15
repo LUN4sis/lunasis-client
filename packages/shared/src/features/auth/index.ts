@@ -15,7 +15,7 @@ export { useAuthStore } from './stores';
 export { exchangeTokenAPI, refreshTokenAPI, logoutAPI } from './api';
 
 // Hooks
-export { useTokenExpiration } from './hooks';
+export { useAuthStoreHydration, useTokenExpiration } from './hooks';
 
 // Utils
 export { LogoutManager, createLogoutManager } from './utils';
