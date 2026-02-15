@@ -1,6 +1,6 @@
 'use client';
 
-import { useAuthStore } from '@repo/shared/features/auth';
+import { useAuthStore, useAuthStoreHydration } from '@repo/shared/features/auth';
 import { SupportedLocale } from '@repo/shared/types';
 import { getErrorMessage } from '@repo/shared/utils';
 import { toast } from '@web/components/ui/toast';
@@ -26,9 +26,11 @@ export default function ChatRoomPage() {
   const [isInitialized, setIsInitialized] = useState(false);
   const [isMounted, setIsMounted] = useState(true);
   const [isReady, setIsReady] = useState(false);
+  const hydrated = useAuthStoreHydration();
   const isLoggedIn = useAuthStore((s) => s.isLoggedIn);
   const { isIncognito, pendingMessages, clearPendingMessages, setCurrentChatId } = useChatStore();
-  const isAnonymous = isIncognito || !isLoggedIn;
+  // Only use isLoggedIn after hydration to prevent false negatives
+  const isAnonymous = isIncognito || (!hydrated || !isLoggedIn);
 
   // currentChatId를 URL params와 동기화 (익명: chatRoomId=anonymousId, 로그인: chatRoomId=서버 ID)
   useEffect(() => {

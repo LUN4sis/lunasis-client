@@ -31,8 +31,7 @@ export default function ChatPage() {
   const hydrated = useAuthStoreHydration();
   const isLoggedIn = useAuthStore((s) => s.isLoggedIn);
   const { isIncognito, setPendingMessages, setCurrentChatId } = useChatStore();
-  // Only use isLoggedIn after hydration to prevent false negatives
-  const isAnonymous = isIncognito || (!hydrated || !isLoggedIn);
+  const isAnonymous = isIncognito || !hydrated || !isLoggedIn;
 
   // Track component mount state and trigger fade-in
   useEffect(() => {
@@ -151,7 +150,7 @@ export default function ChatPage() {
   };
 
   return (
-    <div className={clsx(styles.container, { [styles.ready]: isReady })} suppressHydrationWarning>
+    <div className={clsx(styles.container, { [styles.ready]: isReady })}>
       <Sidebar />
       <div className={styles.top}>
         <ChatHeader />
