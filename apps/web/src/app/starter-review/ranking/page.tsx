@@ -2,45 +2,32 @@
 
 import { useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { DndContext, closestCenter, DragEndEvent } from '@dnd-kit/core';
-import { SortableContext, verticalListSortingStrategy, arrayMove } from '@dnd-kit/sortable';
-import { SortableItem } from './sortable-item';
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  DragEndEvent,
+} from '@dnd-kit/core';
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  verticalListSortingStrategy,
+} from '@dnd-kit/sortable';
+import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
+import { Header } from '@web/features/products/components/header';
+import { DraggableCard } from '@web/features/starter-package/components/draggable-card/draggable-card';
+import { TAMPONS, SANITARY_PADS } from '@web/features/starter-package/constants/products.constant';
 import styles from './ranking.module.scss';
+import { Button } from '@web/components/ui/button/button';
 
 type PackageType = 'tampon' | 'pad' | 'both';
 
-// 브랜드 데이터 타입
-interface Brand {
-  id: string;
-  name: string;
-}
+type Product = (typeof TAMPONS | typeof SANITARY_PADS)[number];
 
-// 패키지 타입별 브랜드 목록
-const BRAND_DATA: Record<PackageType, Brand[]> = {
-  pad: [
-    { id: 'pad-1', name: '좋은느낌' },
-    { id: 'pad-2', name: '화이트' },
-    { id: 'pad-3', name: '순수한면' },
-    { id: 'pad-4', name: '예지미인' },
-    { id: 'pad-5', name: '라엘 생리대' },
-  ],
-  tampon: [
-    { id: 'tampon-1', name: '탐팍스' },
-    { id: 'tampon-2', name: '릴렛츠' },
-    { id: 'tampon-3', name: '템포' },
-    { id: 'tampon-4', name: '코튼라라' },
-    { id: 'tampon-5', name: '나트라케어' },
-  ],
-  both: [
-    { id: 'both-1', name: '좋은느낌' },
-    { id: 'both-2', name: '화이트' },
-    { id: 'both-3', name: '순수한면' },
-    { id: 'both-4', name: '예지미인' },
-    { id: 'both-5', name: '라엘 생리대' },
-  ],
-};
-
-// 패키지 타입별 제목
 const PACKAGE_TITLES: Record<PackageType, string> = {
   pad: '생리대 순위 매기기',
   tampon: '탐폰 순위 매기기',
@@ -52,57 +39,122 @@ export default function RankingPage() {
   const searchParams = useSearchParams();
   const packageType = (searchParams.get('type') as PackageType) || 'pad';
 
-  const [brands, setBrands] = useState<Brand[]>(BRAND_DATA[packageType]);
+  const [tamponItems, setTamponItems] = useState<Product[]>([...TAMPONS]);
+  const [padItems, setPadItems] = useState<Product[]>([...SANITARY_PADS]);
 
-  const handleDragEnd = (event: DragEndEvent) => {
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    }),
+  );
+
+  // 탐폰 리스트 드래그 종료 핸들러
+  const handleTamponDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
 
     if (over && active.id !== over.id) {
-      setBrands((items) => {
-        const oldIndex = items.findIndex((item) => item.id === active.id);
-        const newIndex = items.findIndex((item) => item.id === over.id);
-
+      setTamponItems((items) => {
+        const oldIndex = items.findIndex((item) => item.key === active.id);
+        const newIndex = items.findIndex((item) => item.key === over.id);
         return arrayMove(items, oldIndex, newIndex);
       });
     }
   };
 
+  // 생리대 리스트 드래그 종료 핸들러
+  const handlePadDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+
+    if (over && active.id !== over.id) {
+      setPadItems((items) => {
+        const oldIndex = items.findIndex((item) => item.key === active.id);
+        const newIndex = items.findIndex((item) => item.key === over.id);
+        return arrayMove(items, oldIndex, newIndex);
+      });
+    }
+  };
+
+  // 순위 데이터 저장 및 다음 단계로 이동
   const handleNext = () => {
-    // TODO: 순위 데이터 저장 및 다음 단계로 이동
-    console.log('Final ranking:', brands);
-    // router.push('/starter-review/complete');
+    const finalRanking = {
+      tampons: packageType === 'tampon' || packageType === 'both' ? tamponItems : [],
+      pads: packageType === 'pad' || packageType === 'both' ? padItems : [],
+    };
+    console.log('Final ranking:', finalRanking);
+    // TODO: 순위 데이터를 로컬 스토리지나 상태 관리에 저장
+    router.push(`/starter-review/review?type=${packageType}`);
   };
 
   const handleBack = () => {
     router.back();
   };
 
+  // 표시할 제품 리스트 결정
+  const showTampons = packageType === 'tampon' || packageType === 'both';
+  const showPads = packageType === 'pad' || packageType === 'both';
+
   return (
-    <section className={styles.container}>
-      <header className={styles.header}>
-        <button onClick={handleBack} className={styles.backButton}>
-          {'<'} 뒤로
-        </button>
-        <h1 className={styles.title}>{PACKAGE_TITLES[packageType]}</h1>
-        <p className={styles.description}>가장 좋았던 생리대 브랜드 순서대로 드래그하세요</p>
-      </header>
-
-      <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-        <SortableContext items={brands.map((b) => b.id)} strategy={verticalListSortingStrategy}>
-          <div className={styles.brandList}>
-            {brands.map((brand, index) => (
-              <SortableItem key={brand.id} id={brand.id} rank={index + 1} name={brand.name} />
-            ))}
+    <>
+      <Header handleBackClick={handleBack} />
+      <section className={styles.container}>
+        <div className={styles.content}>
+          <div className={styles.header}>
+            <h1 className={styles.title}>{PACKAGE_TITLES[packageType]}</h1>
+            <p className={styles.description}>제품을 드래그하여 순서를 변경하세요</p>
           </div>
-        </SortableContext>
-      </DndContext>
 
-      <div className={styles.footer}>
-        <p className={styles.hint}>드래그하여 순위를 변경하세요</p>
-        <button onClick={handleNext} className={styles.nextButton}>
-          다음
-        </button>
-      </div>
-    </section>
+          <div className={styles.productLists}>
+            {showTampons && (
+              <DndContext
+                sensors={sensors}
+                collisionDetection={closestCenter}
+                onDragEnd={handleTamponDragEnd}
+                modifiers={[restrictToVerticalAxis]}
+              >
+                {packageType === 'both' && <h2 className={styles.sectionTitle}>탐폰</h2>}
+                <SortableContext
+                  items={tamponItems.map((item) => item.key)}
+                  strategy={verticalListSortingStrategy}
+                >
+                  <div className={styles.brandList}>
+                    {tamponItems.map((product, index) => (
+                      <DraggableCard key={product.key} product={product} rank={index + 1} />
+                    ))}
+                  </div>
+                </SortableContext>
+              </DndContext>
+            )}
+
+            {showPads && (
+              <DndContext
+                sensors={sensors}
+                collisionDetection={closestCenter}
+                onDragEnd={handlePadDragEnd}
+                modifiers={[restrictToVerticalAxis]}
+              >
+                {packageType === 'both' && <h2 className={styles.sectionTitle}>생리대</h2>}
+                <SortableContext
+                  items={padItems.map((item) => item.key)}
+                  strategy={verticalListSortingStrategy}
+                >
+                  <div className={styles.brandList}>
+                    {padItems.map((product, index) => (
+                      <DraggableCard key={product.key} product={product} rank={index + 1} />
+                    ))}
+                  </div>
+                </SortableContext>
+              </DndContext>
+            )}
+          </div>
+
+          <div className={styles.footer}>
+            <Button colorScheme="purple" className={styles.nextButton} onClick={handleNext}>
+              다음
+            </Button>
+          </div>
+        </div>
+      </section>
+    </>
   );
 }
