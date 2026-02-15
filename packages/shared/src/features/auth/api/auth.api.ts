@@ -37,8 +37,14 @@ export const exchangeTokenAPI = googleLoginAPI;
  * @request body {refreshToken: string}
  * @response {RefreshTokenResponse}
  */
-export const tokenRefreshAPI = async (refreshToken: string): Promise<RefreshTokenResponse> => {
-  const api = createApiClient({ baseURL: API_BASE_URL });
+export const tokenRefreshAPI = async (
+  accessToken: string,
+  refreshToken: string,
+): Promise<RefreshTokenResponse> => {
+  const api = createApiClient({
+    baseURL: API_BASE_URL,
+    getAccessToken: () => accessToken,
+  });
   return await api.patch<RefreshTokenResponse, { refreshToken: string }>('/auth', { refreshToken });
 };
 

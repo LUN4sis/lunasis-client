@@ -14,7 +14,8 @@ import { refreshTokenAPI } from '../api/auth.api';
  * @param onLogout - callback function to perform logout
  */
 export function useTokenExpiration(onLogout: () => void) {
-  const { accessTokenIssuedAt, refreshTokenIssuedAt, isLoggedIn, refreshToken } = useAuthStore();
+  const { accessToken, accessTokenIssuedAt, refreshTokenIssuedAt, isLoggedIn, refreshToken } =
+    useAuthStore();
 
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const onLogoutRef = useRef(onLogout);
@@ -37,7 +38,7 @@ export function useTokenExpiration(onLogout: () => void) {
 
     if (accessTokenIssuedAt === null || refreshTokenIssuedAt === null) {
       logger.info('[TokenExpiration] No tokens found, refreshing tokens');
-      refreshTokenAPI(refreshToken ?? '');
+      refreshTokenAPI(accessToken ?? '', refreshToken ?? '');
     }
 
     // check if auto-logout is required
@@ -50,7 +51,7 @@ export function useTokenExpiration(onLogout: () => void) {
     }
 
     logger.info('[TokenExpiration] Tokens valid');
-  }, [accessTokenIssuedAt, refreshTokenIssuedAt, isLoggedIn]);
+  }, [accessToken, accessTokenIssuedAt, refreshTokenIssuedAt, isLoggedIn, refreshToken]);
 
   // schedule next expiration check
   const scheduleNextCheck = useCallback(() => {
