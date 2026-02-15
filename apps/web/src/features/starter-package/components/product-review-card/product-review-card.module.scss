@@ -1,0 +1,243 @@
+@use '@/styles' as *;
+
+// Card container / 카드 컨테이너
+.card {
+  background-color: white;
+  border-radius: $radius-xl;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+  transition: all 0.2s ease-in-out;
+  width: 100%;
+  flex-shrink: 0;
+
+  &:hover {
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  }
+}
+
+// Card header (always visible) / 카드 헤더
+.cardHeader {
+  display: flex;
+  align-items: center;
+  gap: $spacing-4;
+  padding: $spacing-4;
+  width: 100%;
+  background: none;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  -webkit-tap-highlight-color: transparent;
+
+  &:hover {
+    background-color: $gray-50;
+  }
+
+  &:active {
+    background-color: $gray-100;
+  }
+
+  @include respond(mobile) {
+    padding: $spacing-3;
+    gap: $spacing-3;
+  }
+}
+
+// Product image / 제품 이미지
+.productImage {
+  flex-shrink: 0;
+
+  img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: $radius-md;
+
+    @include respond(mobile) {
+      width: 60px;
+      height: 60px;
+    }
+  }
+}
+
+// Product info / 제품 정보
+.productInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-1;
+  min-width: 0;
+  text-align: left;
+}
+
+.mainText {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $gray-900;
+  font-family: $font-family-sans;
+  line-height: 1.4;
+
+  @include respond(mobile) {
+    font-size: $font-size-base;
+  }
+}
+
+.subText {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-regular;
+  color: $gray-600;
+  font-family: $font-family-sans;
+  line-height: 1.4;
+
+  @include respond(mobile) {
+    font-size: $font-size-xs;
+  }
+}
+
+// Chevron icon / 펼치기 아이콘
+.chevron {
+  width: 20px;
+  height: 20px;
+  color: $gray-400;
+  flex-shrink: 0;
+  transition:
+    transform 0.3s,
+    color 0.2s;
+
+  @include respond(mobile) {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+.chevronExpanded {
+  transform: rotate(180deg);
+  color: $gray-600;
+}
+
+// Card content (expandable) / 카드 내용
+.cardContent {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-4;
+  padding: 0 $spacing-4 $spacing-4 $spacing-4;
+  border-top: 1px solid $gray-100;
+  animation: slideDown 0.3s ease-in-out;
+
+  @include respond(mobile) {
+    padding: 0 $spacing-3 $spacing-3 $spacing-3;
+    gap: $spacing-3;
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    max-height: 0;
+  }
+  to {
+    opacity: 1;
+    max-height: 1000px;
+  }
+}
+
+// Info box (selection reason) / 정보 박스
+.infoBox {
+  background-color: $purple-500;
+  border-radius: $radius-lg;
+  padding: $spacing-3;
+  margin-top: $spacing-3;
+
+  @include respond(mobile) {
+    padding: $spacing-2;
+  }
+}
+
+.infoTitle {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  color: white;
+  font-family: $font-family-sans;
+  margin-bottom: $spacing-2;
+
+  @include respond(mobile) {
+    font-size: $font-size-xs;
+  }
+}
+
+.badgeContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-2;
+
+  @include respond(mobile) {
+    gap: $spacing-1;
+  }
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.25rem 0.75rem;
+  background-color: white;
+  border-radius: $radius-7xl;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-medium;
+  color: $purple-500;
+  font-family: $font-family-sans;
+  white-space: nowrap;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+
+  @include respond(mobile) {
+    padding: 0.2rem 0.6rem;
+    font-size: 0.7rem;
+  }
+}
+
+// Section / 섹션
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-2;
+}
+
+.sectionTitle {
+  font-size: $font-size-base;
+  font-weight: $font-weight-semibold;
+  color: $gray-900;
+  font-family: $font-family-sans;
+
+  @include respond(mobile) {
+    font-size: $font-size-sm;
+  }
+}
+
+// Textarea / 텍스트 입력
+.textarea {
+  width: 100%;
+  padding: $spacing-3;
+  border: 1px solid $gray-200;
+  border-radius: $radius-lg;
+  font-size: $font-size-base;
+  font-weight: $font-weight-regular;
+  color: $gray-900;
+  font-family: $font-family-sans;
+  line-height: 1.5;
+  resize: vertical;
+  transition: border-color 0.2s;
+
+  &::placeholder {
+    color: $gray-400;
+  }
+
+  &:focus {
+    outline: none;
+    border-color: #a855f7;
+  }
+
+  @include respond(mobile) {
+    font-size: $font-size-sm;
+    padding: $spacing-2;
+  }
+}

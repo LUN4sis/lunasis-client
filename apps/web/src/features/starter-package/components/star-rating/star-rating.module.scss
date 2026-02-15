@@ -1,0 +1,59 @@
+@use '@/styles' as *;
+
+// Container / 컨테이너
+.container {
+  display: flex;
+  align-items: center;
+  gap: $spacing-1;
+}
+
+// Star button / 별점 버튼
+.starButton {
+  background: none;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s;
+  -webkit-tap-highlight-color: transparent;
+
+  &:hover {
+    transform: scale(1.1);
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+}
+
+// Star icon / 별 아이콘
+.star {
+  transition: all 0.2s;
+
+  &--sm {
+    width: 20px;
+    height: 20px;
+  }
+
+  &--md {
+    width: 28px;
+    height: 28px;
+  }
+
+  &--lg {
+    width: 36px;
+    height: 36px;
+  }
+}
+
+// Star states / 별 상태
+.starEmpty {
+  color: $gray-300;
+}
+
+.starFilled {
+  color: #fbbf24; // Yellow color for filled stars
+}

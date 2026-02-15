@@ -1,0 +1,149 @@
+@use '@/styles' as *;
+
+// Brand item / 제품 카드
+.brandItem {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: $spacing-4;
+  background-color: white;
+  border-radius: $radius-xl;
+  padding: $spacing-4;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  transition: all 0.2s;
+  cursor: grab;
+  touch-action: none;
+
+  &:active {
+    cursor: grabbing;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  @include respond(mobile) {
+    padding: $spacing-3;
+    gap: $spacing-3;
+  }
+}
+
+// Rank badge / 순위 배지 (왼쪽 상단)
+.rankBadge {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: $radius-sm;
+  flex-shrink: 0;
+  z-index: 1;
+
+  @include respond(mobile) {
+    width: 28px;
+    height: 28px;
+  }
+}
+
+.rankNumber {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-bold;
+  color: white;
+  font-family: $font-family-sans;
+
+  @include respond(mobile) {
+    font-size: $font-size-xs;
+  }
+}
+
+// Product image / 제품 이미지
+.productImage {
+  flex-shrink: 0;
+  margin-left: $spacing-1;
+
+  img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: $radius-md;
+
+    @include respond(mobile) {
+      width: 80px;
+      height: 80px;
+    }
+  }
+}
+
+// Product info / 제품 정보
+.productInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-1;
+  min-width: 0;
+}
+
+.mainText {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $gray-900;
+  font-family: $font-family-sans;
+  line-height: 1.4;
+
+  @include respond(mobile) {
+    font-size: $font-size-base;
+  }
+}
+
+.subText {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-regular;
+  color: $gray-600;
+  font-family: $font-family-sans;
+  line-height: 1.4;
+
+  @include respond(mobile) {
+    font-size: $font-size-xs;
+  }
+}
+
+// Menu button / 메뉴 버튼
+.menuButton {
+  background: none;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  color: $gray-400;
+  flex-shrink: 0;
+  transition: color 0.2s;
+  -webkit-tap-highlight-color: transparent;
+  padding: 0;
+
+  &:hover {
+    color: $gray-600;
+  }
+
+  &:active {
+    color: $gray-700;
+  }
+
+  @include respond(mobile) {
+    width: 28px;
+    height: 28px;
+  }
+}
+
+.menuIcon {
+  width: 20px;
+  height: 20px;
+
+  @include respond(mobile) {
+    width: 18px;
+    height: 18px;
+  }
+}
