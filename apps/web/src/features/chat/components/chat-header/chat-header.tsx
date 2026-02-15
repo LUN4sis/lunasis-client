@@ -1,6 +1,6 @@
 'use client';
 
-import { useAuthStore } from '@repo/shared/features/auth/stores/use-auth-store';
+import { useAuthStore, useAuthStoreHydration } from '@repo/shared/features/auth';
 import { SupportedLocale } from '@repo/shared/types';
 import { Button } from '@web/components/ui/button/button';
 import { formatDate } from '@web/lib/utils';
@@ -16,7 +16,9 @@ export const ChatHeader = () => {
   const locale = (params.locale as SupportedLocale) || 'ko';
 
   const toggleSidebar = useChatStore((state) => state.toggleSidebar);
+  const hydrated = useAuthStoreHydration();
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
+  const showMenuButton = hydrated && isLoggedIn;
 
   return (
     <header className={styles.header}>
@@ -25,7 +27,7 @@ export const ChatHeader = () => {
         fullWidth={false}
         aria-label="open sidebar"
         onClick={toggleSidebar}
-        className={clsx(styles.menuButton, { [styles.hide]: !isLoggedIn })}
+        className={clsx(styles.menuButton, { [styles.hide]: !showMenuButton })}
       >
         <MenuIcon />
       </Button>
