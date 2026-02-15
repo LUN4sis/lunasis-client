@@ -22,6 +22,11 @@ export function useTokenExpiration(onLogout: () => void) {
   }, [onLogout]);
 
   const checkAndHandleExpiration = useCallback(() => {
+    logger.info('[TokenExpiration] Checking token expiration', {
+      accessTokenIssuedAt,
+      refreshTokenIssuedAt,
+      isLoggedIn,
+    });
     // early return: user not logged in
     if (!isLoggedIn) {
       logger.info('[TokenExpiration] User not logged in, skipping check');
