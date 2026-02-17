@@ -1,7 +1,10 @@
 import { logger, transformError } from '@repo/shared/utils';
 
-import { useAuthStore } from '../stores/use-auth-store';
+import { useAuthStore } from '../stores';
 
+/**
+ * Logout dependencies
+ */
 export interface LogoutDependencies {
   clearQueryCache?: () => void;
   performServerLogout?: (
@@ -10,6 +13,9 @@ export interface LogoutDependencies {
   ) => Promise<unknown>;
 }
 
+/**
+ * Logout Manager - Simplified version
+ */
 export class LogoutManager {
   private dependencies: LogoutDependencies;
 
@@ -17,22 +23,23 @@ export class LogoutManager {
     this.dependencies = dependencies;
   }
 
-  // clear client data
+  /**
+   * Clear client data
+   */
   clearClientData(): void {
     useAuthStore.getState().clearAuth();
-
     this.dependencies.clearQueryCache?.();
-
     logger.info('[LogoutManager] Client data cleared');
   }
 
-  // server logout
+  /**
+   * Perform server logout
+   */
   async performServerLogout(
     accessToken: string | null,
     refreshToken: string | null,
   ): Promise<void> {
     if (!accessToken && !refreshToken) return;
-
     if (!this.dependencies.performServerLogout) return;
 
     try {
@@ -44,13 +51,17 @@ export class LogoutManager {
     }
   }
 
-  // complete logout with server notification
+  /**
+   * Complete logout with server notification
+   */
   async completeLogout(accessToken: string | null, refreshToken: string | null): Promise<void> {
     this.clearClientData();
     await this.performServerLogout(accessToken, refreshToken);
   }
 
-  // synchronous logout for emergency cases (auto-logout)
+  /**
+   * Synchronous logout for emergency cases (auto-logout)
+   */
   logoutSync(): void {
     const { accessToken, refreshToken } = useAuthStore.getState();
     this.clearClientData();
@@ -61,6 +72,9 @@ export class LogoutManager {
   }
 }
 
+/**
+ * Create logout manager
+ */
 export function createLogoutManager(dependencies: LogoutDependencies = {}): LogoutManager {
   return new LogoutManager(dependencies);
 }

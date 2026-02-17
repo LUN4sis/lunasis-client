@@ -7,24 +7,24 @@ interface SkeletonProps {
   variant?: 'text' | 'rectangular' | 'circular';
 }
 
-export function Skeleton({ className, variant = 'rectangular' }: SkeletonProps) {
+export const Skeleton = ({ className, variant = 'rectangular' }: SkeletonProps) => {
   return <div className={clsx(styles.skeleton, styles[`skeleton--${variant}`], className)} />;
-}
+};
 
-export function ProductImageSkeleton() {
+export const ProductImageSkeleton = () => {
   return <Skeleton className={styles.productImageSkeleton} variant="rectangular" />;
-}
+};
 
-export function RatingSkeleton() {
+export const RatingSkeleton = () => {
   return (
     <div className={styles.ratingSkeleton}>
       <Skeleton className={styles.stars} variant="rectangular" />
       <Skeleton className={styles.count} variant="text" />
     </div>
   );
-}
+};
 
-export function TabSkeleton() {
+export const TabSkeleton = () => {
   return (
     <div className={styles.tabSkeleton}>
       <div className={styles.tabHeader}>
@@ -38,4 +38,4 @@ export function TabSkeleton() {
       </div>
     </div>
   );
-}
+};

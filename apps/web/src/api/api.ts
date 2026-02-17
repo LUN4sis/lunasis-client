@@ -3,7 +3,6 @@ import { API_CONFIG } from '@repo/shared/constants/config';
 import { useAuthStore } from '@repo/shared/features/auth';
 import { refreshTokenAPI } from '@repo/shared/features/auth/api/auth.api';
 import { isAuthError } from '@repo/shared/features/auth/constants/auth.constants';
-import { toTokens } from '@repo/shared/features/auth/types/auth.type';
 import { ErrorCode } from '@repo/shared/types';
 import { logoutSync } from '@web/features/auth/hooks/use-auth';
 
@@ -16,11 +15,10 @@ export const api = new BaseApi({
   getRefreshToken: () => useAuthStore.getState().refreshToken,
   onTokenRefresh: async (_accessToken, refreshToken) => {
     const response = await refreshTokenAPI(refreshToken);
-    const tokens = toTokens({ data: response }, refreshToken);
 
     return {
-      accessToken: tokens.accessToken!,
-      refreshToken: tokens.refreshToken ?? undefined,
+      accessToken: response.accessToken,
+      refreshToken: response.refreshToken ?? refreshToken ?? undefined,
     };
   },
 

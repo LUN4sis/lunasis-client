@@ -1,7 +1,6 @@
 'use client';
 
 import { GoogleOAuthProvider } from '@react-oauth/google';
-import { logger } from '@repo/shared/utils';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { ToastContainer } from '@web/components/ui/toast';
 import { queryClient } from '@web/lib/query-client';
@@ -30,8 +29,6 @@ function MSWProvider({ children }: ProvidersProps) {
   useEffect(() => {
     const initializeMocks = async () => {
       await initMocks();
-      const mswEnabled = process.env.NEXT_PUBLIC_ENABLE_MSW === 'true';
-      logger.info('[MSWProvider] Ready to render', { mswEnabled });
       setIsReady(true);
     };
 

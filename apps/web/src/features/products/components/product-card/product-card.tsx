@@ -4,6 +4,7 @@ import type { Product } from '@repo/shared/types';
 import { Badge } from '@web/components/ui/badge';
 import { Rating } from '@web/components/ui/rating';
 import { useIsDesktop } from '@web/lib/hooks';
+import clsx from 'clsx';
 import { memo, useState } from 'react';
 
 import styles from './product-card.module.scss';
@@ -23,12 +24,26 @@ export const ProductCard = memo(({ product, rank, onClick, className }: ProductC
     onClick?.(product.productId);
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      handleClick();
+    }
+  };
+
   const handleBadgeClick = (e: React.MouseEvent) => {
     e.stopPropagation();
   };
 
   return (
-    <article className={`${styles.card} ${className || ''}`} onClick={handleClick}>
+    <article
+      className={clsx(styles.card, className)}
+      onClick={handleClick}
+      onKeyDown={handleKeyDown}
+      role="button"
+      tabIndex={0}
+      aria-label={`View details for ${product.name}`}
+    >
       <div className={styles.imageWrapper}>
         {rank && (
           <div className={styles.rank}>

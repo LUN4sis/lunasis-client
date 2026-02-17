@@ -1,6 +1,6 @@
 import { createApiClient } from '@repo/shared/api';
 
-import type { LoginResponse, RefreshTokenResponse } from '../types/auth.type';
+import type { AuthSessionResponse, RefreshTokenResponse } from '../types';
 
 const API_BASE_URL =
   (typeof process !== 'undefined' && process.env.NEXT_PUBLIC_API_URL) ||
@@ -12,14 +12,17 @@ const API_BASE_URL =
  * @request body {loginCode: string}
  * @response {LoginResponse}
  */
-export const googleLoginAPI = async (loginCode: string): Promise<LoginResponse> => {
+export const googleLoginAPI = async (loginCode: string): Promise<AuthSessionResponse> => {
   const api = createApiClient({ baseURL: API_BASE_URL });
-  return await api.post<LoginResponse, { loginCode: string }>('/auth/google', { loginCode });
+  return await api.post<AuthSessionResponse, { loginCode: string }>('/auth/google', { loginCode });
 };
 
-export const appleLoginAPI = async (loginCode: string, name: string): Promise<LoginResponse> => {
+export const appleLoginAPI = async (
+  loginCode: string,
+  name: string,
+): Promise<AuthSessionResponse> => {
   const api = createApiClient({ baseURL: API_BASE_URL });
-  return await api.post<LoginResponse, { loginCode: string; name: string }>('/auth/apple', {
+  return await api.post<AuthSessionResponse, { loginCode: string; name: string }>('/auth/apple', {
     loginCode,
     name,
   });

@@ -10,7 +10,7 @@ export interface RatingProps {
   size?: 'sm' | 'md';
 }
 
-export function Rating({ rating, reviewCount, size = 'sm' }: RatingProps) {
+export const Rating = ({ rating, reviewCount, size = 'sm' }: RatingProps) => {
   const fullStars = Math.floor(rating);
   const hasHalfStar = rating % 1 >= 0.5;
   const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
@@ -35,7 +35,7 @@ export function Rating({ rating, reviewCount, size = 'sm' }: RatingProps) {
       {reviewCount !== undefined && <p className={styles.count}>({reviewCount})</p>}
     </div>
   );
-}
+};
 
 interface StarProps {
   type: 'full' | 'half' | 'empty';
