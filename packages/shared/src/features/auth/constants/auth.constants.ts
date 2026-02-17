@@ -5,10 +5,6 @@ export const TOKEN_EXPIRATION = {
   ACCESS_TOKEN_MS: 24 * 60 * 60 * 1000,
   /** Refresh token expiration in milliseconds (720 hours / 30 days) */
   REFRESH_TOKEN_MS: 720 * 60 * 60 * 1000,
-  /** Buffer time before expiration to trigger early refresh (5 minutes) */
-  REFRESH_BUFFER_MS: 5 * 60 * 1000,
-  /** Default check interval in milliseconds (1 minute) */
-  DEFAULT_CHECK_INTERVAL_MS: 1 * 60 * 1000,
 } as const;
 
 export const AUTH_ERROR_CODES: readonly ErrorCode[] = [
@@ -20,7 +16,9 @@ export const AUTH_ERROR_CODES: readonly ErrorCode[] = [
   ErrorCode.FORBIDDEN,
 ] as const;
 
-// check if error code requires logout
+/**
+ * Check if error code requires logout
+ */
 export function isAuthError(errorCode: ErrorCode): boolean {
   return AUTH_ERROR_CODES.includes(errorCode);
 }

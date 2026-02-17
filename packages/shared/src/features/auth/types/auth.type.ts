@@ -1,48 +1,28 @@
-/**
- * Login Response (also used as ExchangeResponse)
- */
-export interface LoginResponse {
+export interface AuthSessionResponse {
   accessToken: string;
   refreshToken: string;
-  firstLogin: boolean;
   nickname: string;
   privateChat: boolean;
+  firstLogin: boolean;
 }
 
-/**
- * Type alias for backward compatibility
- */
-export type ExchangeResponse = LoginResponse;
-
-/**
- * Token Refresh Response
- */
 export interface RefreshTokenResponse {
   accessToken: string;
   refreshToken?: string;
 }
 
-/**
- * Token Pair
- */
-export interface TokenPair {
+// for zustand
+export interface AuthState {
   accessToken: string | null;
   refreshToken: string | null;
-}
 
-/**
- * Convert API response to TokenPair
- */
-export function toTokens(
-  response: { data?: RefreshTokenResponse },
-  currentRefreshToken: string,
-): TokenPair {
-  if (!response.data) {
-    return { accessToken: null, refreshToken: null };
-  }
+  nickname: string | null;
+  privateChat: boolean;
+  firstLogin: boolean;
 
-  return {
-    accessToken: response.data.accessToken,
-    refreshToken: response.data.refreshToken ?? currentRefreshToken,
-  };
+  isLoggedIn: boolean;
+
+  updateTokens: (tokens: Pick<AuthState, 'accessToken' | 'refreshToken'>) => void;
+  setProfile: (profile: Pick<AuthState, 'nickname' | 'firstLogin' | 'privateChat'>) => void;
+  clearAuth: () => void;
 }
