@@ -1,2 +1,1 @@
-export * from './logout-manager';
-export * from './token-manager';
+export { LogoutManager, createLogoutManager, type LogoutDependencies } from './logout.utils';

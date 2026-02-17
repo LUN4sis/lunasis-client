@@ -1,17 +1,20 @@
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 
-import type { AuthProfile, AuthState, TokenUpdatePayload } from '../types/store.type';
+import type { AuthState } from '../types/auth.type';
 
-const initialState = {
+const initialState: Pick<
+  AuthState,
+  'isLoggedIn' | 'accessToken' | 'refreshToken' | 'nickname' | 'firstLogin' | 'privateChat'
+> = {
+  isLoggedIn: false,
+
   accessToken: null,
   refreshToken: null,
-  accessTokenIssuedAt: null,
-  refreshTokenIssuedAt: null,
+
   nickname: null,
   firstLogin: false,
   privateChat: false,
-  isLoggedIn: false,
 };
 
 export const useAuthStore = create<AuthState>()(
@@ -19,17 +22,15 @@ export const useAuthStore = create<AuthState>()(
     (set) => ({
       ...initialState,
 
-      updateTokens: (tokens: TokenUpdatePayload) =>
-        set((state) => ({
+      updateTokens: (tokens) => {
+        set({
           accessToken: tokens.accessToken,
           refreshToken: tokens.refreshToken,
-          accessTokenIssuedAt: tokens.accessTokenIssuedAt ?? Date.now(),
-          refreshTokenIssuedAt:
-            tokens.refreshTokenIssuedAt ?? state.refreshTokenIssuedAt ?? Date.now(),
           isLoggedIn: true,
-        })),
+        });
+      },
 
-      setProfile: (profile: AuthProfile) =>
+      setProfile: (profile) =>
         set({
           nickname: profile.nickname,
           firstLogin: profile.firstLogin,
@@ -41,46 +42,29 @@ export const useAuthStore = create<AuthState>()(
     {
       name: 'auth-storage',
       version: 1,
-      storage: createJSONStorage(() => {
-        if (typeof window !== 'undefined') {
-          return window.localStorage;
-        }
-        return {
-          getItem: () => null,
-          setItem: () => {},
-          removeItem: () => {},
-        };
-      }),
+      storage: createJSONStorage(() => window.localStorage),
+
       partialize: (state) => ({
         accessToken: state.accessToken,
         refreshToken: state.refreshToken,
-        accessTokenIssuedAt: state.accessTokenIssuedAt,
-        refreshTokenIssuedAt: state.refreshTokenIssuedAt,
         nickname: state.nickname,
         firstLogin: state.firstLogin,
         privateChat: state.privateChat,
         isLoggedIn: state.isLoggedIn,
       }),
-      migrate: (persistedState: any, version: number) => {
-        if (!persistedState) {
-          return null;
-        }
 
-        if (version === 0) {
-          return {
-            accessToken: persistedState?.accessToken ?? null,
-            refreshToken: persistedState?.refreshToken ?? null,
-            accessTokenIssuedAt: persistedState?.accessTokenIssuedAt ?? null,
-            refreshTokenIssuedAt: persistedState?.refreshTokenIssuedAt ?? null,
-            nickname: persistedState?.nickname ?? null,
-            privateChat: persistedState?.privateChat ?? false,
-            firstLogin: persistedState?.firstLogin ?? false,
-            isLoggedIn: persistedState?.isLoggedIn ?? false,
-          };
-        }
+      migrate: (persistedState: unknown) => {
+        if (!persistedState || typeof persistedState !== 'object') return initialState;
 
-        return persistedState;
+        const state = persistedState as Partial<AuthState>;
+
+        return {
+          ...initialState,
+          ...state,
+          isLoggedIn: !!state.accessToken,
+        };
       },
+
       onRehydrateStorage: () => (state) => {
         if (state) {
           state.isLoggedIn = !!state.accessToken;
