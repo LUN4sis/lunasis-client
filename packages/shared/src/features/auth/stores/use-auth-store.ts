@@ -5,21 +5,15 @@ import type { AuthState } from '../types/auth.type';
 
 const initialState: Pick<
   AuthState,
-  'isLoggedIn' | 'accessToken' | 'refreshToken' | 'nickname' | 'firstLogin' | 'privateChat'
+  'isLoggedIn' | 'accessToken' | 'refreshToken' | 'nickname' | 'firstLogin' | 'privateChat' | '_hasHydrated'
 > = {
   isLoggedIn: false,
-
   accessToken: null,
   refreshToken: null,
-
   nickname: null,
   firstLogin: false,
   privateChat: false,
-<<<<<<< HEAD
-  isLoggedIn: false,
   _hasHydrated: false,
-=======
->>>>>>> 5955747d69fc94c0c7ce03f637ba16b9cd3e0558
 };
 
 export const useAuthStore = create<AuthState>()(
@@ -60,22 +54,8 @@ export const useAuthStore = create<AuthState>()(
         isLoggedIn: state.isLoggedIn,
       }),
 
-<<<<<<< HEAD
-        if (version === 0) {
-          return {
-            accessToken: persistedState?.accessToken ?? null,
-            refreshToken: persistedState?.refreshToken ?? null,
-            accessTokenIssuedAt: persistedState?.accessTokenIssuedAt ?? null,
-            refreshTokenIssuedAt: persistedState?.refreshTokenIssuedAt ?? null,
-            nickname: persistedState?.nickname ?? null,
-            privateChat: persistedState?.privateChat ?? false,
-            firstLogin: persistedState?.firstLogin ?? false,
-          };
-        }
-=======
       migrate: (persistedState: unknown) => {
         if (!persistedState || typeof persistedState !== 'object') return initialState;
->>>>>>> 5955747d69fc94c0c7ce03f637ba16b9cd3e0558
 
         const state = persistedState as Partial<AuthState>;
 
@@ -85,20 +65,11 @@ export const useAuthStore = create<AuthState>()(
           isLoggedIn: !!state.accessToken,
         };
       },
-<<<<<<< HEAD
-      onRehydrateStorage: () => (state, error) => {
-        if (error) {
-          console.warn('[auth-storage] Rehydration error:', error);
-        }
-        // Directly mutate state (allowed in onRehydrateStorage callback)
-=======
 
       onRehydrateStorage: () => (state) => {
->>>>>>> 5955747d69fc94c0c7ce03f637ba16b9cd3e0558
         if (state) {
           // Prefer token presence; fall back to persisted isLoggedIn (e.g. legacy or token-less persist)
           state.isLoggedIn = state.accessToken != null ? true : state.isLoggedIn;
-          state._hasHydrated = true;
         }
       },
     },

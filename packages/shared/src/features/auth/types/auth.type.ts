@@ -21,8 +21,10 @@ export interface AuthState {
   firstLogin: boolean;
 
   isLoggedIn: boolean;
+  _hasHydrated: boolean;
 
   updateTokens: (tokens: Pick<AuthState, 'accessToken' | 'refreshToken'>) => void;
   setProfile: (profile: Pick<AuthState, 'nickname' | 'firstLogin' | 'privateChat'>) => void;
   clearAuth: () => void;
+  setHasHydrated: (hasHydrated: boolean) => void;
 }
