@@ -1,4 +1,3 @@
-import clsx from 'clsx';
 import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
 
@@ -9,7 +8,7 @@ const NotFound = async () => {
 
   return (
     <div className={styles.container}>
-      <div className={clsx(styles.content, styles.mounted)}>
+      <div className={`${styles.content} ${styles.mounted}`}>
         <div className={styles.graphic} role="img" aria-label="404 Not Found">
           <div className={styles.floatWrapper}>
             <div className={styles.planet}>

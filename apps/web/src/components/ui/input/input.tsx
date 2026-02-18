@@ -28,15 +28,12 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
       className,
     );
 
-    const variantClass = `input__field${variant.charAt(0).toUpperCase() + variant.slice(1)}`;
-    const sizeClass = `input__field${size.charAt(0).toUpperCase() + size.slice(1)}`;
-
     const inputFieldClasses = clsx(
       styles.input__field,
-      styles[variantClass],
-      styles[sizeClass],
+      styles[`input__field--${variant}`],
+      styles[`input__field--${size}`],
       {
-        [styles.input__fieldError]: !!error,
+        [styles['input__field--error']]: !!error,
       },
       inputClassName,
     );

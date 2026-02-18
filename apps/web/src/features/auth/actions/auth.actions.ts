@@ -1,6 +1,6 @@
 'use server';
 
-import type { AuthSessionResponse } from '@repo/shared/features/auth';
+import type { ExchangeResponse } from '@repo/shared/features/auth';
 import { appleLoginAPI, googleLoginAPI, logoutAPI } from '@repo/shared/features/auth/api/auth.api';
 import { ErrorCode } from '@repo/shared/types';
 import { AxiosError } from 'axios';
@@ -24,7 +24,7 @@ interface ActionResponse<T = unknown> {
 export async function exchangeAuthToken(
   credential: string,
   name?: string,
-): Promise<ActionResponse<AuthSessionResponse>> {
+): Promise<ActionResponse<ExchangeResponse>> {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080/api';
 
   console.log('[Server Action] exchangeAuthToken called', {
@@ -38,48 +38,10 @@ export async function exchangeAuthToken(
     // If name is provided, use Apple login API
     const data = name ? await appleLoginAPI(credential, name) : await googleLoginAPI(credential);
 
-    console.log('[Server Action] Token exchange response received', {
+    console.log('[Server Action] Token exchange successful', {
       hasData: !!data,
-      hasAccessToken: !!data?.accessToken,
-      hasRefreshToken: !!data?.refreshToken,
-      accessTokenLength: data?.accessToken?.length,
-      refreshTokenLength: data?.refreshToken?.length,
-      dataKeys: data ? Object.keys(data) : [],
-      rawData: data,
     });
 
-    // Check if server returned an error response
-    // 서버가 에러 응답을 반환했는지 확인
-    if (data && typeof data === 'object' && 'success' in data && data.success === false) {
-      console.error('[Server Action] Server returned error response:', data);
-      return {
-        success: false,
-        error: {
-          code: ErrorCode.EXCHANGE_FAILED,
-          message:
-            'message' in data && typeof data.message === 'string'
-              ? data.message
-              : 'Token exchange failed',
-          details: JSON.stringify(data),
-        },
-      };
-    }
-
-    // Validate required fields
-    // 필수 필드 검증
-    if (!data?.accessToken || !data?.refreshToken) {
-      console.error('[Server Action] Missing required tokens in response');
-      return {
-        success: false,
-        error: {
-          code: ErrorCode.EXCHANGE_FAILED,
-          message: 'Invalid response from server: missing tokens',
-          details: JSON.stringify(data),
-        },
-      };
-    }
-
-    console.log('[Server Action] Token exchange successful');
     return {
       success: true,
       data,

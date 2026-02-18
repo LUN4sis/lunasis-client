@@ -1,6 +1,6 @@
 'use client';
 
-import { useAuthStore } from '@repo/shared/features/auth';
+import { useAuthStore, useAuthStoreHydration } from '@repo/shared/features/auth';
 import { SupportedLocale } from '@repo/shared/types';
 import { getErrorMessage } from '@repo/shared/utils';
 import { toast } from '@web/components/ui/toast';
@@ -18,7 +18,6 @@ import { useTranslations } from 'next-intl';
 import { useEffect, useMemo, useState } from 'react';
 
 import styles from './chat.module.scss';
-import { logger } from '@repo/shared/utils';
 
 export default function ChatPage() {
   const t = useTranslations('chat');
@@ -29,13 +28,10 @@ export default function ChatPage() {
   const [isInitialized, setIsInitialized] = useState(false);
   const [isMounted, setIsMounted] = useState(true);
   const [isReady, setIsReady] = useState(false);
+  const hydrated = useAuthStoreHydration();
   const isLoggedIn = useAuthStore((s) => s.isLoggedIn);
   const { isIncognito, setPendingMessages, setCurrentChatId } = useChatStore();
-  const isAnonymous = isIncognito || !isLoggedIn;
-
-  logger.info('Is logged In:', { isLoggedIn });
-  logger.info('Is Incognito:', { isIncognito });
-  logger.info('Is Anonymous:', { isAnonymous });
+  const isAnonymous = isIncognito || !hydrated || !isLoggedIn;
 
   // Track component mount state and trigger fade-in
   useEffect(() => {
@@ -78,7 +74,7 @@ export default function ChatPage() {
       setMessages([welcomeMessage]);
       setIsInitialized(true);
     } else {
-      // Update welcome message when incognito mode changes
+      // Update welcome message when incognito mode or hydration state changes
       setMessages((prev) => {
         if (prev.length === 1 && prev[0].id === 'welcome-1') {
           return [
@@ -91,7 +87,7 @@ export default function ChatPage() {
         return prev;
       });
     }
-  }, [isInitialized, welcomeText]);
+  }, [isInitialized, welcomeText, hydrated]);
 
   // cleanup object URLs(for memory leak prevention)
   useEffect(() => {
