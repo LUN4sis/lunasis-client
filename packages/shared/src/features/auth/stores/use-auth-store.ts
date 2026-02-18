@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 
 import type { AuthState } from '../types/auth.type';
+import { useAuthHydrationStore } from './use-auth-hydration-store';
 
 const initialState = {
   accessToken: null,
@@ -12,7 +13,6 @@ const initialState = {
   firstLogin: false,
   privateChat: false,
   isLoggedIn: false,
-  _hasHydrated: false,
 };
 
 export const useAuthStore = create<AuthState>()(
@@ -78,11 +78,11 @@ export const useAuthStore = create<AuthState>()(
         if (error) {
           console.warn('[auth-storage] Rehydration error:', error);
         }
-        // Directly mutate state (allowed in onRehydrateStorage callback)
         if (state) {
           // Prefer token presence; fall back to persisted isLoggedIn (e.g. legacy or token-less persist)
           state.isLoggedIn = state.accessToken != null ? true : state.isLoggedIn;
         }
+        useAuthHydrationStore.getState().setHydrated();
       },
     },
   ),

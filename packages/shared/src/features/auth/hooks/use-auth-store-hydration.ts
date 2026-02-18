@@ -1,14 +1,11 @@
 'use client';
 
-import { useAuthStore } from '../stores';
+import { useAuthHydrationStore } from '../stores/use-auth-hydration-store';
 
 /**
- * Track zustand auth store hydration status
- * Returns true when the store has been rehydrated from localStorage
- *
- * This hook uses the _hasHydrated flag set by onRehydrateStorage
- * to ensure we only use auth state after persist middleware has loaded from storage
+ * Returns true when the auth store has been rehydrated from localStorage.
+ * Use this to avoid reading auth state before persist has loaded (e.g. to prevent flash of wrong UI).
  */
 export function useAuthStoreHydration() {
-  return useAuthStore((state) => state._hasHydrated);
+  return useAuthHydrationStore((state) => state.hasHydrated);
 }
