@@ -2,7 +2,7 @@
 
 import { ROUTES } from '@repo/shared/constants';
 import { useAuthStore } from '@repo/shared/features/auth';
-import type { AuthSessionResponse } from '@repo/shared/features/auth/types';
+import type { ExchangeResponse } from '@repo/shared/features/auth/types';
 import { AppError, ERROR_MESSAGES, ErrorCode } from '@repo/shared/types';
 import { logger, transformError } from '@repo/shared/utils';
 import { useMutation } from '@tanstack/react-query';
@@ -55,10 +55,6 @@ interface LoginParams {
   name?: string;
 }
 
-interface UseLoginOptions {
-  onErrorCallback?: () => void;
-}
-
 // Supported locales for login redirect (avoid importing next-intl in hook)
 // 로그인 리다이렉트용 지원 로케일 (훅에서 next-intl 의존성 최소화)
 const LOGIN_SUPPORTED_LOCALES = ['ko', 'en'] as const;
@@ -71,8 +67,8 @@ const LOGIN_DEFAULT_LOCALE = 'ko';
  * OAuth 로그인/토큰 교환을 React Query로 처리하는 훅
  * Google 및 Apple OAuth 지원
  */
-export function useLogin(options?: UseLoginOptions) {
-  const { updateTokens, setProfile, clearAuth } = useAuthStore();
+export function useLogin() {
+  const { updateTokens, setProfile } = useAuthStore();
 
   const loginMutation = useMutation({
     mutationFn: async ({ code, name }: LoginParams) => {
@@ -90,7 +86,7 @@ export function useLogin(options?: UseLoginOptions) {
       });
 
       // Validate result / 결과 검증
-      if (!result.success) {
+      if (!result.success || !result.data) {
         const errorCode = (result.error?.code as ErrorCode) || ErrorCode.EXCHANGE_FAILED;
         const errorMessage = result.error?.message || ERROR_MESSAGES[errorCode];
 
@@ -103,41 +99,13 @@ export function useLogin(options?: UseLoginOptions) {
         throw new AppError(errorCode, errorMessage);
       }
 
-      // Validate data exists / 데이터 존재 확인
-      if (!result.data) {
-        logger.error('[Auth] Token exchange succeeded but no data returned');
-        throw new AppError(ErrorCode.EXCHANGE_FAILED, 'No data returned from server');
-      }
-
       return result.data;
     },
-    onSuccess: async (data: AuthSessionResponse) => {
+    onSuccess: async (data: ExchangeResponse) => {
       logger.info('[Auth] Login successful, updating tokens...', {
         firstLogin: data.firstLogin,
         hasNickname: !!data.nickname,
-        hasAccessToken: !!data.accessToken,
-        hasRefreshToken: !!data.refreshToken,
       });
-
-      // Double-check tokens are not empty (safety measure)
-      // 토큰이 비어있지 않은지 재확인 (안전장치)
-      if (!data.accessToken || !data.refreshToken) {
-        logger.error('[Auth] Received empty tokens from server (unexpected)', {
-          accessToken: data.accessToken,
-          refreshToken: data.refreshToken,
-        });
-
-        clearAuth();
-
-        // Call error callback before throwing (for immediate redirect)
-        // throw하기 전에 에러 콜백 호출 (즉시 리다이렉트용)
-        if (options?.onErrorCallback) {
-          logger.info('[Auth] Calling onErrorCallback before throwing error');
-          options.onErrorCallback();
-        }
-
-        throw new AppError(ErrorCode.EXCHANGE_FAILED, 'Invalid tokens received from server');
-      }
 
       updateTokens({
         accessToken: data.accessToken,
@@ -218,13 +186,6 @@ export function useLogin(options?: UseLoginOptions) {
           details: appError.details,
         },
       });
-
-      clearAuth();
-
-      if (options?.onErrorCallback) {
-        logger.info('[Auth] Calling onErrorCallback for immediate redirect');
-        options.onErrorCallback();
-      }
     },
   });
 

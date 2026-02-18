@@ -50,7 +50,7 @@
     position: relative;
     z-index: 0;
 
-    &Outline {
+    &--outline {
       border: 1px solid colors.$gray-400;
       background-color: colors.$white;
 
@@ -63,7 +63,7 @@
         border-color: colors.$gray-400;
       }
 
-      &.input__fieldError {
+      &.input__field--error {
         border-color: colors.$red;
 
         &:focus {
@@ -72,7 +72,7 @@
       }
     }
 
-    &Filled {
+    &--filled {
       border: 1px solid transparent;
       background-color: colors.$gray-300;
 
@@ -86,7 +86,7 @@
         background-color: colors.$gray-150;
       }
 
-      &.input__fieldError {
+      &.input__field--error {
         border-color: colors.$red;
 
         &:focus {
@@ -100,16 +100,16 @@
       cursor: not-allowed;
     }
 
-    &Sm {
+    &--sm {
       padding: spacing.$spacing-1 spacing.$spacing-2;
       font-size: typography.$font-size-lg;
     }
 
-    &Md {
+    &--md {
       padding: spacing.$spacing-2 spacing.$spacing-3;
     }
 
-    &Lg {
+    &--lg {
       padding: spacing.$spacing-3 spacing.$spacing-4;
       font-size: typography.$font-size-xl;
     }
@@ -129,11 +129,11 @@
     &__field {
       min-height: 2.5rem;
 
-      &Sm {
+      &--sm {
         min-height: 2rem;
       }
 
-      &Lg {
+      &--lg {
         min-height: 3rem;
       }
     }

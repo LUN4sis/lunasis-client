@@ -2,6 +2,7 @@ import '../globals.scss';
 
 import { Providers, ViewportHeightSetter } from '@web/components/layouts';
 import { Loading } from '@web/components/ui/loading';
+import { TokenExpirationHandler } from '@web/features/auth/components/token-expiration-handler';
 import { routing } from '@web/i18n/routing';
 import type { Metadata } from 'next';
 import { DM_Sans } from 'next/font/google';
@@ -87,7 +88,10 @@ export default async function LocaleLayout({ children, params }: Props) {
         <ViewportHeightSetter />
         <Providers>
           <NextIntlClientProvider messages={messages}>
-            <Suspense fallback={<Loading />}>{children}</Suspense>
+            <Suspense fallback={<Loading />}>
+              <TokenExpirationHandler />
+              {children}
+            </Suspense>
           </NextIntlClientProvider>
         </Providers>
       </body>

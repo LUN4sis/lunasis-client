@@ -9,7 +9,7 @@ import 'react-native-reanimated';
 import { useColorScheme } from '@/components/useColorScheme';
 import { useAuthStore } from '@/src/stores/use-auth-store';
 
-import type { AuthState } from '@repo/shared/features/auth';
+import type { AuthState } from '@repo/shared/features/auth/types/store.type';
 
 export {
   // Catch any errors thrown by the Layout component.

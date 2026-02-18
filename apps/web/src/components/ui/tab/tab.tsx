@@ -12,14 +12,14 @@ interface TabProps {
   onTabChange: (tabId: string) => void;
 }
 
-export const Tab = ({ tabs, activeTab, onTabChange }: TabProps) => {
+export function Tab({ tabs, activeTab, onTabChange }: TabProps) {
   return (
     <div className={styles.container}>
       <div className={styles.tabList} role="tablist">
         {tabs.map((tab) => (
           <button
             key={tab.id}
-            className={clsx(styles.tab, activeTab === tab.id && styles.tabActive)}
+            className={clsx(styles.tab, activeTab === tab.id && styles['tab--active'])}
             role="tab"
             aria-selected={activeTab === tab.id}
             aria-controls={`tabpanel-${tab.id}`}
@@ -34,7 +34,7 @@ export const Tab = ({ tabs, activeTab, onTabChange }: TabProps) => {
         <div
           key={tab.id}
           id={`tabpanel-${tab.id}`}
-          className={clsx(styles.tabPanel, activeTab === tab.id && styles.tabPanelActive)}
+          className={clsx(styles.tabPanel, activeTab === tab.id && styles['tabPanel--active'])}
           role="tabpanel"
           aria-labelledby={`tab-${tab.id}`}
           hidden={activeTab !== tab.id}
@@ -44,4 +44,4 @@ export const Tab = ({ tabs, activeTab, onTabChange }: TabProps) => {
       ))}
     </div>
   );
-};
+}

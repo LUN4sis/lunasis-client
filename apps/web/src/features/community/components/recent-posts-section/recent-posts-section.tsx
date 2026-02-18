@@ -32,7 +32,7 @@ export const RecentPostsSection = ({
 
   if (posts.length === 0) {
     return (
-      <section className={clsx(styles.section, className)}>
+      <section className={`${styles.section} ${className || ''}`}>
         <div className={styles.emptyState}>
           <p className={styles.emptyMessage}>
             No posts yet in this category.

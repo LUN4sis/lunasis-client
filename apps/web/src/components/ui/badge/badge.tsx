@@ -10,28 +10,14 @@ export interface BadgeProps {
   onClick?: (e: React.MouseEvent) => void;
 }
 
-export const Badge = ({ text, colorScheme = 'purple', size = 'md', onClick }: BadgeProps) => {
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (onClick && (e.key === 'Enter' || e.key === ' ')) {
-      e.preventDefault();
-      onClick(e as unknown as React.MouseEvent);
-    }
-  };
-
-  const colorClass = `badge${colorScheme.charAt(0).toUpperCase() + colorScheme.slice(1)}`;
-  const sizeClass = `badge${size.charAt(0).toUpperCase() + size.slice(1)}`;
-
+export function Badge({ text, colorScheme = 'purple', size = 'md', onClick }: BadgeProps) {
   return (
     <span
-      className={clsx(styles.badge, styles[colorClass], styles[sizeClass])}
+      className={clsx(styles.badge, styles[`badge--${colorScheme}`], styles[`badge--${size}`])}
       onClick={onClick}
-      onKeyDown={onClick ? handleKeyDown : undefined}
-      role={onClick ? 'button' : undefined}
-      tabIndex={onClick ? 0 : undefined}
-      aria-label={onClick ? text : undefined}
       style={{ cursor: onClick ? 'pointer' : 'default' }}
     >
       {text}
     </span>
   );
-};
+}

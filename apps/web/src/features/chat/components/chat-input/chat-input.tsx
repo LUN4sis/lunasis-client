@@ -18,7 +18,7 @@ interface ChatInputProps {
   disabled?: boolean;
 }
 
-export const ChatInput = ({ onSend, disabled = false }: ChatInputProps) => {
+export function ChatInput({ onSend, disabled = false }: ChatInputProps) {
   const t = useTranslations('chat');
 
   const [message, setMessage] = useState('');
@@ -185,4 +185,4 @@ export const ChatInput = ({ onSend, disabled = false }: ChatInputProps) => {
       </div>
     </div>
   );
-};
+}

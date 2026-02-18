@@ -1,25 +1,18 @@
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 
-import type { AuthState } from '../types/auth.type';
+import type { AuthProfile, AuthState, TokenUpdatePayload } from '../types/store.type';
 
-const initialState: Pick<
-  AuthState,
-  'isLoggedIn' | 'accessToken' | 'refreshToken' | 'nickname' | 'firstLogin' | 'privateChat'
-> = {
-  isLoggedIn: false,
-
+const initialState = {
   accessToken: null,
   refreshToken: null,
-
+  accessTokenIssuedAt: null,
+  refreshTokenIssuedAt: null,
   nickname: null,
   firstLogin: false,
   privateChat: false,
-<<<<<<< HEAD
   isLoggedIn: false,
   _hasHydrated: false,
-=======
->>>>>>> 5955747d69fc94c0c7ce03f637ba16b9cd3e0558
 };
 
 export const useAuthStore = create<AuthState>()(
@@ -27,15 +20,17 @@ export const useAuthStore = create<AuthState>()(
     (set) => ({
       ...initialState,
 
-      updateTokens: (tokens) => {
-        set({
+      updateTokens: (tokens: TokenUpdatePayload) =>
+        set((state) => ({
           accessToken: tokens.accessToken,
           refreshToken: tokens.refreshToken,
+          accessTokenIssuedAt: tokens.accessTokenIssuedAt ?? Date.now(),
+          refreshTokenIssuedAt:
+            tokens.refreshTokenIssuedAt ?? state.refreshTokenIssuedAt ?? Date.now(),
           isLoggedIn: true,
-        });
-      },
+        })),
 
-      setProfile: (profile) =>
+      setProfile: (profile: AuthProfile) =>
         set({
           nickname: profile.nickname,
           firstLogin: profile.firstLogin,
@@ -49,18 +44,31 @@ export const useAuthStore = create<AuthState>()(
     {
       name: 'auth-storage',
       version: 1,
-      storage: createJSONStorage(() => window.localStorage),
-
+      storage: createJSONStorage(() => {
+        if (typeof window !== 'undefined') {
+          return window.localStorage;
+        }
+        return {
+          getItem: () => null,
+          setItem: () => {},
+          removeItem: () => {},
+        };
+      }),
       partialize: (state) => ({
         accessToken: state.accessToken,
         refreshToken: state.refreshToken,
+        accessTokenIssuedAt: state.accessTokenIssuedAt,
+        refreshTokenIssuedAt: state.refreshTokenIssuedAt,
         nickname: state.nickname,
         firstLogin: state.firstLogin,
         privateChat: state.privateChat,
         isLoggedIn: state.isLoggedIn,
       }),
+      migrate: (persistedState: any, version: number) => {
+        if (!persistedState) {
+          return null;
+        }
 
-<<<<<<< HEAD
         if (version === 0) {
           return {
             accessToken: persistedState?.accessToken ?? null,
@@ -72,29 +80,14 @@ export const useAuthStore = create<AuthState>()(
             firstLogin: persistedState?.firstLogin ?? false,
           };
         }
-=======
-      migrate: (persistedState: unknown) => {
-        if (!persistedState || typeof persistedState !== 'object') return initialState;
->>>>>>> 5955747d69fc94c0c7ce03f637ba16b9cd3e0558
 
-        const state = persistedState as Partial<AuthState>;
-
-        return {
-          ...initialState,
-          ...state,
-          isLoggedIn: !!state.accessToken,
-        };
+        return persistedState;
       },
-<<<<<<< HEAD
       onRehydrateStorage: () => (state, error) => {
         if (error) {
           console.warn('[auth-storage] Rehydration error:', error);
         }
         // Directly mutate state (allowed in onRehydrateStorage callback)
-=======
-
-      onRehydrateStorage: () => (state) => {
->>>>>>> 5955747d69fc94c0c7ce03f637ba16b9cd3e0558
         if (state) {
           // Prefer token presence; fall back to persisted isLoggedIn (e.g. legacy or token-less persist)
           state.isLoggedIn = state.accessToken != null ? true : state.isLoggedIn;

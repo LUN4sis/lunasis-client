@@ -7,9 +7,14 @@ import { asyncStorageAdapter } from '@/src/lib/storage-adapter';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 
-import type { AuthState } from '@repo/shared/features/auth';
+import type {
+  AuthProfile,
+  AuthState,
+  TokenUpdatePayload,
+} from '@repo/shared/features/auth/types/store.type';
 
 /**
+ * 인증 스토어 (React Native용)
  * AsyncStorage를 사용하여 인증 상태를 영구 저장
  *
  * @example
@@ -36,6 +41,8 @@ export const useAuthStore = create<AuthState>()(
     (set) => ({
       accessToken: null,
       refreshToken: null,
+      accessTokenIssuedAt: null,
+      refreshTokenIssuedAt: null,
       isLoggedIn: false,
       nickname: null,
       privateChat: false,
@@ -44,10 +51,13 @@ export const useAuthStore = create<AuthState>()(
       /**
        * 토큰 업데이트
        */
-      updateTokens: (tokens: Pick<AuthState, 'accessToken' | 'refreshToken'>) => {
+      updateTokens: (payload: TokenUpdatePayload) => {
+        const now = Date.now();
         set({
-          accessToken: tokens.accessToken,
-          refreshToken: tokens.refreshToken,
+          accessToken: payload.accessToken,
+          refreshToken: payload.refreshToken,
+          accessTokenIssuedAt: payload.accessTokenIssuedAt ?? now,
+          refreshTokenIssuedAt: payload.refreshTokenIssuedAt ?? now,
           isLoggedIn: true,
         });
       },
@@ -55,12 +65,13 @@ export const useAuthStore = create<AuthState>()(
       /**
        * 프로필 설정
        */
-      setProfile: (profile: Pick<AuthState, 'nickname' | 'firstLogin' | 'privateChat'>) => {
-        set({
+      setProfile: (profile: AuthProfile) => {
+        set((state: AuthState) => ({
+          ...state,
           nickname: profile.nickname,
           privateChat: profile.privateChat,
           firstLogin: profile.firstLogin,
-        });
+        }));
       },
 
       /**
@@ -70,6 +81,8 @@ export const useAuthStore = create<AuthState>()(
         set({
           accessToken: null,
           refreshToken: null,
+          accessTokenIssuedAt: null,
+          refreshTokenIssuedAt: null,
           isLoggedIn: false,
           nickname: null,
           privateChat: false,
@@ -86,6 +99,8 @@ export const useAuthStore = create<AuthState>()(
       partialize: (state) => ({
         accessToken: state.accessToken,
         refreshToken: state.refreshToken,
+        accessTokenIssuedAt: state.accessTokenIssuedAt,
+        refreshTokenIssuedAt: state.refreshTokenIssuedAt,
         nickname: state.nickname,
         privateChat: state.privateChat,
         firstLogin: state.firstLogin,
@@ -102,6 +117,8 @@ export const useAuthStore = create<AuthState>()(
           return {
             accessToken: persistedState?.accessToken ?? null,
             refreshToken: persistedState?.refreshToken ?? null,
+            accessTokenIssuedAt: persistedState?.accessTokenIssuedAt ?? null,
+            refreshTokenIssuedAt: persistedState?.refreshTokenIssuedAt ?? null,
             nickname: persistedState?.nickname ?? null,
             privateChat: persistedState?.privateChat ?? null,
             firstLogin: persistedState?.firstLogin ?? null,
