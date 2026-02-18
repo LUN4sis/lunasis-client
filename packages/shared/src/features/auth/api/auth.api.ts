@@ -13,7 +13,7 @@ const API_BASE_URL =
  * @response {LoginResponse}
  */
 export const googleLoginAPI = async (loginCode: string): Promise<AuthSessionResponse> => {
-  const api = createApiClient({ baseURL: API_BASE_URL });
+  const api = createApiClient({ baseURL: API_BASE_URL, unwrapData: true });
   return await api.post<AuthSessionResponse, { loginCode: string }>('/auth/google', { loginCode });
 };
 
@@ -21,7 +21,7 @@ export const appleLoginAPI = async (
   loginCode: string,
   name: string,
 ): Promise<AuthSessionResponse> => {
-  const api = createApiClient({ baseURL: API_BASE_URL });
+  const api = createApiClient({ baseURL: API_BASE_URL, unwrapData: true });
   return await api.post<AuthSessionResponse, { loginCode: string; name: string }>('/auth/apple', {
     loginCode,
     name,
@@ -41,7 +41,7 @@ export const exchangeTokenAPI = googleLoginAPI;
  * @response {RefreshTokenResponse}
  */
 export const tokenRefreshAPI = async (refreshToken: string): Promise<RefreshTokenResponse> => {
-  const api = createApiClient({ baseURL: API_BASE_URL });
+  const api = createApiClient({ baseURL: API_BASE_URL, unwrapData: true });
   return await api.patch<RefreshTokenResponse, { refreshToken: string }>('/auth', { refreshToken });
 };
 
