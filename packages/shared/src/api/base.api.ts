@@ -14,6 +14,12 @@ import { transformAxiosError } from '@repo/shared/utils';
 // ===========================
 // Types & Interfaces
 // ===========================
+
+/** Extended Axios request config with custom flags */
+export interface ExtendedAxiosRequestConfig extends AxiosRequestConfig {
+  /** Skip authentication header for anonymous requests */
+  skipAuth?: boolean;
+}
 export interface BaseApiConfig {
   baseURL: string;
   timeout?: number;
@@ -235,6 +241,13 @@ export class BaseApi {
   private setupRequestInterceptor(): void {
     this.client.interceptors.request.use(
       (requestConfig: InternalAxiosRequestConfig) => {
+        // Skip auth header if explicitly requested (for anonymous requests)
+        const skipAuth = (requestConfig as InternalAxiosRequestConfig & { skipAuth?: boolean })
+          .skipAuth;
+        if (skipAuth) {
+          return requestConfig;
+        }
+
         const token = this.config.getAccessToken();
 
         if (token && requestConfig.headers) {

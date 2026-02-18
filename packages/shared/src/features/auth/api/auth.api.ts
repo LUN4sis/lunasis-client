@@ -48,7 +48,10 @@ export const tokenRefreshAPI = async (refreshToken: string): Promise<RefreshToke
 /**
  * Alias for backward compatibility
  */
-export const refreshTokenAPI = tokenRefreshAPI;
+export const refreshTokenAPI: (
+  accessToken: string,
+  refreshToken: string,
+) => Promise<RefreshTokenResponse> = tokenRefreshAPI;
 
 /**
  * Logout API
