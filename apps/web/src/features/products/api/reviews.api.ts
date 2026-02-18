@@ -1,3 +1,5 @@
+import { handleApiError } from '@repo/shared/utils';
+
 import { apiClient } from '@web/api';
 import type { GetReviewsRequest, GetReviewsResponse } from '@web/features/products';
 
@@ -7,11 +9,15 @@ export const getReviewsAPI = async ({
   cursor,
   pageSize,
 }: GetReviewsRequest): Promise<GetReviewsResponse> => {
-  const params = new URLSearchParams();
-  params.append('cursor', cursor || '');
-  params.append('pageSize', pageSize.toString());
-  const response = await apiClient.get<GetReviewsResponse>(`/reviews/${productId}`, {
-    params,
-  });
-  return response;
+  try {
+    const params = new URLSearchParams();
+    params.append('cursor', cursor || '');
+    params.append('pageSize', pageSize.toString());
+    const response = await apiClient.get<GetReviewsResponse>(`/reviews/${productId}`, {
+      params,
+    });
+    return response;
+  } catch (error) {
+    throw handleApiError(error);
+  }
 };

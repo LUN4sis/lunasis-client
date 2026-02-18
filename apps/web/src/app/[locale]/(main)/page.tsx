@@ -34,9 +34,11 @@ export default function MainPage() {
   return (
     <section className={styles.container} suppressHydrationWarning>
       <div className={styles.content}>
-        {MAIN_ITEMS.map((item) => (
-          <Link href={item.href} key={item.label}>
-            <button className={clsx(styles.item__container, styles[`item--${item.bgColor}`])}>
+        {MAIN_ITEMS.map((item) => {
+          const colorClass = `item${item.bgColor.charAt(0).toUpperCase() + item.bgColor.slice(1)}`;
+          return (
+            <Link href={item.href} key={item.label}>
+              <button className={clsx(styles.item__container, styles[colorClass])}>
               <div className={styles.item__icon}>
                 <Image
                   src={item.icon}
@@ -55,8 +57,9 @@ export default function MainPage() {
                 <p className={styles.item__description}>{item.description}</p>
               </div>
             </button>
-          </Link>
-        ))}
+            </Link>
+          );
+        })}
       </div>
 
       <div className={styles.sub}>

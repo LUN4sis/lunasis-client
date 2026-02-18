@@ -18,6 +18,7 @@ import { useTranslations } from 'next-intl';
 import { useEffect, useMemo, useState } from 'react';
 
 import styles from './chat.module.scss';
+import { logger } from '@repo/shared/utils';
 
 export default function ChatPage() {
   const t = useTranslations('chat');
@@ -32,6 +33,10 @@ export default function ChatPage() {
   const isLoggedIn = useAuthStore((s) => s.isLoggedIn);
   const { isIncognito, setPendingMessages, setCurrentChatId } = useChatStore();
   const isAnonymous = isIncognito || !hydrated || !isLoggedIn;
+
+  logger.info('Is logged In:', { isLoggedIn });
+  logger.info('Is Incognito:', { isIncognito });
+  logger.info('Is Anonymous:', { isAnonymous });
 
   // Track component mount state and trigger fade-in
   useEffect(() => {

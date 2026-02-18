@@ -1,10 +1,17 @@
 import { createApiClient } from '@repo/shared/api';
 
-import type { LoginResponse, RefreshTokenResponse } from '../types/auth.type';
+import type { AuthSessionResponse, RefreshTokenResponse } from '../types';
 
-const API_BASE_URL =
-  (typeof process !== 'undefined' && process.env.NEXT_PUBLIC_API_URL) ||
-  'http://localhost:8080/api';
+/**
+ * Get API base URL at runtime
+ * This ensures environment variables are read at call time, not module load time
+ */
+const getApiBaseUrl = (): string => {
+  return (
+    (typeof process !== 'undefined' && process.env.NEXT_PUBLIC_API_URL) ||
+    'http://localhost:8080/api'
+  );
+};
 
 /**
  * Google Login API
@@ -12,14 +19,17 @@ const API_BASE_URL =
  * @request body {loginCode: string}
  * @response {LoginResponse}
  */
-export const googleLoginAPI = async (loginCode: string): Promise<LoginResponse> => {
-  const api = createApiClient({ baseURL: API_BASE_URL });
-  return await api.post<LoginResponse, { loginCode: string }>('/auth/google', { loginCode });
+export const googleLoginAPI = async (loginCode: string): Promise<AuthSessionResponse> => {
+  const api = createApiClient({ baseURL: getApiBaseUrl(), unwrapData: true });
+  return await api.post<AuthSessionResponse, { loginCode: string }>('/auth/google', { loginCode });
 };
 
-export const appleLoginAPI = async (loginCode: string, name: string): Promise<LoginResponse> => {
-  const api = createApiClient({ baseURL: API_BASE_URL });
-  return await api.post<LoginResponse, { loginCode: string; name: string }>('/auth/apple', {
+export const appleLoginAPI = async (
+  loginCode: string,
+  name: string,
+): Promise<AuthSessionResponse> => {
+  const api = createApiClient({ baseURL: getApiBaseUrl(), unwrapData: true });
+  return await api.post<AuthSessionResponse, { loginCode: string; name: string }>('/auth/apple', {
     loginCode,
     name,
   });
@@ -37,14 +47,8 @@ export const exchangeTokenAPI = googleLoginAPI;
  * @request body {refreshToken: string}
  * @response {RefreshTokenResponse}
  */
-export const tokenRefreshAPI = async (
-  accessToken: string,
-  refreshToken: string,
-): Promise<RefreshTokenResponse> => {
-  const api = createApiClient({
-    baseURL: API_BASE_URL,
-    getAccessToken: () => accessToken,
-  });
+export const tokenRefreshAPI = async (refreshToken: string): Promise<RefreshTokenResponse> => {
+  const api = createApiClient({ baseURL: getApiBaseUrl(), unwrapData: true });
   return await api.patch<RefreshTokenResponse, { refreshToken: string }>('/auth', { refreshToken });
 };
 
@@ -59,6 +63,6 @@ export const refreshTokenAPI = tokenRefreshAPI;
  * @reqeust body {refreshToken: string}
  */
 export const logoutAPI = async (refreshToken: string): Promise<{ success: boolean }> => {
-  const api = createApiClient({ baseURL: API_BASE_URL });
+  const api = createApiClient({ baseURL: getApiBaseUrl() });
   return await api.delete<{ success: boolean }>('/auth', { data: { refreshToken } });
 };
