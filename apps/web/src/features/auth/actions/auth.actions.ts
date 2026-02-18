@@ -27,11 +27,21 @@ export async function exchangeAuthToken(
 ): Promise<ActionResponse<AuthSessionResponse>> {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080/api';
 
+  // Check if API_BASE_URL is correctly loaded in shared package
+  const sharedApiUrl =
+    (typeof process !== 'undefined' && process.env.NEXT_PUBLIC_API_URL) ||
+    'http://localhost:8080/api';
+
   console.log('[Server Action] exchangeAuthToken called', {
     hasCredential: !!credential,
     credentialLength: credential?.length,
     hasName: !!name,
     apiUrl,
+    sharedApiUrl,
+    envCheck: {
+      hasProcess: typeof process !== 'undefined',
+      envValue: process.env.NEXT_PUBLIC_API_URL,
+    },
   });
 
   try {
