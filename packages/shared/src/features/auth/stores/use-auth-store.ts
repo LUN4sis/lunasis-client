@@ -21,11 +21,11 @@ export const useAuthStore = create<AuthState>()(
       ...initialState,
 
       updateTokens: (tokens: Pick<AuthState, 'accessToken' | 'refreshToken'>) =>
-        set((state: AuthState) => ({
+        set({
           accessToken: tokens.accessToken,
           refreshToken: tokens.refreshToken,
           isLoggedIn: true,
-        })),
+        }),
 
       setProfile: (profile: Pick<AuthState, 'nickname' | 'firstLogin' | 'privateChat'>) =>
         set({
