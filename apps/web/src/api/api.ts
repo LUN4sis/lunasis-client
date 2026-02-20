@@ -1,7 +1,7 @@
 import { BaseApi, getApiUrl } from '@repo/shared/api/base.api';
 import { API_CONFIG } from '@repo/shared/constants/config';
 import { useAuthStore } from '@repo/shared/features/auth';
-import { refreshTokenAPI } from '@repo/shared/features/auth/api/auth.api';
+import { refreshTokenAPI } from '@repo/shared/features/auth';
 import { isAuthError } from '@repo/shared/features/auth/constants/auth.constants';
 import { ErrorCode } from '@repo/shared/types';
 import { logoutSync } from '@web/features/auth/hooks/use-auth';
@@ -14,7 +14,7 @@ export const api = new BaseApi({
   getAccessToken: () => useAuthStore.getState().accessToken,
   getRefreshToken: () => useAuthStore.getState().refreshToken,
   onTokenRefresh: async (_accessToken, refreshToken) => {
-    const response = await refreshTokenAPI(refreshToken);
+    const response = await refreshTokenAPI(_accessToken, refreshToken);
 
     return {
       accessToken: response.accessToken,

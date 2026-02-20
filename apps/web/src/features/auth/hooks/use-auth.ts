@@ -52,6 +52,7 @@ export function logoutSync() {
 
 interface LoginParams {
   code: string;
+  provider: 'google' | 'apple';
   name?: string;
 }
 
@@ -60,7 +61,6 @@ interface UseLoginOptions {
 }
 
 // Supported locales for login redirect (avoid importing next-intl in hook)
-// 로그인 리다이렉트용 지원 로케일 (훅에서 next-intl 의존성 최소화)
 const LOGIN_SUPPORTED_LOCALES = ['ko', 'en'] as const;
 const LOGIN_DEFAULT_LOCALE = 'ko';
 
@@ -75,13 +75,14 @@ export function useLogin(options?: UseLoginOptions) {
   const { updateTokens, setProfile, clearAuth } = useAuthStore();
 
   const loginMutation = useMutation({
-    mutationFn: async ({ code, name }: LoginParams) => {
+    mutationFn: async ({ code, provider, name }: LoginParams) => {
       logger.info('[Auth] Starting token exchange...', {
+        provider,
         hasName: !!name,
         codeLength: code?.length,
       });
 
-      const result = await exchangeAuthToken(code, name);
+      const result = await exchangeAuthToken(code, provider, name);
 
       logger.info('[Auth] Token exchange result received', {
         success: result.success,
@@ -130,7 +131,6 @@ export function useLogin(options?: UseLoginOptions) {
         clearAuth();
 
         // Call error callback before throwing (for immediate redirect)
-        // throw하기 전에 에러 콜백 호출 (즉시 리다이렉트용)
         if (options?.onErrorCallback) {
           logger.info('[Auth] Calling onErrorCallback before throwing error');
           options.onErrorCallback();
@@ -151,11 +151,9 @@ export function useLogin(options?: UseLoginOptions) {
       });
 
       // wait for Zustand persist to complete
-      // Zustand persist 완료 대기
       await new Promise((resolve) => setTimeout(resolve, STATE_UPDATE_DELAY));
 
       // Get locale from sessionStorage (stored before OAuth redirect)
-      // sessionStorage에서 로케일 가져오기 (OAuth 리다이렉트 전에 저장됨)
       const getLocale = (): 'ko' | 'en' => {
         if (typeof window !== 'undefined') {
           try {
@@ -180,8 +178,6 @@ export function useLogin(options?: UseLoginOptions) {
 
       // Use window.location.href for reliable redirect from OAuth callback page
       // (which is outside [locale] group)
-      // OAuth 콜백 페이지(locale 그룹 외부)에서 안정적인 리다이렉트를 위해
-      // window.location.href 사용
       if (typeof window !== 'undefined') {
         const locale = getLocale();
         const redirectPath = data.firstLogin ? ROUTES.ONBOARDING_NAME : ROUTES.ROOT;
@@ -209,7 +205,6 @@ export function useLogin(options?: UseLoginOptions) {
       });
 
       // Also log to console for Vercel logs visibility
-      // Vercel 로그 가시성을 위해 콘솔에도 출력
       console.error('[Auth] Login error details:', {
         error,
         appError: {

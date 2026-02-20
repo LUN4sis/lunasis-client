@@ -73,7 +73,7 @@ const GoogleCallback = () => {
         // mark as processed before async operation
         hasProcessedRef.current = true;
 
-        login({ code });
+        login({ code, provider: 'google' });
         return;
       }
 

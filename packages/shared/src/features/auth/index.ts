@@ -4,6 +4,9 @@ export type { AuthSessionResponse, RefreshTokenResponse, AuthState } from './typ
 // Store
 export { useAuthStore } from './stores';
 
+// Hooks
+export { useAuthStoreHydration } from './hooks/use-auth-store-hydration';
+
 // API
 export { exchangeTokenAPI, refreshTokenAPI, logoutAPI } from './api';
 

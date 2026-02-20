@@ -74,7 +74,7 @@ const AppleCallback = () => {
         // mark as processed before async operation
         hasProcessedRef.current = true;
 
-        login({ code, name });
+        login({ code, provider: 'apple', name });
         return;
       }
 

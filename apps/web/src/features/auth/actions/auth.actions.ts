@@ -23,6 +23,7 @@ interface ActionResponse<T = unknown> {
  */
 export async function exchangeAuthToken(
   credential: string,
+  provider: 'google' | 'apple',
   name?: string,
 ): Promise<ActionResponse<AuthSessionResponse>> {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080/api';
@@ -30,13 +31,17 @@ export async function exchangeAuthToken(
   console.log('[Server Action] exchangeAuthToken called', {
     hasCredential: !!credential,
     credentialLength: credential?.length,
+    provider,
     hasName: !!name,
     apiUrl,
   });
 
   try {
-    // If name is provided, use Apple login API
-    const data = name ? await appleLoginAPI(credential, name) : await googleLoginAPI(credential);
+    // Use provider to determine which API to call
+    const data =
+      provider === 'apple'
+        ? await appleLoginAPI(credential, name ?? '')
+        : await googleLoginAPI(credential);
 
     console.log('[Server Action] Token exchange response received', {
       hasData: !!data,
