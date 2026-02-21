@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import { ChevronRight } from 'lucide-react';
 import clsx from 'clsx';
 
-import styles from './starter-review.module.scss';
+import styles from './starter-package.module.scss';
 
 type PackageType = 'tampon' | 'pad' | 'both';
 
@@ -38,7 +38,7 @@ export default function StarterReviewPage() {
   const router = useRouter();
 
   const handleCategorySelect = (key: PackageType) => {
-    router.push(`/starter-review/ranking?type=${key}`);
+    router.push(`/starter-package/ranking?type=${key}`);
   };
 
   return (

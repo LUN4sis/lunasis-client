@@ -25,11 +25,11 @@ export const viewport = {
   themeColor: '#f6f6f6',
 };
 
-// Starter Review Layout
-// 스타터 리뷰 레이아웃
-// This layout is used for the starter-review page
-// 이 레이아웃은 starter-review 페이지에 사용됩니다
-export default function StarterReviewLayout({ children }: { children: React.ReactNode }) {
+// Starter Package Layout
+// 스타터 패키지 레이아웃
+// This layout is used for the starter-package page
+// 이 레이아웃은 starter-package 페이지에 사용됩니다
+export default function StarterPackageLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="ko" suppressHydrationWarning>
       <body className={dmSans.variable} style={{ backgroundColor: '#f6f6f6' }}>

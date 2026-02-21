@@ -8,7 +8,7 @@ const intlMiddleware = createMiddleware(routing);
 export default function middleware(request: NextRequest) {
   if (
     request.nextUrl.pathname.startsWith('/oauth/callback') ||
-    request.nextUrl.pathname.startsWith('/starter-review')
+    request.nextUrl.pathname.startsWith('/starter-package')
   ) {
     return NextResponse.next();
   }

@@ -86,10 +86,10 @@
 }
 
 .option--both {
-  background-color: $purple-500;
+  background-color: $purple-600;
 
   &:hover {
-    background-color: color.adjust($purple-500, $lightness: -4%);
+    background-color: color.adjust($purple-600, $lightness: -4%);
   }
 }
 
