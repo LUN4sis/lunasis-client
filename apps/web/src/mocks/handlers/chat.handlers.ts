@@ -1,5 +1,6 @@
-import type { ChatRoom, ChatStart } from '@web/features/chat/types/api.type';
 import { http, HttpResponse } from 'msw';
+
+import type { ChatRoom, ChatStart } from '@web/features/chat/types/api.type';
 
 import { findMockAnswerForQuestion, mockChatRooms, mockChatRoomsById } from '../data/chat.data';
 

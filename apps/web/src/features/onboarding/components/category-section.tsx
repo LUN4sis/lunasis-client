@@ -1,7 +1,7 @@
-import clsx from 'clsx';
-
 import styles from '@web/app/[locale]/onboarding/onboarding.module.scss';
 import type { OnboardingCategorySection } from '@web/features/onboarding';
+
+import clsx from 'clsx';
 
 export const CategorySection = ({ label, children, className }: OnboardingCategorySection) => {
   return (

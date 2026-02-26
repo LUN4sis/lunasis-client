@@ -14,6 +14,12 @@ node_modules/
 
 # testing
 coverage/
+.nyc_output/
+
+# cache
+.cache/
+*.cache
+.parcel-cache/
 
 # next.js
 .next/
@@ -24,7 +30,23 @@ build/
 
 # misc
 .DS_Store
+.AppleDouble
+.LSOverride
 *.pem
+
+# IDEs and editors
+.vscode/
+.idea/
+*.swp
+*.swo
+*.swn
+*~
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+.eslintcache
 
 # debug
 npm-debug.log*
@@ -34,6 +56,12 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+!.env.example
+!.env.template
+
+# local environment files
+.local
+*.local
 
 # vercel
 .vercel
@@ -44,36 +72,51 @@ next-env.d.ts
 
 # turbo
 .turbo/
+*.turbo
 
 # expo / react native
 .expo/
+.expo-shared/
 dist/
 *.jks
 *.p8
 *.p12
 *.keystore
+*.mobileprovision
 ios/Pods/
 ios/build/
+ios/*.xcworkspace
+!ios/*.xcworkspace/contents.xcworkspacedata
+ios/*.xcuserdata
+ios/*.xcuserdatad
 android/app/build/
 android/.gradle/
 android/local.properties
+android/*.iml
+android/.cxx/
+android/app/release/
 
 # pnpm
 .pnpm-store/
+pnpm-lock.yaml.bak
 
 # windows
 Thumbs.db
 ehthumbs.db
 Desktop.ini
-
-# testing
-.nyc_output/
+$RECYCLE.BIN/
 
 # swc
 .swc/
 
 # logs
 *.log
+logs/
+
+# temporary files
+*.tmp
+*.temp
+.tmp/
 
 certificates
 .cursorrules

@@ -1,12 +1,14 @@
 'use client';
 
+import Image from 'next/image';
+
 import { AlertDialog } from '@web/components/ui/alert-dialog';
 import { Button } from '@web/components/ui/button/button';
-import Image from 'next/image';
 
 import CloseIncognitoIcon from '../../../../../public/images/close-incognito.png';
 import OpenIncognitoIcon from '../../../../../public/images/open-incognito.png';
 import { useChatStore } from '../../stores/use-chat-store';
+
 import styles from './incognito-bar.module.scss';
 
 export const IncognitoBar = () => {

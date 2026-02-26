@@ -447,6 +447,7 @@ export class BaseApi {
 
 ```typescript
 import { QueryClient } from '@tanstack/react-query';
+
 import { isRetryableError } from '@repo/shared/utils';
 
 export const queryClient = new QueryClient({

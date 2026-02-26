@@ -1,11 +1,12 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
+
 import { ROUTES } from '@repo/shared/constants';
 import { logger } from '@repo/shared/utils';
 import { withAuth } from '@web/features/auth';
 import { useOnboardingStore } from '@web/features/onboarding/stores/use-onboarding-store';
-import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
 
 function OnboardingPage() {
   const router = useRouter();

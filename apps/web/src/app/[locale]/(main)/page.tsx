@@ -1,9 +1,10 @@
-import { ROUTES } from '@repo/shared/constants';
-import { DEFAULT_BLUR_DATA_URL } from '@web/lib/constants';
-import clsx from 'clsx';
 import Image from 'next/image';
 import Link from 'next/link';
 
+import { ROUTES } from '@repo/shared/constants';
+import { DEFAULT_BLUR_DATA_URL } from '@web/lib/constants';
+
+import clsx from 'clsx';
 import styles from './main.module.scss';
 
 const MAIN_ITEMS = [
@@ -39,24 +40,24 @@ export default function MainPage() {
           return (
             <Link href={item.href} key={item.label}>
               <button className={clsx(styles.item__container, styles[colorClass])}>
-              <div className={styles.item__icon}>
-                <Image
-                  src={item.icon}
-                  alt={item.label}
-                  width={56}
-                  height={56}
-                  priority
-                  placeholder="blur"
-                  blurDataURL={DEFAULT_BLUR_DATA_URL}
-                  sizes="56px"
-                  className={styles.item__iconImage}
-                />
-              </div>
-              <div className={styles.item__content}>
-                <h2 className={styles.item__title}>{item.label}</h2>
-                <p className={styles.item__description}>{item.description}</p>
-              </div>
-            </button>
+                <div className={styles.item__icon}>
+                  <Image
+                    src={item.icon}
+                    alt={item.label}
+                    width={56}
+                    height={56}
+                    priority
+                    placeholder="blur"
+                    blurDataURL={DEFAULT_BLUR_DATA_URL}
+                    sizes="56px"
+                    className={styles.item__iconImage}
+                  />
+                </div>
+                <div className={styles.item__content}>
+                  <h2 className={styles.item__title}>{item.label}</h2>
+                  <p className={styles.item__description}>{item.description}</p>
+                </div>
+              </button>
             </Link>
           );
         })}

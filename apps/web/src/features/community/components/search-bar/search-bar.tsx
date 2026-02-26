@@ -1,5 +1,5 @@
-import { Input } from '@web/components/ui/input';
 import { Button } from '@web/components/ui/button';
+import { Input } from '@web/components/ui/input';
 
 import styles from './search-bar.module.scss';
 

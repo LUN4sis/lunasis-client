@@ -1,11 +1,12 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
+import Image from 'next/image';
+import { useParams } from 'next/navigation';
+
 import { logger } from '@repo/shared/utils';
 import { Button } from '@web/components/ui/button';
 import { buildGoogleOAuthUrl, getOAuthCallbackUrl } from '@web/features/auth/utils';
-import Image from 'next/image';
-import { useParams } from 'next/navigation';
-import { useTranslations } from 'next-intl';
 
 import styles from './login-button.module.scss';
 

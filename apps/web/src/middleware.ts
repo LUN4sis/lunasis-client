@@ -1,5 +1,5 @@
-import { NextRequest, NextResponse } from 'next/server';
 import createMiddleware from 'next-intl/middleware';
+import { NextRequest, NextResponse } from 'next/server';
 
 import { routing } from './i18n/routing';
 
@@ -8,7 +8,7 @@ const intlMiddleware = createMiddleware(routing);
 export default function middleware(request: NextRequest) {
   if (
     request.nextUrl.pathname.startsWith('/oauth/callback') ||
-    request.nextUrl.pathname.startsWith('/starter-review')
+    request.nextUrl.pathname.startsWith('/starter-package')
   ) {
     return NextResponse.next();
   }

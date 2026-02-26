@@ -1,5 +1,8 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
+import { useCallback } from 'react';
+
 import { ROUTES } from '@repo/shared/constants';
 import { logger, transformError } from '@repo/shared/utils';
 import { Button } from '@web/components/ui/button';
@@ -17,8 +20,6 @@ import {
   useOnboardingNavigationGuard,
   useOnboardingStore,
 } from '@web/features/onboarding';
-import { useRouter } from 'next/navigation';
-import { useCallback } from 'react';
 
 import styles from '../onboarding.module.scss';
 

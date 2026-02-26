@@ -1,10 +1,11 @@
 'use client';
 
+import Image from 'next/image';
+
 import { COMMON_IMAGE_PROPS } from '@products/constants/image.constants';
 import { useImageError } from '@products/hooks/use-image-error';
 import { formatPrice } from '@products/utils';
 import type { Mall } from '@repo/shared/types';
-import Image from 'next/image';
 
 import styles from './mall-card.module.scss';
 

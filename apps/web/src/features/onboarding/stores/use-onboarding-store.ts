@@ -1,6 +1,7 @@
-import { isLocalStorageAvailable, logger } from '@repo/shared/utils';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
+
+import { isLocalStorageAvailable, logger } from '@repo/shared/utils';
 
 import { Insurance, ProductCategory } from '../constants/onboarding.constants';
 import type { BirthDateSelection, OnboardingState } from '../types/onboarding.type';

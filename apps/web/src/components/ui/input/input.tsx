@@ -1,10 +1,11 @@
 'use client';
 
-import clsx from 'clsx';
 import { forwardRef } from 'react';
 
-import styles from './input.module.scss';
 import { InputProps } from './types';
+
+import clsx from 'clsx';
+import styles from './input.module.scss';
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(
   (

@@ -1,6 +1,6 @@
-import clsx from 'clsx';
-
 import { ButtonColorScheme } from '../button/types';
+
+import clsx from 'clsx';
 import styles from './badge.module.scss';
 
 export interface BadgeProps {

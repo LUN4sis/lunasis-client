@@ -1,5 +1,8 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
+import { useCallback, useState } from 'react';
+
 import { ROUTES } from '@repo/shared/constants';
 import { logger, transformError } from '@repo/shared/utils';
 import { Button } from '@web/components/ui/button';
@@ -7,14 +10,12 @@ import { Select } from '@web/components/ui/select';
 import { toast } from '@web/components/ui/toast';
 import { withAuth } from '@web/features/auth';
 import {
-  type BirthDateSelection,
   Title,
   useBirthdateValidation,
   useOnboardingNavigationGuard,
   useOnboardingStore,
+  type BirthDateSelection,
 } from '@web/features/onboarding';
-import { useRouter } from 'next/navigation';
-import { useCallback, useState } from 'react';
 
 import styles from '../onboarding.module.scss';
 

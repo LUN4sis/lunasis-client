@@ -1,6 +1,6 @@
+import path from 'path';
 import type { NextConfig } from 'next';
 import createNextIntlPlugin from 'next-intl/plugin';
-import path from 'path';
 
 const devOrigin = process.env.NEXT_PUBLIC_DEV_ORIGIN || '';
 

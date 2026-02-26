@@ -3,8 +3,9 @@
 import { useEffect } from 'react';
 
 import { Button } from '../button/button';
-import styles from './alert-dialog.module.scss';
 import type { AlertDialogProps } from './types';
+
+import styles from './alert-dialog.module.scss';
 
 export const AlertDialog = ({
   open,

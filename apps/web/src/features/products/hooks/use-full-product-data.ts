@@ -1,5 +1,6 @@
-import { Product, ProductCategory } from '@repo/shared/types';
 import { useMemo } from 'react';
+
+import { Product, ProductCategory } from '@repo/shared/types';
 
 import { generateProductSlug } from '../utils/slug.utils';
 import { useProductData, useProductsByCategory } from './use-products';

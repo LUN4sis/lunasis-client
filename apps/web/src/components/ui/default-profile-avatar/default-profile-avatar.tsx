@@ -1,8 +1,8 @@
 'use client';
 
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import clsx from 'clsx';
 
+import clsx from 'clsx';
 import styles from './default-profile-avatar.module.scss';
 
 export interface DefaultProfileAvatarProps {

@@ -1,12 +1,13 @@
 'use client';
 
+import Image from 'next/image';
+
 import { ReviewSectionSkeleton } from '@products/components/skeletons/product-skeletons';
 import { COMMON_IMAGE_PROPS } from '@products/constants/image.constants';
 import { useImageError } from '@products/hooks/use-image-error';
 import { useReviews } from '@products/hooks/use-reviews';
 import type { GetReviewsResponse, Review } from '@products/types/review.type';
 import { handleApiError } from '@repo/shared/utils';
-import Image from 'next/image';
 
 import styles from './review-section.module.scss';
 

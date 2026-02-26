@@ -1,9 +1,10 @@
-import { Button } from '@web/components/ui/button';
-import { RecentPostCard } from '../recent-post/recent-post-card';
-import { CommunityCategory } from '@repo/shared/features/community/types';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
-import type { Post } from '@repo/shared/features/community/types';
+import { CommunityCategory, type Post } from '@repo/shared/features/community/types';
+import { Button } from '@web/components/ui/button';
+
+import { RecentPostCard } from '../recent-post/recent-post-card';
+
 import clsx from 'clsx';
 import styles from './recent-posts-section.module.scss';
 
