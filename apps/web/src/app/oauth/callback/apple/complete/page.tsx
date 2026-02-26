@@ -1,12 +1,11 @@
 'use client';
 
-import { Suspense, useEffect, useRef } from 'react';
 import { useSearchParams } from 'next/navigation';
+import { Suspense, useEffect, useRef } from 'react';
 
 import { ROUTES } from '@repo/shared/constants';
 import { useAuthStore } from '@repo/shared/features/auth';
 import { handleAndLogError, logger, safeSessionStorage } from '@repo/shared/utils';
-
 import { LoadingFallback } from '@web/components/ui/loading-fallback';
 import { useLogin } from '@web/features/auth/hooks/use-auth';
 import { verifyOAuthState } from '@web/features/auth/utils';

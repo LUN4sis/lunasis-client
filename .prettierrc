@@ -7,5 +7,20 @@
   "useTabs": false,
   "arrowParens": "always",
   "endOfLine": "lf",
-  "bracketSpacing": true
+  "bracketSpacing": true,
+  "plugins": ["@ianvs/prettier-plugin-sort-imports"],
+  "importOrder": [
+    "^(next|next-intl)(/.*)?$",
+    "^react$",
+    "<THIRD_PARTY_MODULES>",
+    "",
+    "^@(repo|web|products|community)/",
+    "",
+    "^\\.(?!.*\\.scss$)",
+    "",
+    ".*globals.*",
+    "^clsx$",
+    "\\.scss$"
+  ],
+  "importOrderTypeScriptVersion": "5.0.0"
 }

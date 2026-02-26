@@ -1,11 +1,12 @@
 'use client';
 
+import { useEffect, useState } from 'react';
+import { Home, RotateCcw } from 'lucide-react';
+
 import { logger } from '@repo/shared/utils';
 import { ROUTES } from '@web/lib/constants';
-import clsx from 'clsx';
-import { Home, RotateCcw } from 'lucide-react';
-import { useEffect, useState } from 'react';
 
+import clsx from 'clsx';
 import styles from './error.module.scss';
 
 interface ErrorProps {

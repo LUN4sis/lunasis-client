@@ -1,7 +1,7 @@
-import clsx from 'clsx';
-import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
+import Link from 'next/link';
 
+import clsx from 'clsx';
 import styles from './not-found.module.scss';
 
 const NotFound = async () => {

@@ -2,8 +2,8 @@
 
 import { useRouter } from 'next/navigation';
 import { ChevronRight } from 'lucide-react';
-import clsx from 'clsx';
 
+import clsx from 'clsx';
 import styles from './starter-package.module.scss';
 
 type PackageType = 'tampon' | 'pad' | 'both';

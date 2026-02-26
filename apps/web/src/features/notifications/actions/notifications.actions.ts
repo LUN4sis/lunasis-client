@@ -1,7 +1,8 @@
 'use server';
 
-import { logger, transformError } from '@repo/shared/utils';
 import webpush from 'web-push';
+
+import { logger, transformError } from '@repo/shared/utils';
 
 // Initialize VAPID details only if environment variables are set
 const vapidPublicKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY;

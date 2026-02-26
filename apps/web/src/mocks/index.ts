@@ -1,5 +1,6 @@
-import { transformError } from '@repo/shared/utils';
 import { http, passthrough } from 'msw';
+
+import { transformError } from '@repo/shared/utils';
 
 /**
  * Community: GET /api/posts is mocked; other /api/posts*, /api/comments* passthrough to real server.

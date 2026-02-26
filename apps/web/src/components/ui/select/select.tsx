@@ -1,10 +1,11 @@
 'use client';
 
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import type { BirthDateSelection } from '@web/features/onboarding';
-import clsx from 'clsx';
 import { useEffect, useMemo, useState } from 'react';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 
+import type { BirthDateSelection } from '@web/features/onboarding';
+
+import clsx from 'clsx';
 import styles from './select.module.scss';
 
 // return the last day of the month

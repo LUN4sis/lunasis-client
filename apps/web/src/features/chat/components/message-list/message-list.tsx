@@ -1,16 +1,17 @@
 'use client';
 
+import Image from 'next/image';
+import { useEffect, useRef } from 'react';
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+
 import { SupportedLocale } from '@repo/shared/types';
 import { useChatStore } from '@web/features/chat/stores';
 import type { MessageRole } from '@web/features/chat/types';
 import { formatDate } from '@web/lib/utils/date';
-import clsx from 'clsx';
-import Image from 'next/image';
-import { useEffect, useRef } from 'react';
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
 
+import clsx from 'clsx';
 import styles from './message-list.module.scss';
 
 export interface Attachment {

@@ -1,5 +1,6 @@
-import { MEDIA_QUERIES } from '@web/lib/constants';
 import { useEffect, useState } from 'react';
+
+import { MEDIA_QUERIES } from '@web/lib/constants';
 
 /**
  * Custom hook for responsive media queries

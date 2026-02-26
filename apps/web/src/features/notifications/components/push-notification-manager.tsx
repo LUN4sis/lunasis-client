@@ -1,5 +1,7 @@
 'use client';
 
+import { useEffect, useState } from 'react';
+
 import { MESSAGES, NOTIFICATION_CONFIG } from '@repo/shared/constants';
 import { logger, transformError } from '@repo/shared/utils';
 import {
@@ -8,7 +10,6 @@ import {
   isStandalone,
   urlBase64ToUint8Array,
 } from '@web/features/pwa/utils/pwa.utils';
-import { useEffect, useState } from 'react';
 
 import { sendNotification, subscribeUser, unsubscribeUser } from '../actions/notifications.actions';
 

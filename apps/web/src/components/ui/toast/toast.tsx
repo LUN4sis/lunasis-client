@@ -1,8 +1,8 @@
 'use client';
 
-import clsx from 'clsx';
 import { useEffect } from 'react';
 
+import clsx from 'clsx';
 import styles from './toast.module.scss';
 
 export type ToastType = 'success' | 'error' | 'warning' | 'info';

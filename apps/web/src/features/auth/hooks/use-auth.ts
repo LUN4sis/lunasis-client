@@ -1,13 +1,14 @@
 'use client';
 
+import { useParams } from 'next/navigation';
+import { useMutation } from '@tanstack/react-query';
+
 import { ROUTES } from '@repo/shared/constants';
 import { useAuthStore } from '@repo/shared/features/auth';
 import type { AuthSessionResponse } from '@repo/shared/features/auth/types';
 import { AppError, ERROR_MESSAGES, ErrorCode } from '@repo/shared/types';
 import { logger, transformError } from '@repo/shared/utils';
-import { useMutation } from '@tanstack/react-query';
 import { routing } from '@web/i18n/routing';
-import { useParams } from 'next/navigation';
 
 import { exchangeAuthToken } from '../actions/auth.actions';
 import { logoutManager } from '../utils';

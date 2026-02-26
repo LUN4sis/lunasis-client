@@ -1,14 +1,15 @@
 import '../globals.scss';
 
+import type { Metadata } from 'next';
+import { hasLocale, NextIntlClientProvider } from 'next-intl';
+import { getMessages, setRequestLocale } from 'next-intl/server';
+import { DM_Sans } from 'next/font/google';
+import { notFound } from 'next/navigation';
+import { Suspense } from 'react';
+
 import { Providers, ViewportHeightSetter } from '@web/components/layouts';
 import { Loading } from '@web/components/ui/loading';
 import { routing } from '@web/i18n/routing';
-import type { Metadata } from 'next';
-import { DM_Sans } from 'next/font/google';
-import { notFound } from 'next/navigation';
-import { hasLocale, NextIntlClientProvider } from 'next-intl';
-import { getMessages, setRequestLocale } from 'next-intl/server';
-import { Suspense } from 'react';
 
 const dmSans = DM_Sans({
   variable: '--font-dm-sans',

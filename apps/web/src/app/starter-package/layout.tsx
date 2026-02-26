@@ -1,8 +1,9 @@
 import '../globals.scss';
 
-import { Providers, ViewportHeightSetter } from '@web/components/layouts';
-import { DM_Sans } from 'next/font/google';
 import type { Metadata } from 'next';
+import { DM_Sans } from 'next/font/google';
+
+import { Providers, ViewportHeightSetter } from '@web/components/layouts';
 
 const dmSans = DM_Sans({
   variable: '--font-dm-sans',

@@ -1,10 +1,12 @@
 'use client';
 
-import { useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { DndContext, closestCenter, DragEndEvent } from '@dnd-kit/core';
-import { SortableContext, verticalListSortingStrategy, arrayMove } from '@dnd-kit/sortable';
+import { useState } from 'react';
+import { closestCenter, DndContext, DragEndEvent } from '@dnd-kit/core';
+import { arrayMove, SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
+
 import { SortableItem } from './sortable-item';
+
 import styles from './ranking.module.scss';
 
 type PackageType = 'tampon' | 'pad' | 'both';
@@ -123,15 +125,9 @@ export default function RankingPage() {
 
       <div className={styles.content}>
         {showTampon && (
-          <ProductSection
-            type="tampon"
-            products={tamponProducts}
-            onReorder={setTamponProducts}
-          />
+          <ProductSection type="tampon" products={tamponProducts} onReorder={setTamponProducts} />
         )}
-        {showPad && (
-          <ProductSection type="pad" products={padProducts} onReorder={setPadProducts} />
-        )}
+        {showPad && <ProductSection type="pad" products={padProducts} onReorder={setPadProducts} />}
       </div>
 
       <div className={styles.footer}>

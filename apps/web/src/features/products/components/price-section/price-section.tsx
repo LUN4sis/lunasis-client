@@ -1,7 +1,7 @@
 import { calculateUnitPrice, formatPrice } from '@products/utils';
 import type { ProductPrice } from '@repo/shared/types';
-import clsx from 'clsx';
 
+import clsx from 'clsx';
 import styles from './price-section.module.scss';
 
 export interface PriceSectionProps {

@@ -1,16 +1,18 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
+import { useRouter } from 'next/navigation';
 import CreateIcon from '@mui/icons-material/Create';
+import { MenuIcon, MessageSquareIcon } from 'lucide-react';
+
 import { getErrorMessage } from '@repo/shared/utils';
 import { Button } from '@web/components/ui/button';
-import clsx from 'clsx';
-import { MenuIcon, MessageSquareIcon } from 'lucide-react';
-import { useRouter } from 'next/navigation';
-import { useTranslations } from 'next-intl';
 
 import { useChatRoomsQuery } from '../../hooks';
 import { useChatStore } from '../../stores/use-chat-store';
 import type { ChatRoomItem } from '../../types/chat.type';
+
+import clsx from 'clsx';
 import styles from './sidebar.module.scss';
 
 export const Sidebar = () => {

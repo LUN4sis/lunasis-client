@@ -1,11 +1,12 @@
+import { http, HttpResponse } from 'msw';
+
 import {
-  type Comment,
   CommunityCategory,
+  type Comment,
   type PostDetail,
   type PostListItem,
   type PostsPageData,
 } from '@repo/shared/features/community/types';
-import { http, HttpResponse } from 'msw';
 
 import { mockPostsByCategory } from '../data/community.data';
 

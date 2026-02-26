@@ -1,5 +1,5 @@
-import { api } from '@web/api';
 import { createCommunityApi } from '@repo/shared/features/community/api';
+import { api } from '@web/api';
 
 export const communityApi = createCommunityApi(api);
 

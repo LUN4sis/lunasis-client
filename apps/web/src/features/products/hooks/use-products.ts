@@ -1,15 +1,16 @@
-import { isAuthError } from '@repo/shared/features/auth/constants/auth.constants';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+
 import { isDevelopment } from '@repo/shared/constants/config';
+import { isAuthError } from '@repo/shared/features/auth/constants/auth.constants';
 import {
+  isAppError,
+  ProductCategory,
   type GetProductBundleParams,
   type GetProductDetailParams,
   type GetProductsParams,
-  isAppError,
   type Product,
-  ProductCategory,
 } from '@repo/shared/types';
 import { logger, transformError } from '@repo/shared/utils';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { getProductBundleAPI, getProductDetailAPI, getProductsAPI } from '../api/products.api';
 

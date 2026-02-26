@@ -1,6 +1,6 @@
 'use client';
 
-import { Toast, type ToastType, useToastStore } from '@web/components/ui/toast';
+import { Toast, useToastStore, type ToastType } from '@web/components/ui/toast';
 
 import styles from './toast.module.scss';
 

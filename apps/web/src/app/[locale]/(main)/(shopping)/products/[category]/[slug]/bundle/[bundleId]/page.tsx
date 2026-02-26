@@ -1,5 +1,7 @@
 'use client';
 
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
+import { useCallback, useMemo } from 'react';
 import {
   BundlePageSkeleton,
   Mall,
@@ -8,13 +10,12 @@ import {
   useProductBundle,
   useProductDetail,
 } from '@products';
+
 import { Header } from '@products/components/header';
 import { ProductCategory, ProductPrice } from '@repo/shared/types';
 import { handleApiError } from '@repo/shared/utils';
 import { ProductImageSkeleton } from '@web/components/ui/skeleton';
 import { dynamicWithSkeleton } from '@web/lib/utils';
-import { useParams, useRouter, useSearchParams } from 'next/navigation';
-import { useCallback, useMemo } from 'react';
 
 import styles from './bundle.module.scss';
 

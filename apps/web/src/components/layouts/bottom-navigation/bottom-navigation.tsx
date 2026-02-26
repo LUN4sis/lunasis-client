@@ -1,5 +1,9 @@
 'use client';
 
+import { useLocale, useTranslations } from 'next-intl';
+import Image from 'next/image';
+import { usePathname, useRouter, useSelectedLayoutSegments } from 'next/navigation';
+
 import { NAVIGATION_SEGMENTS, ROUTES } from '@repo/shared/constants';
 import CalendarIcon from '@web/assets/icons/calendar.svg';
 import ChatIcon from '@web/assets/icons/chat.svg';
@@ -7,13 +11,11 @@ import ProductIcon from '@web/assets/icons/keyframes.svg';
 import ProfileIcon from '@web/assets/icons/profile.svg';
 import { Button } from '@web/components/ui/button';
 import { routeUtils } from '@web/lib/utils';
-import clsx from 'clsx';
-import Image from 'next/image';
-import { usePathname, useRouter, useSelectedLayoutSegments } from 'next/navigation';
-import { useLocale, useTranslations } from 'next-intl';
 
-import styles from './bottom-navigation.module.scss';
 import type { NavItem, NavItemConfig } from './types';
+
+import clsx from 'clsx';
+import styles from './bottom-navigation.module.scss';
 
 const DEFAULT_ICON_SIZE = 24;
 const PRODUCT_ICON_SIZE = 28;
