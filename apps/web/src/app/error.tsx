@@ -3,8 +3,8 @@
 import { useEffect, useState } from 'react';
 import { Home, RotateCcw } from 'lucide-react';
 
-import { ROUTES } from '@repo/shared/constants';
 import { logger } from '@repo/shared/utils';
+import { ROUTES } from '@web/lib/constants';
 
 import clsx from 'clsx';
 import styles from './error.module.scss';
