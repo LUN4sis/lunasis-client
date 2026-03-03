@@ -84,7 +84,7 @@ export default async function LocaleLayout({ children, params }: Props) {
 
   return (
     <html lang={locale} suppressHydrationWarning>
-      <body className={dmSans.variable} style={{ backgroundColor: '#f6f6f6' }}>
+      <body className={dmSans.variable} style={{ backgroundColor: '#f6f6f6' }} suppressHydrationWarning>
         <ViewportHeightSetter />
         <Providers>
           <NextIntlClientProvider messages={messages}>
