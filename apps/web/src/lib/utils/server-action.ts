@@ -48,5 +48,8 @@ export function createErrorResponseFromUnknown<T = never>(error: unknown): ApiRe
     return createErrorResponse(ErrorCode.UNKNOWN_ERROR, error.message);
   }
 
-  return createErrorResponse(ErrorCode.UNKNOWN_ERROR, 'An unknown error occurred.');
+  return createErrorResponse(
+    ErrorCode.UNKNOWN_ERROR,
+    ERROR_MESSAGES[ErrorCode.UNKNOWN_ERROR].message,
+  );
 }

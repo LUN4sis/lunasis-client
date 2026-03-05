@@ -26,7 +26,7 @@ const DefaultLoadingFallback = () => (
 const DefaultUnauthorizedFallback = () => (
   <div className={styles.container}>
     <div className={styles.content}>
-      <h2 className={styles.title}>{ERROR_MESSAGES[ErrorCode.AUTH_REQUIRED]}</h2>
+      <h2 className={styles.title}>{ERROR_MESSAGES[ErrorCode.AUTH_REQUIRED].message}</h2>
       <p className={styles.message}>Redirecting to login page...</p>
     </div>
   </div>

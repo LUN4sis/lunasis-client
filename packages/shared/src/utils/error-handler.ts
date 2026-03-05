@@ -30,12 +30,14 @@ import { logger } from './logger';
 export function transformAxiosError(error: AxiosError<ApiErrorResponse>): AppError {
   // timeout error
   if (error.code === 'ECONNABORTED' || error.message.includes('timeout')) {
-    return new AppError(ErrorCode.TIMEOUT, ERROR_MESSAGES[ErrorCode.TIMEOUT], 408, error);
+    return new AppError(ErrorCode.TIMEOUT, ERROR_MESSAGES[ErrorCode.TIMEOUT].message, 408, error);
   }
 
   // network error(no response)
   if (!error.response) {
-    const networkError = new NetworkError(error.message || ERROR_MESSAGES[ErrorCode.NETWORK_ERROR]);
+    const networkError = new NetworkError(
+      error.message || ERROR_MESSAGES[ErrorCode.NETWORK_ERROR].message,
+    );
     logger.error('Network error occurred', networkError.toJSON());
     return networkError;
   }
@@ -43,7 +45,7 @@ export function transformAxiosError(error: AxiosError<ApiErrorResponse>): AppErr
   const { status, data } = error.response;
   const serverMessage = data?.message;
   const message =
-    serverMessage || HTTP_ERROR_MESSAGES[status] || ERROR_MESSAGES[ErrorCode.UNKNOWN_ERROR];
+    serverMessage || HTTP_ERROR_MESSAGES[status] || ERROR_MESSAGES[ErrorCode.UNKNOWN_ERROR].message;
 
   switch (status) {
     case 401:
@@ -128,7 +130,7 @@ export function transformError(error: unknown): AppError {
 
   const appError = new AppError(
     ErrorCode.UNKNOWN_ERROR,
-    ERROR_MESSAGES[ErrorCode.UNKNOWN_ERROR],
+    ERROR_MESSAGES[ErrorCode.UNKNOWN_ERROR].message,
     undefined,
     error,
   );
@@ -206,32 +208,6 @@ export function getErrorMessage(error: unknown): string {
 }
 
 /**
- * Extract original backend message
- *
- * @param error - Error object
- * @returns original message from backend
- */
-export function getOriginalErrorMessage(error: unknown): string | null {
-  const appError = transformError(error);
-  if (typeof appError.originalError === 'string') {
-    return appError.originalError;
-  }
-  return appError.message;
-}
-
-/**
- * Generate user-friendly error message
- *
- * @param error - Error object
- * @returns Display error message
- */
-export function getDisplayErrorMessage(error: unknown): string {
-  const appError = transformError(error);
-
-  return appError.message;
-}
-
-/**
  * Determine if error is retryable
  *
  * @param error - Error object
@@ -246,18 +222,6 @@ export function isRetryableError(error: unknown): boolean {
   }
 
   return false;
-}
-
-/**
- * Determine if error code is retryable
- *
- * @param errorCode - Error code enum value
- * @returns true if error code is retryable, false otherwise
- */
-export function isRetryableErrorCode(errorCode: ErrorCode): boolean {
-  return [ErrorCode.NETWORK_ERROR, ErrorCode.TIMEOUT, ErrorCode.INTERNAL_SERVER_ERROR].includes(
-    errorCode,
-  );
 }
 
 // ===========================
@@ -288,56 +252,6 @@ export function isAuthenticationError(error: unknown): boolean {
   }
 
   return false;
-}
-
-/**
- * Check if error is permission related
- *
- * @param error - Error object
- * @returns true if error is permission related
- */
-export function isPermissionRelatedError(error: unknown): boolean {
-  if (error instanceof PermissionError) return true;
-
-  if (error instanceof AppError) {
-    return error.code === ErrorCode.FORBIDDEN;
-  }
-
-  return false;
-}
-
-/**
- * Check if error is validation related
- *
- * @param error - Error object
- * @returns true if error is validation related
- */
-export function isValidationRelatedError(error: unknown): boolean {
-  if (error instanceof ValidationError) return true;
-
-  if (error instanceof AppError) {
-    return [ErrorCode.VALIDATION_ERROR, ErrorCode.BAD_REQUEST].includes(error.code);
-  }
-
-  return false;
-}
-
-/**
- * Extract field-specific errors from ValidationError
- *
- * @param error - Error object
- * @returns Field errors map or null
- */
-export function getValidationErrors(error: unknown): Record<string, string[]> | null {
-  if (error instanceof ValidationError && error.errors) {
-    return error.errors;
-  }
-
-  if (error instanceof AppError && error.details?.errors) {
-    return error.details.errors as Record<string, string[]>;
-  }
-
-  return null;
 }
 
 // ===========================
