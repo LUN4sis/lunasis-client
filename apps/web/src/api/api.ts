@@ -1,7 +1,6 @@
 import { BaseApi, getApiUrl } from '@repo/shared/api/base.api';
 import { API_CONFIG } from '@repo/shared/constants/config';
-import { useAuthStore } from '@repo/shared/features/auth';
-import { refreshTokenAPI } from '@repo/shared/features/auth';
+import { refreshTokenAPI, useAuthStore } from '@repo/shared/features/auth';
 import { isAuthError } from '@repo/shared/features/auth/constants/auth.constants';
 import { ErrorCode } from '@repo/shared/types';
 import { logoutSync } from '@web/features/auth/hooks/use-auth';

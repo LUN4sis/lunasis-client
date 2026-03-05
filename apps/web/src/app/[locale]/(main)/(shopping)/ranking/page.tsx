@@ -1,21 +1,22 @@
 'use client';
 
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import { useCallback, useState } from 'react';
+
 import { PRODUCT_CATEGORIES } from '@repo/shared/constants';
 import { ProductCategory } from '@repo/shared/types';
 import { Button } from '@web/components/ui/button';
 import { SelectionGroup } from '@web/components/ui/selection-group';
 import {
   generateProductSlug,
-  type Product,
   ProductCard,
   ProductCardSkeleton,
   useProductPrefetch,
   useProductsByCategory,
+  type Product,
 } from '@web/features/products';
 import { BREAKPOINTS } from '@web/lib/constants';
-import Image from 'next/image';
-import { useRouter } from 'next/navigation';
-import { useCallback, useState } from 'react';
 
 import styles from './ranking.module.scss';
 

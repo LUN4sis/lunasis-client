@@ -1,5 +1,9 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
+import { useParams } from 'next/navigation';
+import { useEffect, useMemo, useState } from 'react';
+
 import { useAuthStore, useAuthStoreHydration } from '@repo/shared/features/auth';
 import { SupportedLocale } from '@repo/shared/types';
 import { getErrorMessage } from '@repo/shared/utils';
@@ -8,14 +12,11 @@ import { sendAnonymousMessageAPI, sendMessageAPI } from '@web/features/chat/api/
 import { ChatHeader } from '@web/features/chat/components/chat-header';
 import { ChatInput } from '@web/features/chat/components/chat-input';
 import { IncognitoBar } from '@web/features/chat/components/incognito-bar';
-import { type Message, MessageList } from '@web/features/chat/components/message-list';
+import { MessageList, type Message } from '@web/features/chat/components/message-list';
 import { Sidebar } from '@web/features/chat/components/sidebar';
 import { useChatStore } from '@web/features/chat/stores';
-import clsx from 'clsx';
-import { useParams } from 'next/navigation';
-import { useTranslations } from 'next-intl';
-import { useEffect, useMemo, useState } from 'react';
 
+import clsx from 'clsx';
 import styles from '../chat.module.scss';
 
 export default function ChatRoomPage() {
@@ -30,7 +31,7 @@ export default function ChatRoomPage() {
   const isLoggedIn = useAuthStore((s) => s.isLoggedIn);
   const { isIncognito, pendingMessages, clearPendingMessages, setCurrentChatId } = useChatStore();
   // Only use isLoggedIn after hydration to prevent false negatives
-  const isAnonymous = isIncognito || (!hydrated || !isLoggedIn);
+  const isAnonymous = isIncognito || !hydrated || !isLoggedIn;
 
   // currentChatId를 URL params와 동기화 (익명: chatRoomId=anonymousId, 로그인: chatRoomId=서버 ID)
   useEffect(() => {

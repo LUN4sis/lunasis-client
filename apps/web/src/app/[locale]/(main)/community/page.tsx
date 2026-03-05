@@ -1,17 +1,16 @@
 'use client';
 
-import { useState, useCallback } from 'react';
-import { useRouter } from 'next/navigation';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import { useCallback, useState } from 'react';
 
-import { usePostsQuery } from '@web/features/community/hooks';
-import { ROUTES, BREAKPOINTS } from '@web/lib/constants';
-import { CommunityCategory } from '@repo/shared/features/community/types';
 import { COMMUNITY_CATEGORIES } from '@repo/shared/features/community/constants';
-
+import { CommunityCategory } from '@repo/shared/features/community/types';
+import { SelectionGroup } from '@web/components/ui/selection-group';
 import { RecentPostsSection } from '@web/features/community/components/recent-posts-section';
 import { SearchBar } from '@web/features/community/components/search-bar';
-import { SelectionGroup } from '@web/components/ui/selection-group';
+import { usePostsQuery } from '@web/features/community/hooks';
+import { BREAKPOINTS, ROUTES } from '@web/lib/constants';
 
 import styles from './community.module.scss';
 

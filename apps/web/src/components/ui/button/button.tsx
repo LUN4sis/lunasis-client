@@ -1,10 +1,11 @@
 'use client';
 
-import clsx from 'clsx';
 import { forwardRef } from 'react';
 
-import styles from './button.module.scss';
 import { ButtonProps } from './types';
+
+import clsx from 'clsx';
+import styles from './button.module.scss';
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   (

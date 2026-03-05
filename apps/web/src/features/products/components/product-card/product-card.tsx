@@ -1,12 +1,13 @@
+import { memo, useState } from 'react';
+
 import { ProductImage } from '@products/components/product-image';
 import { formatPrice } from '@products/utils';
 import type { Product } from '@repo/shared/types';
 import { Badge } from '@web/components/ui/badge';
 import { Rating } from '@web/components/ui/rating';
 import { useIsDesktop } from '@web/lib/hooks';
-import clsx from 'clsx';
-import { memo, useState } from 'react';
 
+import clsx from 'clsx';
 import styles from './product-card.module.scss';
 
 export interface ProductCardProps {

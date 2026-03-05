@@ -1,5 +1,8 @@
 'use client';
 
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
+import { useCallback, useMemo, useState } from 'react';
+
 import { Header } from '@products/components/header';
 import { ROUTES } from '@repo/shared/constants';
 import { ProductCategory } from '@repo/shared/types';
@@ -14,8 +17,6 @@ import {
   useProductDetail,
 } from '@web/features/products';
 import { dynamicWithSkeleton } from '@web/lib/utils';
-import { useParams, useRouter, useSearchParams } from 'next/navigation';
-import { useCallback, useMemo, useState } from 'react';
 
 import styles from './products.module.scss';
 

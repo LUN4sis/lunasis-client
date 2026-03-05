@@ -1,24 +1,24 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
+import { useParams, useRouter } from 'next/navigation';
+import { useEffect, useMemo, useState } from 'react';
+
 import { useAuthStore, useAuthStoreHydration } from '@repo/shared/features/auth';
 import { SupportedLocale } from '@repo/shared/types';
-import { getErrorMessage } from '@repo/shared/utils';
+import { getErrorMessage, logger } from '@repo/shared/utils';
 import { toast } from '@web/components/ui/toast';
 import { sendAnonymousMessageAPI, startChatAPI } from '@web/features/chat/api/chat.api';
 import { ChatHeader } from '@web/features/chat/components/chat-header';
 import { ChatInput } from '@web/features/chat/components/chat-input';
 import { IncognitoBar } from '@web/features/chat/components/incognito-bar';
-import { type Message, MessageList } from '@web/features/chat/components/message-list';
+import { MessageList, type Message } from '@web/features/chat/components/message-list';
 import { Sidebar } from '@web/features/chat/components/sidebar';
 import { useChatStore } from '@web/features/chat/stores';
 import { getAnonymousUserId } from '@web/features/chat/utils/anonymous-user';
-import clsx from 'clsx';
-import { useParams, useRouter } from 'next/navigation';
-import { useTranslations } from 'next-intl';
-import { useEffect, useMemo, useState } from 'react';
 
+import clsx from 'clsx';
 import styles from './chat.module.scss';
-import { logger } from '@repo/shared/utils';
 
 export default function ChatPage() {
   const t = useTranslations('chat');

@@ -1,15 +1,15 @@
 'use client';
 
 import { memo, useState } from 'react';
-import clsx from 'clsx';
 
 import { COMMUNITY_MESSAGES } from '@repo/shared/features/community/constants';
 import type { Comment } from '@repo/shared/features/community/types';
 
-import { CommentHeader } from './comment-header';
 import { CommentEditForm } from './comment-edit-form';
+import { CommentHeader } from './comment-header';
 import { CommentReplyForm } from './comment-reply-form';
 
+import clsx from 'clsx';
 import styles from './styles/comment-item.module.scss';
 
 export interface CommentItemProps {

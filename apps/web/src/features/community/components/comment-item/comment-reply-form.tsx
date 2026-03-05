@@ -2,8 +2,8 @@
 
 import { memo } from 'react';
 
-import { Button } from '@web/components/ui/button';
 import { COMMUNITY_MESSAGES, POST_LIMITS } from '@repo/shared/features/community/constants';
+import { Button } from '@web/components/ui/button';
 
 import clsx from 'clsx';
 import styles from './styles/comment-forms.module.scss';

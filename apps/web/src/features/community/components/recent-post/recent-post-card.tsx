@@ -1,9 +1,8 @@
-import { memo } from 'react';
 import Image from 'next/image';
-
-import { DEFAULT_BLUR_DATA_URL } from '@web/lib/constants';
+import { memo } from 'react';
 
 import type { Post } from '@repo/shared/features/community/types/post.type';
+import { DEFAULT_BLUR_DATA_URL } from '@web/lib/constants';
 
 import clsx from 'clsx';
 import styles from './recent-post-card.module.scss';

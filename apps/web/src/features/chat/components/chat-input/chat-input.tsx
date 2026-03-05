@@ -1,10 +1,11 @@
 'use client';
 
 // import { useChatStore } from '../../stores';
-import SendIcon from '@mui/icons-material/Send';
-import { Button } from '@web/components/ui/button';
 import { useTranslations } from 'next-intl';
 import { useEffect, useRef, useState } from 'react';
+import SendIcon from '@mui/icons-material/Send';
+
+import { Button } from '@web/components/ui/button';
 
 // import AttachmentIcon from '@mui/icons-material/Attachment';
 // import LanguageIcon from '@mui/icons-material/Language';

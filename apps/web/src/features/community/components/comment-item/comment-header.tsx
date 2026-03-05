@@ -1,14 +1,13 @@
 'use client';
 
-import { memo } from 'react';
 import Image from 'next/image';
+import { memo } from 'react';
 
+import { COMMUNITY_MESSAGES } from '@repo/shared/features/community/constants';
+import type { Comment } from '@repo/shared/features/community/types';
+import { formatCommentDate } from '@repo/shared/features/community/utils';
 import { Button } from '@web/components/ui/button';
 import { DEFAULT_BLUR_DATA_URL } from '@web/lib/constants';
-import { COMMUNITY_MESSAGES } from '@repo/shared/features/community/constants';
-import { formatCommentDate } from '@repo/shared/features/community/utils';
-
-import type { Comment } from '@repo/shared/features/community/types';
 
 import styles from './styles/comment-header.module.scss';
 

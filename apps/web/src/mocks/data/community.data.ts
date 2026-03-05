@@ -1,5 +1,4 @@
-import type { PostListItem } from '@repo/shared/features/community/types';
-import { CommunityCategory } from '@repo/shared/features/community/types';
+import { CommunityCategory, type PostListItem } from '@repo/shared/features/community/types';
 
 const createPost = (
   postId: string,

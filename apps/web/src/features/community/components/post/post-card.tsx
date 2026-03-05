@@ -1,11 +1,11 @@
-import { memo } from 'react';
 import Image from 'next/image';
+import { memo } from 'react';
+import BookmarkIcon from '@mui/icons-material/Bookmark';
 
+import type { PostListItem } from '@repo/shared/features/community';
+import { formatPostDate } from '@repo/shared/features/community/utils';
 import { Button } from '@web/components/ui/button';
 import { DEFAULT_BLUR_DATA_URL } from '@web/lib/constants';
-import { formatPostDate } from '@repo/shared/features/community/utils';
-import type { PostListItem } from '@repo/shared/features/community';
-import BookmarkIcon from '@mui/icons-material/Bookmark';
 
 import clsx from 'clsx';
 import styles from './post-card.module.scss';

@@ -1,13 +1,14 @@
 'use client';
 
+import { useParams } from 'next/navigation';
+import { useMutation } from '@tanstack/react-query';
+
 import { ROUTES } from '@repo/shared/constants';
 import { useAuthStore } from '@repo/shared/features/auth';
 import type { AuthSessionResponse } from '@repo/shared/features/auth/types';
 import { AppError, ERROR_MESSAGES, ErrorCode } from '@repo/shared/types';
 import { logger, transformError } from '@repo/shared/utils';
-import { useMutation } from '@tanstack/react-query';
 import { routing } from '@web/i18n/routing';
-import { useParams } from 'next/navigation';
 
 import { exchangeAuthToken } from '../actions/auth.actions';
 import { logoutManager } from '../utils';
@@ -93,7 +94,7 @@ export function useLogin(options?: UseLoginOptions) {
       // Validate result / 결과 검증
       if (!result.success) {
         const errorCode = (result.error?.code as ErrorCode) || ErrorCode.EXCHANGE_FAILED;
-        const errorMessage = result.error?.message || ERROR_MESSAGES[errorCode];
+        const errorMessage = result.error?.message || ERROR_MESSAGES[errorCode].message;
 
         logger.error('[Auth] Token exchange failed', {
           errorCode,
@@ -124,8 +125,8 @@ export function useLogin(options?: UseLoginOptions) {
       // 토큰이 비어있지 않은지 재확인 (안전장치)
       if (!data.accessToken || !data.refreshToken) {
         logger.error('[Auth] Received empty tokens from server (unexpected)', {
-          accessToken: data.accessToken,
-          refreshToken: data.refreshToken,
+          hasAccessToken: !!data.accessToken,
+          hasRefreshToken: !!data.refreshToken,
         });
 
         clearAuth();
@@ -199,19 +200,7 @@ export function useLogin(options?: UseLoginOptions) {
         message: appError.message,
         statusCode: appError.statusCode,
         details: appError.details,
-        // Log full error for debugging
-        // 디버깅을 위한 전체 에러 로그
         fullError: error instanceof Error ? error.stack : String(error),
-      });
-
-      // Also log to console for Vercel logs visibility
-      console.error('[Auth] Login error details:', {
-        error,
-        appError: {
-          code: appError.code,
-          message: appError.message,
-          details: appError.details,
-        },
       });
 
       clearAuth();
@@ -228,19 +217,5 @@ export function useLogin(options?: UseLoginOptions) {
     isLoggingIn: loginMutation.isPending,
     isError: loginMutation.isError,
     error: loginMutation.error,
-  };
-}
-
-/**
- * Hook for checking authentication status
- */
-export function useAuthStatus() {
-  const { isLoggedIn, accessToken, refreshToken, nickname } = useAuthStore();
-
-  return {
-    isLoggedIn,
-    isAuthenticated: isLoggedIn && !!accessToken,
-    hasRefreshToken: !!refreshToken,
-    nickname,
   };
 }

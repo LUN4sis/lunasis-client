@@ -2,11 +2,10 @@
 
 import { useRouter } from 'next/navigation';
 
-import { useCreatePostMutation } from '@web/features/community/hooks';
 import { COMMUNITY_MESSAGES, type CreatePostRequest } from '@repo/shared/features/community';
-
-import { PostForm, type PostFormData, Header } from '@web/features/community/components';
 import { useToastStore } from '@web/components/ui/toast';
+import { Header, PostForm, type PostFormData } from '@web/features/community/components';
+import { useCreatePostMutation } from '@web/features/community/hooks';
 
 import styles from './create-post.module.scss';
 

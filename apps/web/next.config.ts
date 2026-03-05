@@ -1,6 +1,6 @@
+import path from 'path';
 import type { NextConfig } from 'next';
 import createNextIntlPlugin from 'next-intl/plugin';
-import path from 'path';
 
 const devOrigin = process.env.NEXT_PUBLIC_DEV_ORIGIN || '';
 
@@ -88,24 +88,6 @@ const nextConfig: NextConfig = {
             value: devOrigin
               ? `camera=(), microphone=(), geolocation=(self "${devOrigin}")`
               : 'camera=(), microphone=(), geolocation=()',
-          },
-        ],
-      },
-      {
-        source: '/sw.js',
-        headers: [
-          {
-            key: 'Content-Type',
-            value: 'application/javascript; charset=utf-8',
-          },
-          {
-            key: 'Cache-Control',
-            value: 'no-cache, no-store, must-revalidate',
-          },
-          {
-            key: 'Content-Security-Policy',
-            value:
-              "default-src 'self'; script-src 'self'; img-src 'self' data:; connect-src 'self'",
           },
         ],
       },

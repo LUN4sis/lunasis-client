@@ -1,10 +1,11 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
+import { ComponentType, ReactNode, useEffect, useState } from 'react';
+
 import { useAuthStore } from '@repo/shared/features/auth';
 import { ERROR_MESSAGES, ErrorCode } from '@repo/shared/types';
 import { logger } from '@repo/shared/utils';
-import { useRouter } from 'next/navigation';
-import { ComponentType, ReactNode, useEffect, useState } from 'react';
 
 import styles from './with-auth.module.scss';
 
@@ -25,7 +26,7 @@ const DefaultLoadingFallback = () => (
 const DefaultUnauthorizedFallback = () => (
   <div className={styles.container}>
     <div className={styles.content}>
-      <h2 className={styles.title}>{ERROR_MESSAGES[ErrorCode.AUTH_REQUIRED]}</h2>
+      <h2 className={styles.title}>{ERROR_MESSAGES[ErrorCode.AUTH_REQUIRED].message}</h2>
       <p className={styles.message}>Redirecting to login page...</p>
     </div>
   </div>

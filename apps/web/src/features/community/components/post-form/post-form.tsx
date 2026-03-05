@@ -1,16 +1,15 @@
-import { memo, useState, useEffect } from 'react';
-import {
-  COMMUNITY_CATEGORIES,
-  POST_LIMITS,
-  getCommunityCategoryDisplay,
-} from '@repo/shared/features/community';
-import { useUnsavedChangesWarning } from '@web/features/community/utils';
-
-import { Input } from '@web/components/ui/input';
-import { Button } from '@web/components/ui/button';
+import { memo, useEffect, useState } from 'react';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 
+import {
+  COMMUNITY_CATEGORIES,
+  getCommunityCategoryDisplay,
+  POST_LIMITS,
+} from '@repo/shared/features/community';
 import type { CommunityCategory } from '@repo/shared/features/community/types';
+import { Button } from '@web/components/ui/button';
+import { Input } from '@web/components/ui/input';
+import { useUnsavedChangesWarning } from '@web/features/community/utils';
 
 import clsx from 'clsx';
 import styles from './post-form.module.scss';

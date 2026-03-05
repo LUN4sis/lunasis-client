@@ -1,8 +1,9 @@
-import { Button, type ButtonColorScheme, type ButtonVariant } from '@web/components/ui/button';
-import clsx from 'clsx';
 import Image from 'next/image';
 import { isValidElement, memo, type ReactNode } from 'react';
 
+import { Button, type ButtonColorScheme, type ButtonVariant } from '@web/components/ui/button';
+
+import clsx from 'clsx';
 import styles from './selection-group.module.scss';
 
 interface SelectionGroupProps<T extends string> {

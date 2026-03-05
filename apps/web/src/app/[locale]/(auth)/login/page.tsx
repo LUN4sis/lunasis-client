@@ -1,5 +1,8 @@
 'use client';
 
+import Image from 'next/image';
+import { useParams } from 'next/navigation';
+
 import { logger } from '@repo/shared/utils';
 import { Button } from '@web/components/ui/button';
 import {
@@ -8,10 +11,8 @@ import {
   getAppleOAuthCallbackUrl,
   getOAuthCallbackUrl,
 } from '@web/features/auth/utils';
-import clsx from 'clsx';
-import Image from 'next/image';
-import { useParams } from 'next/navigation';
 
+import clsx from 'clsx';
 import styles from './login.module.scss';
 
 /**
