@@ -3,19 +3,13 @@ import '../globals.scss';
 import type { Metadata } from 'next';
 import { hasLocale, NextIntlClientProvider } from 'next-intl';
 import { getMessages, setRequestLocale } from 'next-intl/server';
-import { DM_Sans } from 'next/font/google';
 import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
 
 import { Providers, ViewportHeightSetter } from '@web/components/layouts';
 import { Loading } from '@web/components/ui/loading';
 import { routing } from '@web/i18n/routing';
-
-const dmSans = DM_Sans({
-  variable: '--font-dm-sans',
-  subsets: ['latin'],
-  weight: ['300', '400', '500', '600', '700'],
-});
+import { playfairDisplay } from '@web/styles/fonts';
 
 export const metadata: Metadata = {
   title: 'LUNAsis',
@@ -84,7 +78,11 @@ export default async function LocaleLayout({ children, params }: Props) {
 
   return (
     <html lang={locale} suppressHydrationWarning>
-      <body className={dmSans.variable} style={{ backgroundColor: '#f6f6f6' }} suppressHydrationWarning>
+      <body
+        className={playfairDisplay.variable}
+        style={{ backgroundColor: '#f6f6f6' }}
+        suppressHydrationWarning
+      >
         <ViewportHeightSetter />
         <Providers>
           <NextIntlClientProvider messages={messages}>

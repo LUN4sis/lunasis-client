@@ -1,15 +1,9 @@
 import '../globals.scss';
 
 import type { Metadata } from 'next';
-import { DM_Sans } from 'next/font/google';
 
 import { Providers, ViewportHeightSetter } from '@web/components/layouts';
-
-const dmSans = DM_Sans({
-  variable: '--font-dm-sans',
-  subsets: ['latin'],
-  weight: ['300', '400', '500', '600', '700'],
-});
+import { playfairDisplay } from '@web/styles/fonts';
 
 export const metadata: Metadata = {
   title: 'LUNAsis - Starter Review',
@@ -33,7 +27,7 @@ export const viewport = {
 export default function StarterPackageLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="ko" suppressHydrationWarning>
-      <body className={dmSans.variable} style={{ backgroundColor: '#f6f6f6' }}>
+      <body className={playfairDisplay.variable} style={{ backgroundColor: '#f6f6f6' }}>
         <ViewportHeightSetter />
         <Providers>{children}</Providers>
       </body>

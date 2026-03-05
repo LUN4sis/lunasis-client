@@ -2,9 +2,67 @@
 @use '@/styles/base/reset';
 @use '@/styles/base/base';
 
+// PyeojinGothic (펴진고딕)
+// Source: https://github.com/Jihwan-Suh/PyeojinGothic
+// License: SIL Open Font License
+@font-face {
+  font-family: 'PyeojinGothic';
+  src: url('https://cdn.jsdelivr.net/gh/Jihwan-Suh/PyeojinGothic/fonts/web/woff/PyeojinGothic-Light.woff')
+    format('woff');
+  font-weight: 300;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'PyeojinGothic';
+  src: url('https://cdn.jsdelivr.net/gh/Jihwan-Suh/PyeojinGothic/fonts/web/woff/PyeojinGothic-Regular.woff')
+    format('woff');
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'PyeojinGothic';
+  src: url('https://cdn.jsdelivr.net/gh/Jihwan-Suh/PyeojinGothic/fonts/web/woff/PyeojinGothic-Medium.woff')
+    format('woff');
+  font-weight: 500;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'PyeojinGothic';
+  src: url('https://cdn.jsdelivr.net/gh/Jihwan-Suh/PyeojinGothic/fonts/web/woff/PyeojinGothic-SemiBold.woff')
+    format('woff');
+  font-weight: 600;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'PyeojinGothic';
+  src: url('https://cdn.jsdelivr.net/gh/Jihwan-Suh/PyeojinGothic/fonts/web/woff/PyeojinGothic-Bold.woff')
+    format('woff');
+  font-weight: 700;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'PyeojinGothic';
+  src: url('https://cdn.jsdelivr.net/gh/Jihwan-Suh/PyeojinGothic/fonts/web/woff/PyeojinGothic-ExtraBold.woff')
+    format('woff');
+  font-weight: 800;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'PyeojinGothic';
+  src: url('https://cdn.jsdelivr.net/gh/Jihwan-Suh/PyeojinGothic/fonts/web/woff/PyeojinGothic-Black.woff')
+    format('woff');
+  font-weight: 900;
+  font-display: swap;
+}
+
 :root {
   color-scheme: light;
-  --font-dm-sans: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 
 html {
