@@ -1,6 +1,7 @@
-import axios, { AxiosError } from 'axios';
+import { AxiosError } from 'axios';
 
 import {
+  ApiErrorResponse,
   AppError,
   AuthError,
   ERROR_MESSAGES,
@@ -52,7 +53,7 @@ function makeAxiosError(
   data?: Record<string, unknown>,
   message?: string,
   code?: string,
-): AxiosError {
+): AxiosError<ApiErrorResponse> {
   const error = new AxiosError(
     message ?? 'Request failed',
     code,
@@ -60,24 +61,24 @@ function makeAxiosError(
     {},
     {
       status,
-      data: data ?? {},
+      data: (data ?? {}) as unknown as ApiErrorResponse,
       headers: {},
       config: { headers: {} } as never,
       statusText: 'Error',
     },
   );
-  return error;
+  return error as AxiosError<ApiErrorResponse>;
 }
 
-function makeNetworkAxiosError(message = 'Network Error'): AxiosError {
+function makeNetworkAxiosError(message = 'Network Error'): AxiosError<ApiErrorResponse> {
   const error = new AxiosError(message);
   // no response — simulates network failure
-  return error;
+  return error as AxiosError<ApiErrorResponse>;
 }
 
-function makeTimeoutAxiosError(): AxiosError {
+function makeTimeoutAxiosError(): AxiosError<ApiErrorResponse> {
   const error = new AxiosError('timeout of 30000ms exceeded', 'ECONNABORTED');
-  return error;
+  return error as AxiosError<ApiErrorResponse>;
 }
 
 // ─── transformAxiosError ─────────────────────────────────────────────────────
@@ -94,7 +95,7 @@ describe('transformAxiosError', () => {
     });
 
     it('returns AppError with TIMEOUT code when message contains "timeout"', () => {
-      const error = new AxiosError('request timeout occurred');
+      const error = new AxiosError('request timeout occurred') as AxiosError<ApiErrorResponse>;
       const result = transformAxiosError(error);
 
       expect(result.code).toBe(ErrorCode.TIMEOUT);
@@ -111,7 +112,7 @@ describe('transformAxiosError', () => {
     });
 
     it('uses default NETWORK_ERROR message when axios error message is empty', () => {
-      const error = new AxiosError('');
+      const error = new AxiosError('') as AxiosError<ApiErrorResponse>;
       const result = transformAxiosError(error);
 
       expect(result).toBeInstanceOf(NetworkError);

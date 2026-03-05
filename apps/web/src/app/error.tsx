@@ -3,8 +3,8 @@
 import { useEffect, useState } from 'react';
 import { Home, RotateCcw } from 'lucide-react';
 
+import { ROUTES } from '@repo/shared/constants';
 import { logger } from '@repo/shared/utils';
-import { ROUTES } from '@web/lib/constants';
 
 import clsx from 'clsx';
 import styles from './error.module.scss';
@@ -18,36 +18,21 @@ const Error = ({ error, reset }: ErrorProps) => {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    // Log detailed error information for debugging
-    // 디버깅을 위한 상세 에러 정보 로깅
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
     const errorInfo = {
       message: error.message || '(empty message)',
       name: error.name,
       digest: error.digest,
       stack: error.stack,
-      // Additional context for empty message errors
-      // 빈 메시지 에러에 대한 추가 컨텍스트
       isEmpty: !error.message,
       url: typeof window !== 'undefined' ? window.location.href : 'unknown',
     };
 
     logger.error('Page error occurred', errorInfo);
-
-    // Log to console in development for easier debugging
-    if (process.env.NODE_ENV === 'development') {
-      console.error('[Error Boundary]', error);
-    }
-
-    setMounted(true);
   }, [error]);
-
-  const handleReset = () => {
-    reset();
-  };
-
-  const handleGoHome = () => {
-    window.location.href = ROUTES.ROOT;
-  };
 
   return (
     <div className={styles.container}>
@@ -117,21 +102,17 @@ const Error = ({ error, reset }: ErrorProps) => {
         </p>
 
         <div className={styles.actions}>
-          <button onClick={handleReset} className={styles.primaryButton} aria-label="Refresh page">
+          <button onClick={reset} className={styles.primaryButton} aria-label="Refresh page">
             <div className={styles.iconWrapper} aria-hidden="true">
               <RotateCcw size={18} />
             </div>
             <span>Refresh page</span>
           </button>
 
-          <button
-            onClick={handleGoHome}
-            className={styles.secondaryButton}
-            aria-label="Go to home page"
-          >
+          <a href={ROUTES.ROOT} className={styles.secondaryButton} aria-label="Go to home page">
             <Home size={16} />
             <span>Go to home page</span>
-          </button>
+          </a>
         </div>
       </div>
     </div>
