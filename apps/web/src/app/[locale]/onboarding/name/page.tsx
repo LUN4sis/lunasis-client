@@ -2,12 +2,12 @@
 
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
-import { getRandomNickname, Title, useNicknameValidation } from '@/features/onboarding';
 
 import { ROUTES } from '@repo/shared/constants/routes';
 import { Button } from '@web/components/ui/button';
 import { Input } from '@web/components/ui/input';
 import { Spinner } from '@web/components/ui/spinner';
+import { getRandomNickname, Title, useNicknameValidation } from '@web/features/onboarding';
 
 import styles from '../onboarding.module.scss';
 
