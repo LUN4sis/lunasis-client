@@ -1,57 +1,31 @@
-import axios, { AxiosError } from 'axios';
-
 import { ApiResponse, AppError, ErrorCode } from '@repo/shared/types';
-import { handleApiError } from '@repo/shared/utils';
+import { transformError } from '@repo/shared/utils';
 import { api } from '@web/api/api';
 
 import { SubmitRequest, SubmitResponse } from '../types/onboarding.type';
 
-export async function checkNicknameAPI(nickname: string): Promise<{ ok: true }> {
+// random nickname generator
+export async function getRandomNicknameAPI(): Promise<string> {
   try {
-    const response = await api.post<ApiResponse<{ ok: true }>>('/users/check', { nickname });
+    const response = await api.get<ApiResponse<{ randomNickname: string }>>('/users/recommend');
 
-    if (response.success && response.data) {
-      return { ok: true };
-    }
+    if (response.success && response.data) return response.data.randomNickname;
 
-    throw handleApiError(response);
+    throw new AppError(ErrorCode.UNKNOWN_ERROR, 'Failed to get random nickname');
   } catch (error: unknown) {
-    if (axios.isAxiosError(error)) {
-      const axiosError = error as AxiosError<ApiResponse<{ ok: true }>>;
-      const status = axiosError.response?.status;
-      const message =
-        axiosError.response?.data?.message || axiosError.response?.data?.error?.message;
-
-      if (status === 404 && message?.includes('중복')) {
-        throw new AppError(ErrorCode.VALIDATION_ERROR, 'Nickname already exists', status);
-      }
-    }
-
-    throw handleApiError(error);
+    throw transformError(error);
   }
 }
 
+// user registration API
 export async function registerUserAPI(formData: SubmitRequest): Promise<SubmitResponse> {
   try {
     const response = await api.post<ApiResponse<SubmitResponse>>('/users', formData);
-
     if (response.success && response.data) {
       return response.data;
     }
-
-    throw handleApiError(response);
+    throw new AppError(ErrorCode.UNKNOWN_ERROR, 'Failed to register user');
   } catch (error: unknown) {
-    if (axios.isAxiosError(error)) {
-      const axiosError = error as AxiosError<ApiResponse<SubmitResponse>>;
-      const status = axiosError.response?.status;
-      const message =
-        axiosError.response?.data?.message || axiosError.response?.data?.error?.message;
-
-      if (status === 400) {
-        throw new AppError(ErrorCode.VALIDATION_ERROR, message || 'Invalid data', status);
-      }
-    }
-
-    throw handleApiError(error);
+    throw transformError(error);
   }
 }

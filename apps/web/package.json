@@ -20,6 +20,7 @@
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
+    "@dnd-kit/modifiers": "^9.0.0",
     "@dnd-kit/sortable": "^10.0.0",
     "@dnd-kit/utilities": "^3.2.2",
     "@emotion/react": "^11.14.0",
@@ -92,7 +93,10 @@
     "moduleNameMapper": {
       "^@web/(.*)$": "<rootDir>/src/$1",
       "^@repo/shared/features/(.*)$": "<rootDir>/../../packages/shared/src/features/$1",
-      "^@repo/shared/(.*)$": "<rootDir>/../../packages/shared/src/$1/index.ts",
+      "^@repo/shared/(.*)$": [
+        "<rootDir>/../../packages/shared/src/$1/index.ts",
+        "<rootDir>/../../packages/shared/src/$1.ts"
+      ],
       "^@repo/shared$": "<rootDir>/../../packages/shared/src/index.ts",
       "^.+\\.(css|scss|sass)$": "identity-obj-proxy"
     },

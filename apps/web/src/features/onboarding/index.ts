@@ -1,6 +1,5 @@
 // Hooks
 export { useBirthdateValidation } from './hooks/use-birthdate-validation';
-export { useOnboardingInterests } from './hooks/use-onboarding-interests';
 export {
   useOnboardingComplete,
   useOnboardingNavigationGuard,
@@ -15,7 +14,7 @@ export { Title } from './components/title';
 export { useOnboardingStore } from './stores/use-onboarding-store';
 
 // Actions
-export { checkNickname, registerUser } from './actions/onboarding.actions';
+export { getRandomNickname, registerUser } from './actions/onboarding.actions';
 
 // Constants
 export * from './constants/onboarding.constants';

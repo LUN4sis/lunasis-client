@@ -1,77 +1,49 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useState } from 'react';
 
+import { birthdateSelectionSchema } from '../schemas/validation.schemas';
 import { useOnboardingStore } from '../stores/use-onboarding-store';
 import type { BirthDateSelection } from '../types/onboarding.type';
-import { calculateAge, isBirthValid } from '../utils/validation.utils';
-
-interface BirthdateValidationState {
-  isValid: boolean;
-  error: string;
-}
+import { calculateAge, validate, type ValidationResult } from '../utils/validation.utils';
 
 export function useBirthdateValidation() {
   const birthDateSelection = useOnboardingStore((state) => state.birthDateSelection);
   const setBirthDateSelection = useOnboardingStore((state) => state.setBirthDateSelection);
   const setAge = useOnboardingStore((state) => state.setAge);
 
-  const [validation, setValidation] = useState<BirthdateValidationState>({
+  const [result, setResult] = useState<ValidationResult>({
     isValid: false,
-    error: '',
+    error: null,
   });
 
-  // check if the current selected birth date is complete
-  const isDateComplete = useMemo(() => {
-    return Boolean(birthDateSelection.year && birthDateSelection.month && birthDateSelection.day);
-  }, [birthDateSelection]);
+  const isDateComplete = Boolean(
+    birthDateSelection.year && birthDateSelection.month && birthDateSelection.day,
+  );
 
-  // birth date change handler
   const handleDateChange = useCallback(
     (date: BirthDateSelection) => {
       setBirthDateSelection(date);
-      setValidation({ isValid: false, error: '' });
+      setResult({ isValid: false, error: null });
     },
     [setBirthDateSelection],
   );
 
-  // validate birth date
-  const validateBirthdate = useCallback((): boolean => {
-    // early return if the birth date is not completely filled
-    if (!birthDateSelection.year) {
-      setValidation({ isValid: false, error: 'Please select the year of your birth.' });
-      return false;
-    }
-    if (!birthDateSelection.month) {
-      setValidation({ isValid: false, error: 'Please select the month of your birth.' });
-      return false;
-    }
-    if (!birthDateSelection.day) {
-      setValidation({ isValid: false, error: 'Please select the day of your birth.' });
-      return false;
+  const validateBirthdate = (): boolean => {
+    const validationResult = validate(birthDateSelection, birthdateSelectionSchema);
+    setResult(validationResult);
+
+    if (validationResult.isValid) {
+      const { year, month, day } = birthDateSelection;
+      setAge(calculateAge(parseInt(year, 10), parseInt(month, 10), parseInt(day, 10)));
     }
 
-    const year = parseInt(birthDateSelection.year, 10);
-    const month = parseInt(birthDateSelection.month, 10);
-    const day = parseInt(birthDateSelection.day, 10);
-
-    // early return if the birth date is in the future
-    if (isBirthValid(year, month, day)) {
-      setValidation({ isValid: false, error: 'Please select a valid birth date.' });
-      return false;
-    }
-
-    // calculate age and save it
-    const age = calculateAge(year, month, day);
-    setAge(age);
-    setValidation({ isValid: true, error: '' });
-
-    return true;
-  }, [birthDateSelection, setAge]);
+    return validationResult.isValid;
+  };
 
   return {
     birthDateSelection,
     isDateComplete,
-    isValid: validation.isValid,
-    error: validation.error,
+    isValid: result.isValid,
+    error: result.error,
     handleDateChange,
     validateBirthdate,
   };

@@ -1,0 +1,11 @@
+@use '@/styles' as *;
+
+.starsRow {
+  display: flex;
+  align-self: flex-start;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: none;
+  -webkit-tap-highlight-color: transparent;
+}
