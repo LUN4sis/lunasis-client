@@ -8,8 +8,8 @@ import { logger, transformError } from '@repo/shared/utils';
 import { Button } from '@web/components/ui/button';
 import { Select } from '@web/components/ui/select';
 import { toast } from '@web/components/ui/toast';
-import { withAuth } from '@web/features/auth';
 import {
+  registerUser,
   Title,
   useBirthdateValidation,
   useOnboardingNavigationGuard,
@@ -22,24 +22,13 @@ import styles from '../onboarding.module.scss';
 function AgePage() {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isDateValid, setIsDateValid] = useState(false);
 
-  const nickname = useOnboardingStore((state) => state.nickname);
-  const isNicknameValidated = useOnboardingStore((s) => s.isNicknameValidated);
+  const nickname = useOnboardingStore((s) => s.nickname);
 
-  // navigation guard
-  useOnboardingNavigationGuard({
-    requireNickname: true,
-    isNicknameValidated,
-  });
-
-  // birthdate validation hook
   const { birthDateSelection, error, handleDateChange, validateBirthdate } =
     useBirthdateValidation();
 
-  // track the internal validation state of the Select component
-  const [isDateValid, setIsDateValid] = useState(false);
-
-  // handle the selection change of the Select component
   const handleSelectionChange = useCallback(
     (selection: BirthDateSelection) => {
       handleDateChange(selection);
@@ -51,20 +40,25 @@ function AgePage() {
     async (e: React.FormEvent) => {
       e.preventDefault();
 
-      // early return if the birth date is not valid
-      if (!isDateValid || !validateBirthdate()) {
-        return;
-      }
+      if (!isDateValid || !validateBirthdate()) return;
 
       setIsSubmitting(true);
 
       try {
-        logger.info('[Age Page] Submitting age:', { age: useOnboardingStore.getState().age });
+        const { nickname, birthDateSelection } = useOnboardingStore.getState();
+        const age = new Date().getFullYear() - parseInt(birthDateSelection.year, 10) + 1;
+
+        logger.info('[Age Page] Submitting user:', { nickname, age });
+
+        const response = await registerUser({ chatNickname: nickname.trim(), age });
+        if (!response.success) {
+          return;
+        }
+
         router.push(ROUTES.ONBOARDING_INTERESTS);
       } catch (error) {
         const appError = transformError(error);
         logger.error('[Age Page] Submit error:', appError.toJSON());
-        toast.error('Something went wrong. Please try again.');
       } finally {
         setIsSubmitting(false);
       }
@@ -75,41 +69,43 @@ function AgePage() {
   return (
     <section className={styles.content}>
       <Title>
-        {nickname}, Love it!
+        {nickname}님, 좋아요!
         <br />
-        Please select your birthday.
+        {nickname}님에 대해 조금 더 알려주세요.
       </Title>
-      <h2 className={styles.description}>
-        We&apos;ll provide personalized information
-        <br />
-        based on your age.
-      </h2>
 
-      <form onSubmit={handleSubmit} className={styles.form}>
-        <Select
-          onChange={handleDateChange}
-          onValidityChange={setIsDateValid}
-          onSelectionChange={handleSelectionChange}
-          error={error}
-          initialValue={birthDateSelection}
-        />
+      <span className={styles.description}>
+        {nickname}님의 생년월일을 포함한 모든 개인정보는
+        <br />
+        서비스 내에서의 개인화 경험에만 사용돼요.
+      </span>
+
+      <form onSubmit={handleSubmit}>
+        <div className={styles.select}>
+          <Select
+            onChange={handleDateChange}
+            onValidityChange={setIsDateValid}
+            onSelectionChange={handleSelectionChange}
+            error={error ?? undefined}
+            initialValue={birthDateSelection}
+          />
+        </div>
 
         <Button
           type="submit"
+          colorScheme="pink"
           isLoading={isSubmitting}
           disabled={isSubmitting}
-          className={styles.submitButton}
+          className={styles.submit}
           onKeyDown={(e) => {
-            if (e.key === 'Enter' && !isSubmitting) {
-              handleSubmit(e);
-            }
+            if (e.key === 'Enter' && !isSubmitting) handleSubmit(e);
           }}
         >
-          Submit
+          다음
         </Button>
       </form>
     </section>
   );
 }
 
-export default withAuth(AgePage);
+export default AgePage;

@@ -1,107 +1,85 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import { getRandomNickname, Title, useNicknameValidation } from '@/features/onboarding';
 
-import { ROUTES } from '@repo/shared/constants';
-import { useAuthStore } from '@repo/shared/features/auth';
-import { logger, transformError } from '@repo/shared/utils';
+import { ROUTES } from '@repo/shared/constants/routes';
 import { Button } from '@web/components/ui/button';
 import { Input } from '@web/components/ui/input';
-import { toast } from '@web/components/ui/toast';
-import { withAuth } from '@web/features/auth';
-import { Title, useNicknameValidation, useOnboardingStore } from '@web/features/onboarding';
+import { Spinner } from '@web/components/ui/spinner';
 
 import styles from '../onboarding.module.scss';
 
+const MOCK_RANDOM_NICKNAME = 'LUNA1234';
+
 function NamePage() {
   const router = useRouter();
-  const name = useAuthStore((s) => s.nickname);
-  const nickname = useOnboardingStore((s) => s.nickname);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [randomNickname, setRandomNickname] = useState<string | null>(null);
+  const { nickname: name, handleNicknameChange, validateNickname, error } = useNicknameValidation();
 
-  const { handleNicknameChange, validateNickname, isLoading, error, setIsNicknameValidated } =
-    useNicknameValidation();
+  // get random nickname (account ID)
+  useEffect(() => {
+    getRandomNickname().then((response) => {
+      if (response.success && response.data) {
+        setRandomNickname(response.data.randomNickname);
+      } else {
+        setRandomNickname(MOCK_RANDOM_NICKNAME);
+      }
+    });
+  }, []);
 
   const handleSubmit = useCallback(
-    async (e: React.FormEvent) => {
-      e.preventDefault();
-
-      // early return if the form is already submitting or loading
-      if (isSubmitting || isLoading) {
-        return;
-      }
-
-      setIsSubmitting(true);
-
-      try {
-        const isNicknameValid = await validateNickname();
-
-        // early return if the nickname validation failed
-        if (!isNicknameValid) {
-          logger.warn('[Name Page] Nickname validation failed');
-          // early return if the nickname validation failed
-          return;
-        }
-
-        setIsNicknameValidated(true);
-        logger.info('[Name Page] Nickname validated successfully:', { nickname });
-        router.push(ROUTES.ONBOARDING_AGE);
-      } catch (error) {
-        toast.error('Something went wrong. Please try again.');
-        const appError = transformError(error);
-        logger.error('[Name Page] Error during nickname validation:', appError.toJSON());
-      } finally {
-        setIsSubmitting(false);
-      }
+    (event: React.FormEvent) => {
+      event.preventDefault();
+      if (!validateNickname()) return;
+      router.push(ROUTES.ONBOARDING_AGE);
     },
-    [isSubmitting, isLoading, validateNickname, setIsNicknameValidated, nickname, router],
+    [router, validateNickname],
   );
 
-  const handleInputChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      handleNicknameChange(e.target.value);
-    },
-    [handleNicknameChange],
-  );
-
-  const isButtonDisabled = isSubmitting || isLoading;
+  if (randomNickname === null) return <Spinner />;
 
   return (
     <section className={styles.content}>
       <Title>
-        Welcome {name}!
+        안녕하세요!
         <br />
-        Choose a nickname for Lunasis.
+        LUNA가 당신을 어떻게 부르면 좋을까요?
       </Title>
 
-      <form onSubmit={handleSubmit} className={styles.form}>
+      <form className={styles.form} onSubmit={handleSubmit}>
         <Input
-          name="nickname"
-          value={nickname}
-          onChange={handleInputChange}
-          error={error || ''}
-          disabled={isButtonDisabled}
-          className={styles.inputWrapper}
-          inputClassName={styles.inputField}
+          variant="outline"
+          value={name}
+          onChange={(e) => handleNicknameChange(e.target.value)}
+          fullWidth
+          inputClassName={styles.input}
+          size="md"
+          error={error ?? undefined}
         />
+
+        <span>
+          상품 리뷰 등에 사용될 {name}님의 아이디는 {randomNickname}(으)로 할게요.
+          <br />
+          아이디는 추후에 설정에서 수정할 수 있어요.
+        </span>
 
         <Button
           type="submit"
-          isLoading={isButtonDisabled}
-          disabled={isButtonDisabled}
-          className={styles.submitButton}
+          colorScheme="pink"
+          className={styles.submit}
           onKeyDown={(e) => {
-            if (e.key === 'Enter' && !isButtonDisabled) {
+            if (e.key === 'Enter') {
               handleSubmit(e);
             }
           }}
         >
-          Submit
+          다음
         </Button>
       </form>
     </section>
   );
 }
 
-export default withAuth(NamePage);
+export default NamePage;
