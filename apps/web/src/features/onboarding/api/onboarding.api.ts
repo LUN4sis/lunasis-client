@@ -20,9 +20,9 @@ export async function getRandomNicknameAPI(): Promise<string> {
 // user registration API
 export async function registerUserAPI(formData: SubmitRequest): Promise<SubmitResponse> {
   try {
-    const response = await api.post<ApiResponse<SubmitResponse>>('/users', formData);
-    if (response.success && response.data) {
-      return response.data;
+    const response = await api.post<SubmitResponse>('/users', formData);
+    if (response.nickname) {
+      return response;
     }
     throw new AppError(ErrorCode.UNKNOWN_ERROR, 'Failed to register user');
   } catch (error: unknown) {
