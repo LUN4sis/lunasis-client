@@ -1,4 +1,4 @@
-import { AppError, ErrorCode, type ApiResponse } from '@repo/shared/types';
+import { AppError, ERROR_MESSAGES, ErrorCode, type ApiResponse } from '@repo/shared/types';
 
 /**
  * Create success response

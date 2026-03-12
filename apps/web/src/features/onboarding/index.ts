@@ -1,6 +1,5 @@
 // Hooks
 export { useBirthdateValidation } from './hooks/use-birthdate-validation';
-export { useOnboardingInterests } from './hooks/use-onboarding-interests';
 export {
   useOnboardingComplete,
   useOnboardingNavigationGuard,

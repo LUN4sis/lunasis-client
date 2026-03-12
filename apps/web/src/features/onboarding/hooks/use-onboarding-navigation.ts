@@ -8,35 +8,33 @@ import { toast } from '@web/components/ui/toast';
 interface NavigationGuardOptions {
   requireNickname?: boolean;
   requireAge?: boolean;
-  isNicknameValidated?: boolean;
+  nickname?: string;
   age?: number;
 }
 
 export function useOnboardingNavigationGuard({
   requireNickname = false,
   requireAge = false,
-  isNicknameValidated,
+  nickname,
   age,
 }: NavigationGuardOptions) {
   const router = useRouter();
 
   useEffect(() => {
-    // early return if nickname validation is required but not completed
-    if (requireNickname && !isNicknameValidated) {
-      logger.warn('[Navigation Guard] Nickname validation required');
+    if (requireNickname && !nickname) {
+      logger.warn('[Navigation Guard] Nickname required');
       toast.warning('Please complete the previous step first.');
       router.push(ROUTES.ONBOARDING_NAME);
       return;
     }
 
-    // early return if age is required but not set
     if (requireAge && (!age || age === 0)) {
       logger.warn('[Navigation Guard] Age required');
       toast.warning('Please complete your profile step by step.');
       router.push(ROUTES.ONBOARDING_AGE);
       return;
     }
-  }, [requireNickname, requireAge, isNicknameValidated, age, router]);
+  }, [requireNickname, requireAge, nickname, age, router]);
 }
 
 export function useOnboardingComplete() {
