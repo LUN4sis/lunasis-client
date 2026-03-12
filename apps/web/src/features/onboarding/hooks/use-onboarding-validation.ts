@@ -47,9 +47,9 @@ export function useNicknameValidation() {
 
   return {
     nickname,
+    fetchRecommendedNickname,
     handleNicknameChange,
     validateNickname,
-    fetchRecommendedNickname,
     isValid: result.isValid,
     error: result.error,
     isLoading: result.isLoading,
