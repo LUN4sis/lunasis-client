@@ -4,17 +4,13 @@ import { AxiosError } from 'axios';
 
 import type { AuthSessionResponse } from '@repo/shared/features/auth';
 import { appleLoginAPI, googleLoginAPI, logoutAPI } from '@repo/shared/features/auth/api/auth.api';
-import { ErrorCode } from '@repo/shared/types';
-
-interface ActionResponse<T = unknown> {
-  success: boolean;
-  data?: T;
-  error?: {
-    code: string;
-    message: string;
-    details?: string;
-  };
-}
+import { ErrorCode, type ApiResponse } from '@repo/shared/types';
+import { handleError, logger } from '@repo/shared/utils';
+import {
+  createErrorResponse,
+  createErrorResponseFromUnknown,
+  createSuccessResponse,
+} from '@web/lib/utils/server-action';
 
 /**
  * Exchange OAuth credential for tokens (Server Action)
