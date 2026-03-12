@@ -1,0 +1,6 @@
+interface:
+  display_name: "Frontend Patterns"
+  short_description: "React and Next.js patterns and best practices"
+  default_prompt: "Apply React/Next.js patterns and best practices"
+policy:
+  allow_implicit_invocation: true
