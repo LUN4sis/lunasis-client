@@ -1,5 +1,3 @@
-import axios, { AxiosError } from 'axios';
-
 import { ApiResponse, AppError, ErrorCode } from '@repo/shared/types';
 import { transformError } from '@repo/shared/utils';
 import { api } from '@web/api/api';
