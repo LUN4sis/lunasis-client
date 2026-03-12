@@ -38,7 +38,7 @@ export function useNicknameValidation() {
     setResult((prev) => ({ ...prev, isValid, error }));
   };
 
-  // validate nickname schema only (no server duplicate check)
+  // validate snickname schema only (no server duplicate check)
   const validateNickname = (): boolean => {
     const validationResult = validate(nickname, nicknameSchema);
     setResult({ ...validationResult, isLoading: false });
