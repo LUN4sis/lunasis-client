@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
+import { getRandomNickname, Title, useNicknameValidation } from '@/features/onboarding';
 
 import { ROUTES } from '@repo/shared/constants/routes';
 import { Button } from '@web/components/ui/button';
