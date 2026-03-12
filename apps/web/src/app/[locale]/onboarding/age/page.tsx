@@ -8,8 +8,8 @@ import { logger, transformError } from '@repo/shared/utils';
 import { Button } from '@web/components/ui/button';
 import { Select } from '@web/components/ui/select';
 import {
-  Title,
   registerUser,
+  Title,
   useBirthdateValidation,
   useOnboardingStore,
   type BirthDateSelection,
@@ -89,8 +89,8 @@ function AgePage() {
             onSelectionChange={handleSelectionChange}
             error={error ?? undefined}
             initialValue={birthDateSelection}
-            />
-        </div>  
+          />
+        </div>
 
         <Button
           type="submit"
