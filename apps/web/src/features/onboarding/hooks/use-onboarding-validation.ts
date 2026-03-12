@@ -15,18 +15,6 @@ export function useNicknameValidation() {
   const nickname = useOnboardingStore((s) => s.nickname);
   const setNickname = useOnboardingStore((s) => s.setNickname);
 
-  const handleNicknameChange = (value: string) => {
-    setNickname(value);
-    const { isValid, error } = validate(value, nicknameSchema);
-    setResult((prev) => ({ ...prev, isValid, error }));
-  };
-
-  const validateNickname = (): boolean => {
-    const { isValid, error } = validate(nickname, nicknameSchema);
-    setResult((prev) => ({ ...prev, isValid, error }));
-    return isValid;
-  };
-
   const fetchRecommendedNickname = async () => {
     setResult((prev) => ({ ...prev, isLoading: true }));
 
@@ -42,6 +30,19 @@ export function useNicknameValidation() {
     } finally {
       setResult((prev) => ({ ...prev, isLoading: false }));
     }
+  };
+
+  const handleNicknameChange = (value: string) => {
+    setNickname(value);
+    const { isValid, error } = validate(value, nicknameSchema);
+    setResult((prev) => ({ ...prev, isValid, error }));
+  };
+
+  // validate nickname schema only (no server duplicate check)
+  const validateNickname = (): boolean => {
+    const validationResult = validate(nickname, nicknameSchema);
+    setResult({ ...validationResult, isLoading: false });
+    return validationResult.isValid;
   };
 
   return {
