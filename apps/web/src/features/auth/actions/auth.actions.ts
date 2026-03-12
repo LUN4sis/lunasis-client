@@ -1,7 +1,5 @@
 'use server';
 
-import { AxiosError } from 'axios';
-
 import type { AuthSessionResponse } from '@repo/shared/features/auth';
 import { appleLoginAPI, googleLoginAPI, logoutAPI } from '@repo/shared/features/auth/api/auth.api';
 import { ErrorCode } from '@repo/shared/types';
