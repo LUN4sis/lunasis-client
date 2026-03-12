@@ -23,8 +23,6 @@ export interface OnboardingState {
   nickname: string;
   age: number;
   birthDateSelection: BirthDateSelection;
-
-  isNicknameValidated: boolean;
 }
 
 export interface SubmitRequest {

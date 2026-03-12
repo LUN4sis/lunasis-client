@@ -14,8 +14,18 @@ export function useNicknameValidation() {
 
   const nickname = useOnboardingStore((s) => s.nickname);
   const setNickname = useOnboardingStore((s) => s.setNickname);
-  const isNicknameValidated = useOnboardingStore((s) => s.isNicknameValidated);
-  const setIsNicknameValidated = useOnboardingStore((s) => s.setIsNicknameValidated);
+
+  const handleNicknameChange = (value: string) => {
+    setNickname(value);
+    const { isValid, error } = validate(value, nicknameSchema);
+    setResult((prev) => ({ ...prev, isValid, error }));
+  };
+
+  const validateNickname = (): boolean => {
+    const { isValid, error } = validate(nickname, nicknameSchema);
+    setResult((prev) => ({ ...prev, isValid, error }));
+    return isValid;
+  };
 
   const fetchRecommendedNickname = async () => {
     setResult((prev) => ({ ...prev, isLoading: true }));
@@ -26,7 +36,6 @@ export function useNicknameValidation() {
       if (response.success && response.data) {
         const { randomNickname } = response.data;
         setNickname(randomNickname);
-        setIsNicknameValidated(true);
       }
     } catch {
       // silently fail — user can still type their own nickname
@@ -35,37 +44,13 @@ export function useNicknameValidation() {
     }
   };
 
-  const handleNicknameChange = (value: string) => {
-    setNickname(value);
-    setIsNicknameValidated(false);
-
-    const validationResult = validate(value, nicknameSchema);
-
-    setResult({
-      ...validationResult,
-      isLoading: false,
-    });
-  };
-
-  // validate nickname schema only (no server duplicate check)
-  const validateNickname = (): boolean => {
-    const validationResult = validate(nickname, nicknameSchema);
-    setResult({ ...validationResult, isLoading: false });
-    if (validationResult.isValid) {
-      setIsNicknameValidated(true);
-    }
-    return validationResult.isValid;
-  };
-
   return {
     nickname,
-    fetchRecommendedNickname,
     handleNicknameChange,
     validateNickname,
+    fetchRecommendedNickname,
     isValid: result.isValid,
     error: result.error,
     isLoading: result.isLoading,
-    isNicknameValidated,
-    setIsNicknameValidated,
   };
 }

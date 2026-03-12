@@ -10,30 +10,30 @@ import { useOnboardingStore } from '@web/features/onboarding/stores/use-onboardi
 
 function OnboardingPage() {
   const router = useRouter();
-  const isNicknameValidated = useOnboardingStore((s) => s.isNicknameValidated);
+  const nickname = useOnboardingStore((s) => s.nickname);
   const age = useOnboardingStore((s) => s.age);
 
   useEffect(() => {
     logger.info('[Onboarding Index] Redirecting based on progress:', {
-      isNicknameValidated,
+      nickname,
       age,
     });
 
     // early return if all steps are completed
-    if (isNicknameValidated && age) {
+    if (nickname && age) {
       router.replace(ROUTES.ONBOARDING_INTERESTS);
       return;
     }
 
     // early return if only the nickname is completed
-    if (isNicknameValidated) {
+    if (nickname) {
       router.replace(ROUTES.ONBOARDING_AGE);
       return;
     }
 
     // default: redirect to the name page
     router.replace(ROUTES.ONBOARDING_NAME);
-  }, [isNicknameValidated, age, router]);
+  }, [nickname, age, router]);
 
   // optional loading indicator during redirect
   return null;
