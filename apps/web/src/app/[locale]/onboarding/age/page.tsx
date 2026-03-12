@@ -1,7 +1,7 @@
 'use client';
 
-import { useCallback, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useCallback, useState } from 'react';
 
 import { ROUTES } from '@repo/shared/constants';
 import { logger, transformError } from '@repo/shared/utils';
@@ -51,7 +51,6 @@ function AgePage() {
         const response = await registerUser({ chatNickname: nickname, age: koreanAge });
 
         if (!response.success) {
-          toast.error(response.error?.message || '오류가 발생했습니다. 다시 시도해주세요.');
           return;
         }
 
@@ -59,7 +58,6 @@ function AgePage() {
       } catch (error) {
         const appError = transformError(error);
         logger.error('[Age Page] Submit error:', appError.toJSON());
-        toast.error('오류가 발생했습니다. 다시 시도해주세요.');
       } finally {
         setIsSubmitting(false);
       }
