@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { checkNickname } from '../actions/onboarding.actions';
+import { getRandomNickname } from '../actions/onboarding.actions';
 import { nicknameSchema } from '../schemas/validation.schemas';
 import { useOnboardingStore } from '../stores/use-onboarding-store';
 import { validate, type ValidationResult } from '../utils/validation.utils';
@@ -17,6 +17,24 @@ export function useNicknameValidation() {
   const isNicknameValidated = useOnboardingStore((s) => s.isNicknameValidated);
   const setIsNicknameValidated = useOnboardingStore((s) => s.setIsNicknameValidated);
 
+  const fetchRecommendedNickname = async () => {
+    setResult((prev) => ({ ...prev, isLoading: true }));
+
+    try {
+      const response = await getRandomNickname();
+
+      if (response.success && response.data) {
+        const { randomNickname } = response.data;
+        setNickname(randomNickname);
+        setIsNicknameValidated(true);
+      }
+    } catch {
+      // silently fail — user can still type their own nickname
+    } finally {
+      setResult((prev) => ({ ...prev, isLoading: false }));
+    }
+  };
+
   const handleNicknameChange = (value: string) => {
     setNickname(value);
     setIsNicknameValidated(false);
@@ -29,60 +47,19 @@ export function useNicknameValidation() {
     });
   };
 
-  // validate nickname and check if it is available
-  const validateNickname = async (): Promise<boolean> => {
-    if (isNicknameValidated) {
-      return true;
-    }
-
+  // validate nickname schema only (no server duplicate check)
+  const validateNickname = (): boolean => {
     const validationResult = validate(nickname, nicknameSchema);
-
-    if (!validationResult.isValid) {
-      setResult({
-        ...validationResult,
-        isLoading: false,
-      });
-      return false;
+    setResult({ ...validationResult, isLoading: false });
+    if (validationResult.isValid) {
+      setIsNicknameValidated(true);
     }
-
-    // check if nickname is available
-    setResult((prev) => ({ ...prev, isLoading: true }));
-
-    try {
-      const response = await checkNickname(nickname);
-
-      if (response.success) {
-        setResult({
-          isValid: true,
-          error: null,
-          isLoading: false,
-        });
-        // save validation success state
-        setIsNicknameValidated(true);
-        return true;
-      } else {
-        setResult({
-          isValid: false,
-          error:
-            response.error?.message || 'An error occurred while checking nickname availability.',
-          isLoading: false,
-        });
-        setIsNicknameValidated(false);
-        return false;
-      }
-    } catch {
-      setResult({
-        isValid: false,
-        error: 'An error occurred while checking nickname availability.',
-        isLoading: false,
-      });
-      setIsNicknameValidated(false);
-      return false;
-    }
+    return validationResult.isValid;
   };
 
   return {
     nickname,
+    fetchRecommendedNickname,
     handleNicknameChange,
     validateNickname,
     isValid: result.isValid,

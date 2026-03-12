@@ -1,46 +1,37 @@
 import { z } from 'zod';
 
-export const NICKNAME_REGEX = /^[a-zA-Z0-9_-]+$/;
+import { isBirthValid } from '../utils/validation.utils';
 
-// --- nickname schema ---
-export const nicknameEmptySchema = z.string().trim().min(1, 'Please enter your nickname.');
+export const NICKNAME_REGEX = /^[a-zA-Z0-9_\-\uAC00-\uD7A3]+$/;
 
-export const nicknameWhitespaceSchema = z
-  .string()
-  .refine((val) => !/\s/.test(val), 'Nickname must not contain spaces or whitespace characters.');
-
-export const nicknameLengthSchema = z
-  .string()
-  .trim()
-  .min(2, 'Nickname must be at least 2 characters long.')
-  .max(10, 'Nickname must be at most 10 characters long.');
-
-export const nicknameCharSchema = z
-  .string()
-  .trim()
-  .regex(NICKNAME_REGEX, 'Nickname must contain only letters, numbers, underscores, and hyphens.');
-
+// --- nickname ---
 export const nicknameSchema = z
   .string()
-  .pipe(nicknameWhitespaceSchema)
-  .pipe(nicknameEmptySchema)
-  .pipe(nicknameLengthSchema)
-  .pipe(nicknameCharSchema);
+  .min(1, '닉네임을 입력해주세요.')
+  .refine((val) => !/\s/.test(val), '닉네임에 공백을 포함할 수 없습니다.')
+  .min(2, '닉네임은 최소 2자 이상이어야 합니다.')
+  .max(10, '닉네임은 최대 10자 이하여야 합니다.')
+  .regex(NICKNAME_REGEX, '특수문자는 밑줄(_)과 하이픈(-)만 포함할 수 있습니다.');
 
 // --- age schema ---
 export const ageSchema = z.number();
+
+// --- birthdate selection schema ---
+export const birthdateSelectionSchema = z
+  .object({
+    year: z.string().min(1, '출생 연도를 선택해주세요.'),
+    month: z.string().min(1, '출생 월을 선택해주세요.'),
+    day: z.string().min(1, '출생 일을 선택해주세요.'),
+  })
+  .refine(({ year, month, day }) => {
+    if (!year || !month || !day) return true;
+    return !isBirthValid(parseInt(year, 10), parseInt(month, 10), parseInt(day, 10));
+  }, '유효한 생년월일을 선택해주세요.');
 
 // --- onboarding form schema ---
 export const onboardingFormSchema = z.object({
   nickname: nicknameSchema,
   age: ageSchema,
-  chatbotService: z.boolean(),
-  privateChat: z.boolean(),
-  insurance: z.array(z.string()).nullable(),
-  hospitalSearch: z.boolean(),
-  community: z.array(z.string()).nullable(),
-  productCategories: z.array(z.string()).nullable(),
-  priceComparison: z.boolean(),
 });
 
 export type OnboardingFormSchema = z.infer<typeof onboardingFormSchema>;

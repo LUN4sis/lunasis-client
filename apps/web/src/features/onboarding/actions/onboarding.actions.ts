@@ -6,18 +6,15 @@ import {
   createSuccessResponse,
 } from '@web/lib/utils/server-action';
 
-import { checkNicknameAPI, registerUserAPI } from '../api/onboarding.api';
+import { getRandomNicknameAPI, registerUserAPI } from '../api/onboarding.api';
 import { ageSchema, nicknameSchema } from '../schemas/validation.schemas';
 import { SubmitRequest, SubmitResponse } from '../types/onboarding.type';
-import { validateFieldsForServer, validateForServer } from '../utils/validation.utils';
+import { validateFieldsForServer } from '../utils/validation.utils';
 
-export async function checkNickname(nickname: string): Promise<ApiResponse<{ ok: true }>> {
+export async function getRandomNickname(): Promise<ApiResponse<{ randomNickname: string }>> {
   try {
-    const validationError = validateForServer<string, { ok: true }>(nickname, nicknameSchema);
-    if (validationError) return validationError;
-
-    const result = await checkNicknameAPI(nickname);
-    return createSuccessResponse(result);
+    const randomNickname = await getRandomNicknameAPI();
+    return createSuccessResponse({ randomNickname });
   } catch (error) {
     return createErrorResponseFromUnknown(error);
   }
@@ -30,15 +27,12 @@ export async function checkNickname(nickname: string): Promise<ApiResponse<{ ok:
  */
 export async function registerUser(data: SubmitRequest): Promise<ApiResponse<SubmitResponse>> {
   try {
-    // validation for required fields (nickname, age only)
     const requiredFieldsError = validateFieldsForServer<SubmitResponse>([
-      { value: data.nickname, schema: nicknameSchema },
+      { value: data.chatNickname, schema: nicknameSchema },
       { value: data.age, schema: ageSchema },
     ]);
 
     if (requiredFieldsError) return requiredFieldsError;
-
-    // zipCode is now boolean, no null check needed
 
     const result = await registerUserAPI(data);
     return createSuccessResponse(result);
