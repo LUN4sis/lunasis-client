@@ -1,4 +1,5 @@
 @use 'sass:map';
+@use 'sass:color';
 @use '../../../styles/design/colors' as colors;
 @use '../../../styles/design/typography' as typography;
 @use '../../../styles/design/spacing' as spacing;
@@ -7,7 +8,7 @@
 $color-schemes: (
   'pink': (
     'bg': colors.$red,
-    'hover': colors.$red-300,
+    'hover': color.scale(colors.$red, $lightness: -15%),
     'active': colors.$red,
     'text': colors.$white,
     'border': colors.$red,
@@ -31,7 +32,7 @@ $color-schemes: (
   ),
   'orange': (
     'bg': colors.$orange,
-    'hover': colors.$orange,
+    'hover': color.scale(colors.$orange, $lightness: -15%),
     'active': colors.$orange,
     'text': colors.$white,
     'border': colors.$orange,
