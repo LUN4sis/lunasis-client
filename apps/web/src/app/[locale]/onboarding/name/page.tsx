@@ -7,7 +7,8 @@ import { ROUTES } from '@repo/shared/constants/routes';
 import { Button } from '@web/components/ui/button';
 import { Input } from '@web/components/ui/input';
 import { Spinner } from '@web/components/ui/spinner';
-import { getRandomNickname, Title, useNicknameValidation } from '@web/features/onboarding';
+import { Title, useNicknameValidation } from '@web/features/onboarding';
+import { getRandomNicknameAPI } from '@web/features/onboarding/api/onboarding.api';
 
 import styles from '../onboarding.module.scss';
 
@@ -20,13 +21,9 @@ function NamePage() {
 
   // get random nickname (account ID)
   useEffect(() => {
-    getRandomNickname().then((response) => {
-      if (response.success && response.data) {
-        setRandomNickname(response.data.randomNickname);
-      } else {
-        setRandomNickname(MOCK_RANDOM_NICKNAME);
-      }
-    });
+    getRandomNicknameAPI()
+      .then((randomNick) => setRandomNickname(randomNick))
+      .catch(() => setRandomNickname(MOCK_RANDOM_NICKNAME));
   }, []);
 
   const handleSubmit = useCallback(
