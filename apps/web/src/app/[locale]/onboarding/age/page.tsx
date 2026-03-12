@@ -44,12 +44,11 @@ function AgePage() {
 
       try {
         const { nickname, birthDateSelection } = useOnboardingStore.getState();
-        const koreanAge = new Date().getFullYear() - parseInt(birthDateSelection.year, 10) + 1;
+        const age = new Date().getFullYear() - parseInt(birthDateSelection.year, 10) + 1;
 
-        logger.info('[Age Page] Submitting user:', { nickname, koreanAge });
+        logger.info('[Age Page] Submitting user:', { nickname, age });
 
-        const response = await registerUser({ chatNickname: nickname, age: koreanAge });
-
+        const response = await registerUser({ chatNickname: nickname.trim(), age });
         if (!response.success) {
           return;
         }
@@ -80,7 +79,7 @@ function AgePage() {
       </span>
 
       <form onSubmit={handleSubmit}>
-        <div className={styles.selectContainer}>
+        <div className={styles.select}>
           <Select
             onChange={handleDateChange}
             onValidityChange={setIsDateValid}
