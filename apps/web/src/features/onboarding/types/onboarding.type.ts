@@ -33,3 +33,13 @@ export interface SubmitRequest {
 export interface SubmitResponse {
   nickname: string;
 }
+
+export interface PreferencesRequest {
+  healthCareInterests: string[];
+  gynecologyInterests: string[];
+  hasVisited: boolean;
+  hospitalPriorities: string[];
+  communityInterests: string[];
+  commerceInterests: string[];
+  productCategories: string[];
+}
