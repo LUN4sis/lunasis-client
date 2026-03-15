@@ -1,14 +1,12 @@
 import { act } from '@testing-library/react';
 
-import { ErrorCode } from '@repo/shared/types';
-
-import { registerPreferences } from '../../actions/onboarding.actions';
+import { registerPreferencesAPI } from '../../api/onboarding.api';
 import type { PreferencesRequest } from '../../types/onboarding.type';
 import { useOnboardingStore } from '../use-onboarding-store';
 
 // ─── Mocks ────────────────────────────────────────────────────────────
-jest.mock('../../actions/onboarding.actions', () => ({
-  registerPreferences: jest.fn(),
+jest.mock('../../api/onboarding.api', () => ({
+  registerPreferencesAPI: jest.fn(),
 }));
 
 jest.mock('@repo/shared/utils', () => ({
@@ -21,8 +19,8 @@ jest.mock('@repo/shared/utils', () => ({
   isLocalStorageAvailable: jest.fn(() => false),
 }));
 
-const mockedRegisterPreferences = registerPreferences as jest.MockedFunction<
-  typeof registerPreferences
+const mockedRegisterPreferencesAPI = registerPreferencesAPI as jest.MockedFunction<
+  typeof registerPreferencesAPI
 >;
 
 // ─── Test Data ────────────────────────────────────────────────────────
@@ -158,13 +156,9 @@ describe('useOnboardingStore', () => {
   });
 
   describe('submitPreferences', () => {
-    it('calls registerPreferences action and resets store on success', async () => {
-      mockedRegisterPreferences.mockResolvedValue({
-        success: true,
-        data: 'OK',
-      });
+    it('calls registerPreferencesAPI and resets store on success', async () => {
+      mockedRegisterPreferencesAPI.mockResolvedValue('OK');
 
-      // Set some state first
       act(() => {
         useOnboardingStore.getState().setNickname('testuser');
         useOnboardingStore.getState().setAge(25);
@@ -174,48 +168,15 @@ describe('useOnboardingStore', () => {
         await useOnboardingStore.getState().submitPreferences(mockPreferencesRequest);
       });
 
-      expect(mockedRegisterPreferences).toHaveBeenCalledWith(mockPreferencesRequest);
+      expect(mockedRegisterPreferencesAPI).toHaveBeenCalledWith(mockPreferencesRequest);
 
-      // Store should be reset to initial state
       const state = useOnboardingStore.getState();
       expect(state.nickname).toBe('');
       expect(state.age).toBe(0);
     });
 
-    it('throws error when registerPreferences returns failure', async () => {
-      mockedRegisterPreferences.mockResolvedValue({
-        success: false,
-        error: {
-          code: ErrorCode.VALIDATION_ERROR,
-          message: '잘못된 요청입니다.',
-        },
-      });
-
-      await expect(
-        act(async () => {
-          await useOnboardingStore.getState().submitPreferences(mockPreferencesRequest);
-        }),
-      ).rejects.toThrow('잘못된 요청입니다.');
-    });
-
-    it('throws error with default message when error message is absent', async () => {
-      mockedRegisterPreferences.mockResolvedValue({
-        success: false,
-        error: undefined,
-      });
-
-      await expect(
-        act(async () => {
-          await useOnboardingStore.getState().submitPreferences(mockPreferencesRequest);
-        }),
-      ).rejects.toThrow('오류가 발생했습니다.');
-    });
-
-    it('does not reset store when registerPreferences fails', async () => {
-      mockedRegisterPreferences.mockResolvedValue({
-        success: false,
-        error: { code: ErrorCode.UNKNOWN_ERROR, message: 'fail' },
-      });
+    it('does not reset store when registerPreferencesAPI fails', async () => {
+      mockedRegisterPreferencesAPI.mockRejectedValue(new Error('fail'));
 
       act(() => {
         useOnboardingStore.getState().setNickname('keepme');
@@ -229,12 +190,11 @@ describe('useOnboardingStore', () => {
         // expected
       }
 
-      // State should NOT be reset
       expect(useOnboardingStore.getState().nickname).toBe('keepme');
     });
 
-    it('propagates errors thrown by registerPreferences', async () => {
-      mockedRegisterPreferences.mockRejectedValue(new Error('Network failure'));
+    it('propagates errors thrown by registerPreferencesAPI', async () => {
+      mockedRegisterPreferencesAPI.mockRejectedValue(new Error('Network failure'));
 
       await expect(
         act(async () => {
