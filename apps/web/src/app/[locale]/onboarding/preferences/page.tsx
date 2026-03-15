@@ -65,6 +65,14 @@ function PreferencesPage() {
   const isSubmitEnabled =
     healthCareInterests.length > 0 && communityInterests.length > 0 && commerceInterests.length > 0;
 
+  const completionCount = [
+    healthCareInterests.length > 0,
+    communityInterests.length > 0,
+    commerceInterests.length > 0,
+  ].filter(Boolean).length;
+
+  const submitBgColor = `rgba(255, 106, 106, ${completionCount / 3})`;
+
   const handleHealthCareSelect = useCallback(
     (key: string) => {
       const next = toggle(healthCareInterests, key);
@@ -259,8 +267,9 @@ function PreferencesPage() {
         type="submit"
         colorScheme="pink"
         isLoading={isSubmitting}
-        disabled={isSubmitting || !isSubmitEnabled}
+        disabled={isSubmitting}
         className={styles.submitSticky}
+        style={{ backgroundColor: submitBgColor, transition: 'background-color 0.4s ease' }}
       >
         시작하기
       </Button>
