@@ -3,7 +3,7 @@ import { createJSONStorage, persist } from 'zustand/middleware';
 
 import { isLocalStorageAvailable, logger } from '@repo/shared/utils';
 
-import { registerPreferences } from '../actions/onboarding.actions';
+import { registerPreferencesAPI } from '../api/onboarding.api';
 import type {
   BirthDateSelection,
   OnboardingState,
@@ -49,10 +49,7 @@ export const useOnboardingStore = create<OnboardingStoreState>()(
         set((state) => ({ preferences: { ...state.preferences, ...update } })),
       resetOnboarding: () => set(initialState),
       submitPreferences: async (data: PreferencesRequest) => {
-        const response = await registerPreferences(data);
-        if (!response.success) {
-          throw new Error(response.error?.message || '오류가 발생했습니다.');
-        }
+        await registerPreferencesAPI(data);
         set(initialState);
       },
     }),

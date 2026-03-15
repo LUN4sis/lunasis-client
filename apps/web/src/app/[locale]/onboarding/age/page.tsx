@@ -1,7 +1,7 @@
 'use client';
 
-import { useCallback, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useCallback, useState } from 'react';
 
 import { ROUTES } from '@repo/shared/constants';
 import { logger, transformError } from '@repo/shared/utils';
@@ -11,9 +11,10 @@ import { toast } from '@web/components/ui/toast';
 import { withAuth } from '@web/features/auth';
 import {
   ERROR_MESSAGES,
-  registerUser,
+  registerUserAPI,
   Title,
   useBirthdateValidation,
+  useOnboardingNavigationGuard,
   useOnboardingStore,
 } from '@web/features/onboarding';
 
@@ -25,6 +26,8 @@ function AgePage() {
   const [isDateValid, setIsDateValid] = useState(false);
 
   const nickname = useOnboardingStore((s) => s.nickname);
+
+  useOnboardingNavigationGuard({ requireNickname: true, nickname });
 
   const { birthDateSelection, error, handleDateChange, validateBirthdate } =
     useBirthdateValidation();
@@ -43,12 +46,7 @@ function AgePage() {
 
         logger.info('[Age Page] Submitting user:', { nickname, age });
 
-        const response = await registerUser({ chatNickname: nickname, age });
-
-        if (!response.success) {
-          toast.error(response.error?.message || ERROR_MESSAGES.GENERIC);
-          return;
-        }
+        await registerUserAPI({ chatNickname: nickname, age });
 
         router.push(ROUTES.ONBOARDING_PREFERENCES);
       } catch (error) {
