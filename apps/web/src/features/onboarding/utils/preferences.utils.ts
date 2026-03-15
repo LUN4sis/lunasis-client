@@ -1,5 +1,7 @@
 // convert items to { key, display } format for SelectionGroup
-export function toOptions(items: { id: string; label: string }[]): { key: string; display: string }[] {
+export function toOptions(
+  items: { id: string; label: string }[],
+): { key: string; display: string }[] {
   return items.map((i) => ({ key: i.id, display: i.label }));
 }
 
