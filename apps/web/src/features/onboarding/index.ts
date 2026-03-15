@@ -17,6 +17,9 @@ export { useOnboardingStore } from './stores/use-onboarding-store';
 // Actions
 export { getRandomNickname, registerPreferences, registerUser } from './actions/onboarding.actions';
 
+// API
+export { registerPreferencesAPI, registerUserAPI } from './api/onboarding.api';
+
 // Constants
 export * from './constants/onboarding.constants';
 

@@ -9,21 +9,31 @@ import { Input } from '@web/components/ui/input';
 import { Spinner } from '@web/components/ui/spinner';
 import { Title, useNicknameValidation } from '@web/features/onboarding';
 import { getRandomNicknameAPI } from '@web/features/onboarding/api/onboarding.api';
+import { useOnboardingStore } from '@web/features/onboarding/stores/use-onboarding-store';
 
 import styles from '../onboarding.module.scss';
-
-const MOCK_RANDOM_NICKNAME = 'LUNA1234';
 
 function NamePage() {
   const router = useRouter();
   const [randomNickname, setRandomNickname] = useState<string | null>(null);
   const { nickname: name, handleNicknameChange, validateNickname, error } = useNicknameValidation();
 
+  const storedNickname = useOnboardingStore((s) => s.nickname);
+  const storedAge = useOnboardingStore((s) => s.age);
+
+  useEffect(() => {
+    if (storedNickname && storedAge) {
+      router.replace(ROUTES.ONBOARDING_PREFERENCES);
+    } else if (storedNickname) {
+      router.replace(ROUTES.ONBOARDING_AGE);
+    }
+  }, [storedNickname, storedAge, router]);
+
   // get random nickname (account ID)
   useEffect(() => {
     getRandomNicknameAPI()
       .then((randomNick) => setRandomNickname(randomNick))
-      .catch(() => setRandomNickname(MOCK_RANDOM_NICKNAME));
+      .catch(() => setRandomNickname(null));
   }, []);
 
   const handleSubmit = useCallback(
@@ -60,11 +70,6 @@ function NamePage() {
           aria-invalid={!!error}
           aria-describedby={error ? 'nickname-error' : undefined}
         />
-        {error && (
-          <span id="nickname-error" role="alert" className={styles.errorHint}>
-            {error}
-          </span>
-        )}
 
         <span>
           상품 리뷰 등에 사용될 {name}님의 아이디는 {randomNickname}(으)로 할게요.
