@@ -177,7 +177,7 @@ describe('useNicknameValidation', () => {
       });
 
       expect(mockedToastError).toHaveBeenCalledWith(
-        '닉네임 추천을 불러오지 못했습니다. 직접 입력해주세요.',
+        '닉네임 추천을 불러오지 못했습니다. 다시 시도해주세요.',
       );
       expect(result.current.isLoading).toBe(false);
     });
