@@ -9,7 +9,7 @@ export interface ValidationResult {
   isLoading?: boolean;
 }
 
-export function isBirthValid(year: number, month: number, day: number): boolean {
+export function isFutureDate(year: number, month: number, day: number): boolean {
   const birthDate = new Date(year, month - 1, day);
   const today = new Date();
   today.setHours(0, 0, 0, 0);
