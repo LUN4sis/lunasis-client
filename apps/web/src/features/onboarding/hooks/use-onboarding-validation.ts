@@ -1,4 +1,6 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
+
+import { toast } from '@web/components/ui/toast';
 
 import { getRandomNickname } from '../actions/onboarding.actions';
 import { nicknameSchema } from '../schemas/validation.schemas';
@@ -15,6 +17,21 @@ export function useNicknameValidation() {
   const nickname = useOnboardingStore((s) => s.nickname);
   const setNickname = useOnboardingStore((s) => s.setNickname);
 
+  const handleNicknameChange = useCallback(
+    (value: string) => {
+      setNickname(value);
+      const { isValid, error } = validate(value, nicknameSchema);
+      setResult((prev) => ({ ...prev, isValid, error }));
+    },
+    [setNickname],
+  );
+
+  const validateNickname = useCallback((): boolean => {
+    const { isValid, error } = validate(nickname, nicknameSchema);
+    setResult((prev) => ({ ...prev, isValid, error }));
+    return isValid;
+  }, [nickname]);
+
   const fetchRecommendedNickname = async () => {
     setResult((prev) => ({ ...prev, isLoading: true }));
 
@@ -26,23 +43,10 @@ export function useNicknameValidation() {
         setNickname(randomNickname);
       }
     } catch {
-      // silently fail — user can still type their own nickname
+      toast.error('닉네임 추천을 불러오지 못했습니다. 다시 시도해주세요.');
     } finally {
       setResult((prev) => ({ ...prev, isLoading: false }));
     }
-  };
-
-  const handleNicknameChange = (value: string) => {
-    setNickname(value);
-    const { isValid, error } = validate(value, nicknameSchema);
-    setResult((prev) => ({ ...prev, isValid, error }));
-  };
-
-  // validate snickname schema only (no server duplicate check)
-  const validateNickname = (): boolean => {
-    const validationResult = validate(nickname, nicknameSchema);
-    setResult({ ...validationResult, isLoading: false });
-    return validationResult.isValid;
   };
 
   return {
