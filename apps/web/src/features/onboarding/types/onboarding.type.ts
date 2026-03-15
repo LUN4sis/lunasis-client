@@ -19,10 +19,21 @@ export interface OptionGroup {
   colorScheme?: ButtonColorScheme;
 }
 
+export interface PreferencesState {
+  healthCareInterests: string[];
+  gynecologyInterests: string[];
+  hasVisited: boolean | null;
+  hospitalPriorities: string[];
+  communityInterests: string[];
+  commerceInterests: string[];
+  productCategories: string[];
+}
+
 export interface OnboardingState {
   nickname: string;
   age: number;
   birthDateSelection: BirthDateSelection;
+  preferences: PreferencesState;
 }
 
 export interface SubmitRequest {
