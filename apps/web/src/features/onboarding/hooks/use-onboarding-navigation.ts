@@ -23,14 +23,14 @@ export function useOnboardingNavigationGuard({
   useEffect(() => {
     if (requireNickname && !nickname) {
       logger.warn('[Navigation Guard] Nickname required');
-      toast.warning('Please complete the previous step first.');
+      toast.warning('이전 단계가 완료되지 않았어요!');
       router.push(ROUTES.ONBOARDING_NAME);
       return;
     }
 
     if (requireAge && (!age || age === 0)) {
       logger.warn('[Navigation Guard] Age required');
-      toast.warning('Please complete your profile step by step.');
+      toast.warning('이전 단계가 완료되지 않았어요!');
       router.push(ROUTES.ONBOARDING_AGE);
       return;
     }

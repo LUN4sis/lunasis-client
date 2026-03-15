@@ -21,7 +21,7 @@ function OnboardingPage() {
 
     // early return if all steps are completed
     if (nickname && age) {
-      router.replace(ROUTES.ONBOARDING_INTERESTS);
+      router.replace(ROUTES.ONBOARDING_PREFERENCES);
       return;
     }
 
