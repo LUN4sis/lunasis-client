@@ -75,6 +75,10 @@ export const Select = ({
               setSelectedMonth('');
               setSelectedDay('');
             }}
+            aria-label="출생 연도"
+            aria-required="true"
+            aria-invalid={!!error}
+            aria-describedby={error ? 'birthdate-error' : undefined}
             className={clsx({ [styles.placeholder]: !selectedYear })}
           >
             <option value="" disabled>
@@ -98,6 +102,9 @@ export const Select = ({
               setSelectedDay('');
             }}
             disabled={!selectedYear}
+            aria-label="출생 월"
+            aria-required="true"
+            aria-invalid={!!error}
             className={clsx({ [styles.placeholder]: !selectedMonth })}
           >
             <option value="" disabled>
@@ -118,6 +125,9 @@ export const Select = ({
             value={selectedDay}
             onChange={(e) => setSelectedDay(e.target.value)}
             disabled={!selectedYear || !selectedMonth}
+            aria-label="출생 일"
+            aria-required="true"
+            aria-invalid={!!error}
             className={clsx({ [styles.placeholder]: !selectedDay })}
           >
             <option value="" disabled>
@@ -132,7 +142,11 @@ export const Select = ({
           <ArrowDropDownIcon className={styles.chevronIcon} />
         </section>
       </section>
-      {error && <p className={styles.error}>{error}</p>}
+      {error && (
+        <p id="birthdate-error" role="alert" className={styles.error}>
+          {error}
+        </p>
+      )}
     </div>
   );
 };

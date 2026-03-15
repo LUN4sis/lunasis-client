@@ -1,18 +1,20 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
 import { useCallback, useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 import { ROUTES } from '@repo/shared/constants';
 import { logger, transformError } from '@repo/shared/utils';
 import { Button } from '@web/components/ui/button';
 import { Select } from '@web/components/ui/select';
+import { toast } from '@web/components/ui/toast';
+import { withAuth } from '@web/features/auth';
 import {
+  ERROR_MESSAGES,
   registerUser,
   Title,
   useBirthdateValidation,
   useOnboardingStore,
-  type BirthDateSelection,
 } from '@web/features/onboarding';
 
 import styles from '../onboarding.module.scss';
@@ -27,13 +29,6 @@ function AgePage() {
   const { birthDateSelection, error, handleDateChange, validateBirthdate } =
     useBirthdateValidation();
 
-  const handleSelectionChange = useCallback(
-    (selection: BirthDateSelection) => {
-      handleDateChange(selection);
-    },
-    [handleDateChange],
-  );
-
   const handleSubmit = useCallback(
     async (e: React.FormEvent) => {
       e.preventDefault();
@@ -44,20 +39,22 @@ function AgePage() {
 
       try {
         const { nickname, birthDateSelection } = useOnboardingStore.getState();
-        const koreanAge = new Date().getFullYear() - parseInt(birthDateSelection.year, 10) + 1;
+        const age = new Date().getFullYear() - parseInt(birthDateSelection.year, 10) + 1;
 
-        logger.info('[Age Page] Submitting user:', { nickname, koreanAge });
+        logger.info('[Age Page] Submitting user:', { nickname, age });
 
-        const response = await registerUser({ chatNickname: nickname, age: koreanAge });
+        const response = await registerUser({ chatNickname: nickname, age });
 
         if (!response.success) {
+          toast.error(response.error?.message || ERROR_MESSAGES.GENERIC);
           return;
         }
 
-        router.push(ROUTES.ONBOARDING_INTERESTS);
+        router.push(ROUTES.ONBOARDING_PREFERENCES);
       } catch (error) {
         const appError = transformError(error);
         logger.error('[Age Page] Submit error:', appError.toJSON());
+        toast.error(ERROR_MESSAGES.GENERIC);
       } finally {
         setIsSubmitting(false);
       }
@@ -84,7 +81,7 @@ function AgePage() {
           <Select
             onChange={handleDateChange}
             onValidityChange={setIsDateValid}
-            onSelectionChange={handleSelectionChange}
+            onSelectionChange={handleDateChange}
             error={error ?? undefined}
             initialValue={birthDateSelection}
           />
@@ -96,9 +93,6 @@ function AgePage() {
           isLoading={isSubmitting}
           disabled={isSubmitting}
           className={styles.submit}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter' && !isSubmitting) handleSubmit(e);
-          }}
         >
           다음
         </Button>
@@ -107,4 +101,4 @@ function AgePage() {
   );
 }
 
-export default AgePage;
+export default withAuth(AgePage);

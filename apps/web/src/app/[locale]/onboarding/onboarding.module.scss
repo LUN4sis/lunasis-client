@@ -7,7 +7,7 @@ $toggle-size: 1.25rem;
 $border-width: 2px;
 
 .container {
-  @include full-screen-container;
+  @include full-screen-scrollable;
   @include hide-scrollbar;
   @include safe-area-inset(padding, all);
   @include extend-background-to-status-bar($gray-50);
@@ -22,7 +22,7 @@ $border-width: 2px;
 
 .content {
   @include flex-column;
-  @include size(100%, 100%);
+  width: 100%;
   gap: 1.5rem;
   padding-bottom: calc(4rem + env(safe-area-inset-bottom));
 
@@ -30,25 +30,39 @@ $border-width: 2px;
     width: 88%;
   }
 
-  .submit {
-    position: fixed;
-    bottom: calc(1.5rem + env(safe-area-inset-bottom));
-    left: 50%;
+  %submit-base {
     width: 10%;
-    transform: translateX(-50%);
     color: black !important;
     font-size: $font-size-lg;
     font-weight: $font-weight-medium;
     border-radius: 2rem !important;
     box-shadow: $box-shadow-md;
     z-index: 10;
-
-    &:active {
-      transform: translateX(-50%) translateY(1px) !important;
-    }
+    bottom: calc(1.5rem + env(safe-area-inset-bottom));
 
     @include respond(mobile) {
       width: 36%;
+    }
+  }
+
+  .submit {
+    @extend %submit-base;
+    position: fixed;
+    left: 50%;
+    transform: translateX(-50%);
+
+    &:active {
+      transform: translateX(-50%) translateY(1px);
+    }
+  }
+
+  .submitSticky {
+    @extend %submit-base;
+    position: sticky;
+    align-self: center;
+
+    &:active {
+      transform: translateY(1px);
     }
   }
 }
@@ -85,7 +99,7 @@ $border-width: 2px;
 
 .input {
   border-radius: 0.8rem !important;
-  border-color: #bcbbbb;
+  border-color: $gray-400;
   box-shadow: $box-shadow-md;
 }
 
@@ -95,5 +109,91 @@ $border-width: 2px;
 
   @include respond(mobile) {
     font-weight: $font-weight-light;
+  }
+}
+
+.category {
+  @include flex-column;
+  gap: $spacing-2;
+}
+
+.label {
+  font-weight: $font-weight-regular;
+  color: $red;
+  @include text-responsive($font-size-lg, $font-size-lg, $font-size-xl);
+}
+
+.options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-2;
+}
+
+.selectionGroup {
+  button {
+    padding: 0.3rem 0.8rem;
+    border-radius: $radius-4xl;
+    color: $black !important;
+    font-weight: $font-weight-regular;
+    border-color: $gray-400 !important;
+    transition:
+      transform 0.15s ease,
+      background-color 0.35s ease,
+      border-color 0.35s ease;
+
+    &:active {
+      transform: scale(0.95);
+    }
+
+    &[class*='button--selected'] {
+      border-color: $gray-400 !important;
+    }
+  }
+
+  @include respond(mobile) {
+    button {
+      min-height: 0;
+      font-weight: $font-weight-light;
+
+      &[class*='button--selected'] {
+        font-weight: $font-weight-light;
+      }
+    }
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+    max-height: 500px;
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-8px);
+    max-height: 0;
+  }
+}
+
+.animatedSection {
+  @include flex-column;
+  gap: calc($spacing-6 / 2);
+  overflow: hidden;
+  animation: slideDown 0.25s ease forwards;
+
+  &.exiting {
+    animation: slideUp 0.2s ease forwards;
+    pointer-events: none;
   }
 }

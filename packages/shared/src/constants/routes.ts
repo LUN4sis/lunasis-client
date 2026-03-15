@@ -7,7 +7,7 @@ export const ROUTES = {
   // Onboarding
   ONBOARDING_NAME: '/onboarding/name',
   ONBOARDING_AGE: '/onboarding/age',
-  ONBOARDING_INTERESTS: '/onboarding/interests',
+  ONBOARDING_PREFERENCES: '/onboarding/preferences',
 
   // Shopping
   RANKING: '/ranking',
