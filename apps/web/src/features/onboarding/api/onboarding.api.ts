@@ -33,9 +33,7 @@ export async function registerUserAPI(formData: SubmitRequest): Promise<SubmitRe
 }
 
 // user preferences submission
-export async function registerPreferencesAPI(
-  formData: PreferencesRequest,
-): Promise<ApiResponse<string>> {
+export async function registerPreferencesAPI(formData: PreferencesRequest): Promise<string> {
   try {
     const response = await api.post<ApiResponse<string>>('/users/preference', formData);
     logger.info(
@@ -43,7 +41,7 @@ export async function registerPreferencesAPI(
       response as unknown as Record<string, unknown>,
     );
     if (response.success) {
-      return response;
+      return response.data ?? '';
     }
     throw new AppError(ErrorCode.UNKNOWN_ERROR, 'Failed to register preferences');
   } catch (error: unknown) {
