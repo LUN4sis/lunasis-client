@@ -1,4 +1,5 @@
 // Hooks
+export { useAnimatedSection } from './hooks/use-animated-section';
 export { useBirthdateValidation } from './hooks/use-birthdate-validation';
 export {
   useOnboardingComplete,
@@ -14,14 +15,18 @@ export { Title } from './components/title';
 export { useOnboardingStore } from './stores/use-onboarding-store';
 
 // Actions
-export { getRandomNickname, registerUser } from './actions/onboarding.actions';
+export { getRandomNickname, registerPreferences, registerUser } from './actions/onboarding.actions';
 
 // Constants
 export * from './constants/onboarding.constants';
 
 // Types
 export type * from './types/onboarding.type';
-export type { CategorySection as OnboardingCategorySection } from './types/onboarding.type';
+export type {
+  CategorySection as OnboardingCategorySection,
+  PreferencesState,
+} from './types/onboarding.type';
 
 // Utils
-export { calculateAge, isBirthValid, validate } from './utils/validation.utils';
+export { calculateAge, isFutureDate, validate } from './utils/validation.utils';
+export { toOptions, toggle } from './utils/preferences.utils';

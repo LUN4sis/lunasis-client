@@ -47,6 +47,7 @@ function NamePage() {
 
       <form className={styles.form} onSubmit={handleSubmit}>
         <Input
+          id="nickname"
           variant="outline"
           value={name}
           onChange={(e) => handleNicknameChange(e.target.value)}
@@ -54,7 +55,16 @@ function NamePage() {
           inputClassName={styles.input}
           size="md"
           error={error ?? undefined}
+          aria-label="닉네임"
+          aria-required="true"
+          aria-invalid={!!error}
+          aria-describedby={error ? 'nickname-error' : undefined}
         />
+        {error && (
+          <span id="nickname-error" role="alert" className={styles.errorHint}>
+            {error}
+          </span>
+        )}
 
         <span>
           상품 리뷰 등에 사용될 {name}님의 아이디는 {randomNickname}(으)로 할게요.
@@ -62,16 +72,7 @@ function NamePage() {
           아이디는 추후에 설정에서 수정할 수 있어요.
         </span>
 
-        <Button
-          type="submit"
-          colorScheme="pink"
-          className={styles.submit}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') {
-              handleSubmit(e);
-            }
-          }}
-        >
+        <Button type="submit" colorScheme="pink" className={styles.submit}>
           다음
         </Button>
       </form>
