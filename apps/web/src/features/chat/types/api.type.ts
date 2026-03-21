@@ -1,68 +1,85 @@
 import { z } from 'zod';
 
-import type { ApiResponse } from '@repo/shared/types';
+import type { ChatMessage, ChatRoom, SavedMemory } from './domain.type';
+
+export type { ChatMessage, ChatRoom, SavedMemory };
 
 // =========================
-// Zod Schemas
+// Chat Zod Schemas
 // =========================
 
 export const chatRoomSchema = z.object({
-  chatRoomId: z.string(),
+  chatRoomId: z.uuid(),
   title: z.string(),
-});
-
-export const chatStartSchema = z.object({
-  chatRoomId: z.string(),
-  title: z.string(),
-  answer: z.string(),
 });
 
 export const chatMessageSchema = z.object({
-  chatId: z.string(),
+  chatId: z.uuid(),
   question: z.string(),
   answer: z.string(),
   image: z.string().nullable(),
 });
 
-export const answerSchema = z.object({
+export const createChatRoomResSchema = z.object({
+  chatRoomId: z.uuid(),
+  title: z.string(),
+  answer: z.string(),
+});
+
+export const anonymousResSchema = z.object({
   answer: z.string(),
 });
 
 // =========================
-// Data Types
+// Personalization Zod Schemas
 // =========================
 
-export type ChatRoom = z.infer<typeof chatRoomSchema>;
-export type ChatStart = z.infer<typeof chatStartSchema>;
-export type ChatMessage = z.infer<typeof chatMessageSchema>;
-export type Answer = z.infer<typeof answerSchema>;
+export const TONE_LEVELS = ['HIGH', 'DEFAULT', 'LESS'] as const;
+export type ToneLevel = (typeof TONE_LEVELS)[number];
+
+export const savedMemorySchema = z.object({
+  savedMemoryId: z.uuid(),
+  savedMemory: z.string(),
+});
+
+export const updateSettingReqSchema = z.object({
+  chatNickName: z.string(),
+  warmth: z.enum(TONE_LEVELS),
+  enthusiastic: z.enum(TONE_LEVELS),
+  formal: z.enum(TONE_LEVELS),
+  personalSetting: z.string().max(1000),
+});
 
 // =========================
-// API Response Types
+// Chat API Response Types
 // =========================
 
-export type ChatRoomRes = ApiResponse<ChatRoom[]>;
-export type ChatStartRes = ApiResponse<ChatStart>;
-export type ChatMessagesRes = ApiResponse<ChatMessage[]>;
-export type MessageRes = ApiResponse<Answer>;
+export type GetChatRoomsRes = ChatRoom[];
 
-// =========================
-// API Request Types
-// =========================
-
-export interface ChatRoomParams {
+export interface CreateChatRoomRes {
   chatRoomId: string;
-}
-
-export interface QuestionReq {
-  question: string;
-}
-
-export interface AnonymousReq {
-  anonymousId: string;
-  question: string;
-}
-
-export interface UpdateTitleReq {
   title: string;
+  answer: string;
 }
+
+export type GetChatLogRes = ChatMessage[];
+
+export type SendMessageRes = ChatMessage[];
+
+export interface AnonymousRes {
+  answer: string;
+}
+
+export interface UpdateSettingReq {
+  chatNickName: string;
+  warmth: ToneLevel;
+  enthusiastic: ToneLevel;
+  formal: ToneLevel;
+  personalSetting: string;
+}
+
+// =========================
+// Personalization API Response Types
+// =========================
+
+export type GetSavedMemoriesRes = SavedMemory[];
