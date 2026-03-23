@@ -5,7 +5,17 @@
   padding: $spacing-3 $spacing-4;
   caret-color: transparent;
   user-select: none;
-  background-color: $gray-50;
+
+  button {
+    cursor: pointer;
+    min-width: 3rem;
+    min-height: 3rem;
+
+    svg {
+      color: $black;
+      @include size(1.75rem);
+    }
+  }
 }
 
 .title {
@@ -16,6 +26,12 @@
     font-size: $font-size-3xl;
     font-weight: $font-weight-regular;
   }
+}
+
+.menuButton {
+  cursor: pointer;
+  caret-color: transparent;
+  color: $black;
 }
 
 .hide {
