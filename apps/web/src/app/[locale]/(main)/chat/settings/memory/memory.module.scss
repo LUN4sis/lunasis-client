@@ -1,0 +1,107 @@
+@use '@/styles' as *;
+
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  background-color: $gray-50;
+}
+
+.header {
+  @include flex(row, flex-start, center);
+  padding: $spacing-3 $spacing-4;
+  background-color: $white;
+  border-bottom: 1px solid $gray-200;
+  gap: $spacing-2;
+  flex-shrink: 0;
+}
+
+.backButton {
+  min-width: 2.5rem;
+  min-height: 2.5rem;
+  color: $black;
+
+  svg {
+    @include size(1.5rem);
+  }
+}
+
+.title {
+  flex: 1;
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $black;
+}
+
+.editButton {
+  min-width: auto;
+  font-size: $font-size-sm;
+  color: $gray-600;
+  padding: $spacing-1 $spacing-2;
+}
+
+.content {
+  flex: 1;
+  overflow-y: auto;
+  padding: $spacing-4;
+}
+
+.memoryList {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-3;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.memoryCard {
+  position: relative;
+  background-color: $white;
+  border-radius: $radius-lg;
+  padding: $spacing-4;
+  border: 1px solid $gray-200;
+  min-height: 4rem;
+}
+
+.memoryText {
+  font-size: $font-size-sm;
+  color: $gray-700;
+  line-height: 1.5;
+  padding-right: $spacing-6;
+}
+
+.deleteButton {
+  position: absolute;
+  top: $spacing-2;
+  right: $spacing-2;
+  @include flex(row, center, center);
+  @include size(1.5rem);
+  border-radius: $radius-7xl;
+  background-color: $gray-200;
+  border: none;
+  cursor: pointer;
+  color: $gray-600;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+  flex-shrink: 0;
+
+  &:hover:not(:disabled) {
+    background-color: $red;
+    color: $white;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.empty {
+  font-size: $font-size-sm;
+  color: $gray-400;
+  text-align: center;
+  padding: $spacing-8 0;
+}
