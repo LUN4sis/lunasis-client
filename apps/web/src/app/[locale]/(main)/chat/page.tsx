@@ -2,22 +2,23 @@
 
 import { useTranslations } from 'next-intl';
 import { useParams, useRouter } from 'next/navigation';
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { useAuthStore, useAuthStoreHydration } from '@repo/shared/features/auth';
 import { SupportedLocale } from '@repo/shared/types';
-import { getErrorMessage, logger } from '@repo/shared/utils';
+import { getErrorMessage } from '@repo/shared/utils';
 import { toast } from '@web/components/ui/toast';
-import { sendAnonymousMessageAPI, startChatAPI } from '@web/features/chat/api/chat.api';
-import { ChatHeader } from '@web/features/chat/components/chat-header';
-import { ChatInput } from '@web/features/chat/components/chat-input';
-import { IncognitoBar } from '@web/features/chat/components/incognito-bar';
 import { MessageList, type Message } from '@web/features/chat/components/message-list';
-import { Sidebar } from '@web/features/chat/components/sidebar';
+import { WelcomeScreen } from '@web/features/chat/components/welcome-screen';
+import { useChatLayout } from '@web/features/chat/contexts';
+import {
+  useChatRoomsQuery,
+  useCreateAnonymousChatMutation,
+  useCreateChatMutation,
+} from '@web/features/chat/hooks';
 import { useChatStore } from '@web/features/chat/stores';
-import { getAnonymousUserId } from '@web/features/chat/utils/anonymous-user';
+import { getAnonymousUserId } from '@web/features/chat/utils';
 
-import clsx from 'clsx';
 import styles from './chat.module.scss';
 
 export default function ChatPage() {
@@ -26,40 +27,57 @@ export default function ChatPage() {
   const { locale } = useParams();
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [isInitialized, setIsInitialized] = useState(false);
-  const [isMounted, setIsMounted] = useState(true);
-  const [isReady, setIsReady] = useState(false);
+  const { setLayoutActions } = useChatLayout();
+  const isMountedRef = useRef(true);
   const hydrated = useAuthStoreHydration();
   const isLoggedIn = useAuthStore((s) => s.isLoggedIn);
-  const { isIncognito, setPendingMessages, setCurrentChatId } = useChatStore();
+  const nickname = useAuthStore((s) => s.nickname);
+  const { isIncognito, setCurrentChatId, setPendingMessages } = useChatStore();
   const isAnonymous = isIncognito || !hydrated || !isLoggedIn;
 
-  logger.info('Is logged In:', { isLoggedIn });
-  logger.info('Is Incognito:', { isIncognito });
-  logger.info('Is Anonymous:', { isAnonymous });
+  const { data: chatRooms } = useChatRoomsQuery(!isAnonymous);
+  const isFirstTime = !isAnonymous && hydrated && chatRooms !== undefined && chatRooms.length === 0;
 
-  // Track component mount state and trigger fade-in
+  // React Query mutations
+  const createChatMutation = useCreateChatMutation({
+    onSuccess: (data, question) => {
+      if (!isMountedRef.current) return;
+      const timestamp = new Date();
+      setCurrentChatId(data.chatRoomId);
+      setPendingMessages({ question, answer: data.answer, timestamp });
+      setIsLoading(false);
+      router.push(`/${locale}/chat/${data.chatRoomId}`);
+    },
+    onError: (error) => {
+      if (!isMountedRef.current) return;
+      const errorMessage = getErrorMessage(error);
+      toast.error(errorMessage);
+      setIsLoading(false);
+    },
+  });
+
+  const createAnonymousChatMutation = useCreateAnonymousChatMutation({
+    onSuccess: (data, question) => {
+      if (!isMountedRef.current) return;
+      const anonymousId = getAnonymousUserId();
+      setCurrentChatId(anonymousId);
+      setPendingMessages({ question, answer: data.answer, timestamp: new Date() });
+      setIsLoading(false);
+      router.push(`/${locale}/chat/${anonymousId}`);
+    },
+    onError: (error) => {
+      if (!isMountedRef.current) return;
+      const errorMessage = getErrorMessage(error);
+      toast.error(errorMessage);
+      setIsLoading(false);
+    },
+  });
+
+  // Track component mount state
   useEffect(() => {
-    setIsMounted(true);
-    // Delay to allow hydration to complete before showing content
-    const timer = requestAnimationFrame(() => {
-      setIsReady(true);
-    });
+    isMountedRef.current = true;
     return () => {
-      setIsMounted(false);
-      cancelAnimationFrame(timer);
-    };
-  }, []);
-
-  // hide bottom nav
-  useEffect(() => {
-    document.documentElement.style.setProperty('--bottom-nav-height', '0px');
-    document.documentElement.style.setProperty('--bottom-nav-display', 'none');
-
-    return () => {
-      // restore
-      document.documentElement.style.setProperty('--bottom-nav-height', '56px');
-      document.documentElement.style.setProperty('--bottom-nav-display', 'flex');
+      isMountedRef.current = false;
     };
   }, []);
 
@@ -69,30 +87,17 @@ export default function ChatPage() {
   );
 
   useEffect(() => {
-    if (!isInitialized) {
-      const welcomeMessage: Message = {
-        id: 'welcome-1',
-        role: 'assistant',
-        content: welcomeText,
-        timestamp: new Date(),
-      };
-      setMessages([welcomeMessage]);
-      setIsInitialized(true);
-    } else {
-      // Update welcome message when incognito mode or hydration state changes
-      setMessages((prev) => {
-        if (prev.length === 1 && prev[0].id === 'welcome-1') {
-          return [
-            {
-              ...prev[0],
-              content: welcomeText,
-            },
-          ];
-        }
-        return prev;
-      });
+    if (!isFirstTime) {
+      setMessages([
+        {
+          id: 'welcome-1',
+          role: 'assistant',
+          content: welcomeText,
+          timestamp: new Date(),
+        },
+      ]);
     }
-  }, [isInitialized, welcomeText, hydrated]);
+  }, [isFirstTime, welcomeText]);
 
   // cleanup object URLs(for memory leak prevention)
   useEffect(() => {
@@ -107,71 +112,56 @@ export default function ChatPage() {
     };
   }, [messages]);
 
-  const handleSend = async (
-    message: string,
-    options: { webSearch: boolean; file: File | null },
-  ) => {
-    // TODO: Implement webSearch and file attachment
-    void options;
+  const handleSend = useCallback(
+    async (
+      message: string,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      _options: { webSearch: boolean; file: File | null },
+    ) => {
+      // TODO: Implement webSearch and file attachment
 
-    const userMessage: Message = {
-      id: `user-${Date.now()}`,
-      role: 'user',
-      content: message,
-      timestamp: new Date(),
-    };
+      // Validate input
+      const trimmed = message.trim();
+      if (!trimmed) {
+        toast.error(t('validation.emptyMessage'));
+        return;
+      }
+      if (trimmed.length > 5000) {
+        toast.error(t('validation.messageTooLong'));
+        return;
+      }
 
-    setMessages((prev) => [...prev, userMessage]);
-    setIsLoading(true);
+      const userMessage: Message = {
+        id: `user-${Date.now()}`,
+        role: 'user',
+        content: trimmed,
+        timestamp: new Date(),
+      };
 
-    try {
+      setMessages((prev) => [...prev, userMessage]);
+      setIsLoading(true);
+
       if (isAnonymous) {
-        const anonymousId = getAnonymousUserId();
-        const res = await sendAnonymousMessageAPI(anonymousId, message);
-        if (!isMounted) return;
-        if (!res.success || !res.data) throw new Error(res.message ?? '요청에 실패했습니다.');
-        setCurrentChatId(anonymousId);
-        setPendingMessages({ question: message, answer: res.data.answer, timestamp: new Date() });
-        router.push(`/${locale}/chat/${anonymousId}`);
+        createAnonymousChatMutation.mutate(trimmed);
       } else {
-        const res = await startChatAPI(message);
-        if (!isMounted) return;
-        if (!res.success || !res.data) throw new Error(res.message ?? '요청에 실패했습니다.');
-        const timestamp = new Date();
-        setCurrentChatId(res.data.chatRoomId);
-        setPendingMessages({ question: message, answer: res.data.answer, timestamp });
-        router.push(`/${locale}/chat/${res.data.chatRoomId}`);
+        createChatMutation.mutate(trimmed);
       }
-    } catch (error) {
-      if (!isMounted) return;
+    },
+    [isAnonymous, createAnonymousChatMutation, createChatMutation, t],
+  );
 
-      const errorMessage = getErrorMessage(error);
-      toast.error(errorMessage);
-    } finally {
-      if (isMounted) {
-        setIsLoading(false);
-      }
-    }
-  };
+  // Register handleSend and isLoading with the layout
+  useEffect(() => {
+    setLayoutActions({ handleSend, isLoading });
+  }, [handleSend, isLoading, setLayoutActions]);
 
   return (
-    <div className={clsx(styles.container, { [styles.ready]: isReady })}>
-      <Sidebar />
-      <div className={styles.top}>
-        <ChatHeader />
-        <IncognitoBar />
-      </div>
-
-      <div
-        className={clsx(styles.chatContainer, {
-          [styles.incognito]: isIncognito,
-        })}
-      >
+    <div className={styles.messageListWrapper}>
+      {isFirstTime ? (
+        <WelcomeScreen mode="firstTime" nickname={nickname} />
+      ) : (
         <MessageList messages={messages} isLoading={isLoading} locale={locale as SupportedLocale} />
-      </div>
-      <div className={styles.bottom}>
-        <ChatInput onSend={handleSend} disabled={isLoading} />
-      </div>
+      )}
     </div>
   );
 }

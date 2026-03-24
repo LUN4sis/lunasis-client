@@ -1,7 +1,7 @@
 'use client';
 
-import { useParams } from 'next/navigation';
-import { BellIcon, MenuIcon } from 'lucide-react';
+import { useParams, useRouter } from 'next/navigation';
+import { MenuIcon, Settings } from 'lucide-react';
 
 import { useAuthStore, useAuthStoreHydration } from '@repo/shared/features/auth';
 import { SupportedLocale } from '@repo/shared/types';
@@ -16,11 +16,16 @@ import styles from './chat-header.module.scss';
 export const ChatHeader = () => {
   const params = useParams();
   const locale = (params.locale as SupportedLocale) || 'ko';
+  const router = useRouter();
 
   const toggleSidebar = useChatStore((state) => state.toggleSidebar);
   const hydrated = useAuthStoreHydration();
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
   const showMenuButton = hydrated && isLoggedIn;
+
+  const handleSettingsClick = () => {
+    router.push(`/${locale}/chat/settings`);
+  };
 
   return (
     <header className={styles.header}>
@@ -40,11 +45,11 @@ export const ChatHeader = () => {
       <Button
         variant="ghost"
         fullWidth={false}
-        disabled
-        aria-label="notification (coming soon)"
-        className={styles.hide}
+        aria-label="chat settings"
+        onClick={handleSettingsClick}
+        className={clsx(styles.menuButton, { [styles.hide]: !showMenuButton })}
       >
-        <BellIcon />
+        <Settings />
       </Button>
     </header>
   );
