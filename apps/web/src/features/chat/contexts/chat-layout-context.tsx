@@ -20,7 +20,7 @@ export function ChatLayoutProvider({ children }: { children: React.ReactNode }) 
   const setLayoutActions = useCallback(
     (actions: { handleSend: HandleSend; isLoading: boolean }) => {
       handleSendRef.current = actions.handleSend;
-      // Only trigger re-render when isLoading actually changes
+      // reload isLoading state if it has changed
       if (isLoadingRef.current !== actions.isLoading) {
         isLoadingRef.current = actions.isLoading;
         setIsLoading(actions.isLoading);
