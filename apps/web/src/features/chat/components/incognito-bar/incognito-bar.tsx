@@ -1,6 +1,8 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import Image from 'next/image';
+import { useParams, useRouter } from 'next/navigation';
 
 import { AlertDialog } from '@web/components/ui/alert-dialog';
 import { Button } from '@web/components/ui/button/button';
@@ -12,6 +14,9 @@ import { useChatStore } from '../../stores/use-chat-store';
 import styles from './incognito-bar.module.scss';
 
 export const IncognitoBar = () => {
+  const router = useRouter();
+  const { locale } = useParams();
+  const t = useTranslations('chat.incognitoDialog');
   const isIncognito = useChatStore((state) => state.isIncognito);
   const isAlertOpen = useChatStore((state) => state.isAlertOpen);
   const toggleIncognito = useChatStore((state) => state.toggleIncognito);
@@ -26,6 +31,7 @@ export const IncognitoBar = () => {
     toggleIncognito();
     setCurrentChatId(null);
     setAlertOpen(false);
+    router.push(`/${locale}/chat`);
   };
 
   const handleCancel = () => {
@@ -48,14 +54,10 @@ export const IncognitoBar = () => {
 
       <AlertDialog
         open={isAlertOpen}
-        title={isIncognito ? 'Turn off Incognito Mode?' : 'Turn on Incognito Mode?'}
-        description={
-          isIncognito
-            ? 'Your chat history will be saved and visible in the sidebar.'
-            : 'Your chats will not be saved or visible in chat history.'
-        }
-        confirmText="Continue"
-        cancelText="Cancel"
+        title={isIncognito ? t('turnOffTitle') : t('turnOnTitle')}
+        description={isIncognito ? t('turnOffDescription') : t('turnOnDescription')}
+        confirmText={t('confirm')}
+        cancelText={t('cancel')}
         onConfirm={handleConfirm}
         onCancel={handleCancel}
       />

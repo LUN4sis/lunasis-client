@@ -46,31 +46,77 @@
       "normal": "다시 돌아오신 것을 환영해요!\n준비되면 무엇이든 말해주세요.",
       "incognito": "시크릿 모드입니다.\n\n이 대화는 기록에 남지 않으며 저장되지 않습니다."
     },
+    "validation": {
+      "emptyMessage": "메시지를 입력해주세요.",
+      "messageTooLong": "메시지는 5000자 이하여야 합니다.",
+      "fileTooLarge": "파일 크기는 10MB 이하여야 합니다."
+    },
+    "incognitoDialog": {
+      "turnOffTitle": "시크릿 모드를 끄시겠어요?",
+      "turnOnTitle": "시크릿 모드를 켜시겠어요?",
+      "turnOffDescription": "채팅 기록이 저장되어 사이드바에 표시됩니다.",
+      "turnOnDescription": "채팅이 저장되거나 채팅 기록에 표시되지 않습니다.",
+      "confirm": "계속",
+      "cancel": "취소"
+    },
+    "settings": {
+      "title": "개인 맞춤 설정",
+      "nickname": {
+        "label": "루나가 어떻게 불러 드릴까요?",
+        "placeholder": "닉네임을 입력하세요"
+      },
+      "tone": {
+        "title": "말투 설정",
+        "warmth": "친근함",
+        "enthusiastic": "열정적",
+        "formal": "전문적",
+        "high": "높음",
+        "default": "보통",
+        "less": "낮음"
+      },
+      "personalSetting": {
+        "title": "맞춤형 설정",
+        "placeholder": "루나에게 원하는 답변 스타일을 자유롭게 입력하세요"
+      },
+      "memory": {
+        "title": "메모리",
+        "viewAll": "저장된 메모리 보기",
+        "savedTitle": "저장된 메모리",
+        "edit": "편집",
+        "done": "완료",
+        "empty": "저장된 메모리가 없습니다",
+        "deleteAriaLabel": "메모리 삭제"
+      },
+      "saveSuccess": "설정이 저장되었습니다.",
+      "saveError": "설정 저장에 실패했습니다.",
+      "deleteSuccess": "메모리가 삭제되었습니다.",
+      "deleteError": "메모리 삭제에 실패했습니다."
+    },
     "welcomeScreen": {
       "firstTime": {
-        "title": "👋 안녕하세요, 루나입니다!",
-        "intro": "저는 여러분의 AI 기반 웰니스 동반자로, 과학과 공감을 바탕으로 건강을 이해하고 관리하는 것을 돕습니다. 생리 주기 추적, 근처 병원 찾기, 혹은 단순히 몸에 대한 궁금증 해결까지—언제든 여러분을 위해 여기 있습니다.",
-        "examplesTitle": "🌸 다음과 같은 질문을 해보세요:",
+        "title": "🌙 반가워요, 저는 루나예요!",
+        "intro": "저는 당신의 건강을 과학적이고 편안하게 관리하는 것을 도와드릴 AI 웰니스 동반자이죠. 생리 주기를 기록하거나, 여성 병원을 찾고 있거나, {nickname}님의 몸에 대해 궁금한 게 있다면 언제든지 찾아주세요!",
+        "examplesTitle": "🩺 이런 질문들을 해보세요:",
         "categories": {
           "healthNavigation": {
-            "title": "🏥 건강 네비게이션 & 지역 서비스",
+            "title": "📍 건강 정보 & 병원 찾기",
             "examples": [
-              "주말에 운영하는 가장 가까운 여성 건강 클리닉은 어디인가요?",
-              "강남 지역 병원의 최근 환자 리뷰를 요약해주세요."
+              "Where is the nearest women's health clinic open on weekends?",
+              "Summarize recent patient reviews of a clinic in Gangnam, Seoul."
             ]
           },
           "menstrualHealth": {
-            "title": "🩸 생리 건강 & 추적",
+            "title": "🩸 생리 건강 & 관리",
             "examples": [
-              "생리 전 갈색 분비물이 정상인가요?",
-              "생리통은 있는데 생리가 없어요. 무엇이 문제일까요?"
+              "생리 전에 갈색 분비물이 나오는 건 정상인가요?",
+              "생리통은 있는데 생리는 안 나와요—무슨 일일까요?"
             ]
           },
           "aiInsights": {
-            "title": "🧠 AI 기반 건강 인사이트",
+            "title": "🤖 AI-Powered Health Insights",
             "examples": [
               "지난 3주기를 분석해서 이상한 점이 있는지 알려주세요.",
-              "최근 증상을 바탕으로 웰니스 요약을 생성해주세요."
+              "Generate a wellness summary based on my recent symptoms."
             ]
           }
         }

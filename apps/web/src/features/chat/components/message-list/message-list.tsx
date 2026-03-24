@@ -4,6 +4,8 @@ import Image from 'next/image';
 import { useEffect, useRef } from 'react';
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import ReactMarkdown from 'react-markdown';
+import rehypeSanitize from 'rehype-sanitize';
+import remarkBreaks from 'remark-breaks';
 import remarkGfm from 'remark-gfm';
 
 import { SupportedLocale } from '@repo/shared/types';
@@ -105,8 +107,8 @@ export function MessageList({ messages, isLoading = false, locale }: MessageList
                 <div
                   className={clsx(styles.attachments, { [styles.user]: message.role === 'user' })}
                 >
-                  {message.attachments.map((attachment, index) => (
-                    <div key={index} className={styles.attachmentCard}>
+                  {message.attachments.map((attachment) => (
+                    <div key={attachment.url} className={styles.attachmentCard}>
                       <InsertDriveFileIcon className={styles.fileIcon} />
                       <div className={styles.fileInfo}>
                         <span className={styles.fileName}>{attachment.name}</span>
@@ -121,7 +123,12 @@ export function MessageList({ messages, isLoading = false, locale }: MessageList
 
               <div className={clsx(styles.bubble, { [styles.user]: message.role === 'user' })}>
                 <div className={styles.messageContent}>
-                  <ReactMarkdown remarkPlugins={[remarkGfm]}>{message.content}</ReactMarkdown>
+                  <ReactMarkdown
+                    remarkPlugins={[remarkGfm, remarkBreaks]}
+                    rehypePlugins={[rehypeSanitize]}
+                  >
+                    {message.content}
+                  </ReactMarkdown>
                 </div>
               </div>
             </div>

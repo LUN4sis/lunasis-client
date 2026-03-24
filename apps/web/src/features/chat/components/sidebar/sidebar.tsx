@@ -1,6 +1,6 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import CreateIcon from '@mui/icons-material/Create';
 import { MenuIcon, MessageSquareIcon } from 'lucide-react';
@@ -10,7 +10,7 @@ import { Button } from '@web/components/ui/button';
 
 import { useChatRoomsQuery } from '../../hooks';
 import { useChatStore } from '../../stores/use-chat-store';
-import type { ChatRoomItem } from '../../types/chat.type';
+import type { ChatRoom } from '../../types/api.type';
 
 import clsx from 'clsx';
 import styles from './sidebar.module.scss';
@@ -18,6 +18,7 @@ import styles from './sidebar.module.scss';
 export const Sidebar = () => {
   const t = useTranslations('chat.sidebar');
   const router = useRouter();
+  const locale = useLocale();
 
   const isSidebarOpen = useChatStore((state) => state.isSidebarOpen);
   const toggleSidebar = useChatStore((state) => state.toggleSidebar);
@@ -25,7 +26,7 @@ export const Sidebar = () => {
   const setCurrentChatId = useChatStore((state) => state.setCurrentChatId);
   const isIncognito = useChatStore((state) => state.isIncognito);
 
-  const { data, isLoading, isError, error, refetch } = useChatRoomsQuery();
+  const { data, isLoading, isError, error, refetch } = useChatRoomsQuery(!isIncognito);
 
   const handleToggleSidebar = () => {
     toggleSidebar();
@@ -33,13 +34,13 @@ export const Sidebar = () => {
 
   const handleCreateChat = () => {
     setCurrentChatId(null);
-    router.push('/chat');
+    router.push(`/${locale}/chat`);
     handleToggleSidebar();
   };
 
   const handleClickChatRoom = (chatRoomId: string) => {
     setCurrentChatId(chatRoomId);
-    router.push(`/chat/${chatRoomId}`);
+    router.push(`/${locale}/chat/${chatRoomId}`);
     handleToggleSidebar();
   };
 
@@ -51,7 +52,7 @@ export const Sidebar = () => {
 
   if (!isSidebarOpen) return null;
 
-  const chatRooms: ChatRoomItem[] = data?.data ?? [];
+  const chatRooms: ChatRoom[] = data ?? [];
 
   return (
     <div

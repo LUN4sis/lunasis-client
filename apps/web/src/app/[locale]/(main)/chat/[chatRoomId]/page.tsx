@@ -2,65 +2,103 @@
 
 import { useTranslations } from 'next-intl';
 import { useParams } from 'next/navigation';
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { useAuthStore, useAuthStoreHydration } from '@repo/shared/features/auth';
 import { SupportedLocale } from '@repo/shared/types';
 import { getErrorMessage } from '@repo/shared/utils';
 import { toast } from '@web/components/ui/toast';
-import { sendAnonymousMessageAPI, sendMessageAPI } from '@web/features/chat/api/chat.api';
-import { ChatHeader } from '@web/features/chat/components/chat-header';
-import { ChatInput } from '@web/features/chat/components/chat-input';
-import { IncognitoBar } from '@web/features/chat/components/incognito-bar';
 import { MessageList, type Message } from '@web/features/chat/components/message-list';
-import { Sidebar } from '@web/features/chat/components/sidebar';
+import { useChatLayout } from '@web/features/chat/contexts';
+import {
+  useChatMessagesQuery,
+  useSendAnonymousMessageMutation,
+  useSendMessageMutation,
+} from '@web/features/chat/hooks';
 import { useChatStore } from '@web/features/chat/stores';
+import { convertChatMessagesToUIMessages } from '@web/features/chat/utils';
 
-import clsx from 'clsx';
 import styles from '../chat.module.scss';
+
+/** Maximum allowed file size for chat attachments (10 MB) */
+const MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024;
 
 export default function ChatRoomPage() {
   const t = useTranslations('chat');
   const { locale, chatRoomId } = useParams<{ locale: string; chatRoomId: string }>();
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const { setLayoutActions } = useChatLayout();
   const [isInitialized, setIsInitialized] = useState(false);
-  const [isMounted, setIsMounted] = useState(true);
-  const [isReady, setIsReady] = useState(false);
+  const isMountedRef = useRef(true);
   const hydrated = useAuthStoreHydration();
   const isLoggedIn = useAuthStore((s) => s.isLoggedIn);
   const { isIncognito, pendingMessages, clearPendingMessages, setCurrentChatId } = useChatStore();
   // Only use isLoggedIn after hydration to prevent false negatives
   const isAnonymous = isIncognito || !hydrated || !isLoggedIn;
 
+  // Fetch messages for logged-in users only
+  const { data: chatMessagesData } = useChatMessagesQuery(isAnonymous ? null : chatRoomId);
+
+  // React Query mutations
+  const sendMessageMutation = useSendMessageMutation(chatRoomId, {
+    onSuccess: (apiMessages) => {
+      if (!isMountedRef.current) return;
+      // API returns full conversation history; extract only the last message (AI response)
+      // User message was already added optimistically in handleSend
+      const lastMessage = apiMessages[apiMessages.length - 1];
+      if (lastMessage) {
+        const aiMessage: Message = {
+          id: `${lastMessage.chatId}-answer`,
+          role: 'assistant',
+          content: lastMessage.answer,
+          timestamp: new Date(),
+          ...(lastMessage.image
+            ? { attachments: [{ type: 'image', url: lastMessage.image, name: 'Image' }] }
+            : {}),
+        };
+        setMessages((prev) => [...prev, aiMessage]);
+      }
+      setIsLoading(false);
+    },
+    onError: (error) => {
+      if (!isMountedRef.current) return;
+      const errorMessage = getErrorMessage(error);
+      toast.error(errorMessage);
+      setIsLoading(false);
+    },
+  });
+
+  const sendAnonymousMessageMutation = useSendAnonymousMessageMutation({
+    onSuccess: (data) => {
+      if (!isMountedRef.current) return;
+      const aiMessage: Message = {
+        id: `ai-${Date.now()}`,
+        role: 'assistant',
+        content: data.answer,
+        timestamp: new Date(),
+      };
+      setMessages((prev) => [...prev, aiMessage]);
+      setIsLoading(false);
+    },
+    onError: (error) => {
+      if (!isMountedRef.current) return;
+      const errorMessage = getErrorMessage(error);
+      toast.error(errorMessage);
+      setIsLoading(false);
+    },
+  });
+
   // currentChatId를 URL params와 동기화 (익명: chatRoomId=anonymousId, 로그인: chatRoomId=서버 ID)
   useEffect(() => {
     if (chatRoomId) setCurrentChatId(chatRoomId);
   }, [chatRoomId, setCurrentChatId]);
 
-  // Track component mount state and trigger fade-in
+  // Track component mount state
   useEffect(() => {
-    setIsMounted(true);
-    // Delay to allow hydration to complete before showing content
-    const timer = requestAnimationFrame(() => {
-      setIsReady(true);
-    });
+    isMountedRef.current = true;
     return () => {
-      setIsMounted(false);
-      cancelAnimationFrame(timer);
-    };
-  }, []);
-
-  // hide bottom nav
-  // 하단 네비게이션 숨기기
-  useEffect(() => {
-    document.documentElement.style.setProperty('--bottom-nav-height', '0px');
-    document.documentElement.style.setProperty('--bottom-nav-display', 'none');
-
-    return () => {
-      // restore
-      document.documentElement.style.setProperty('--bottom-nav-height', '56px');
-      document.documentElement.style.setProperty('--bottom-nav-display', 'flex');
+      isMountedRef.current = false;
     };
   }, []);
 
@@ -69,56 +107,66 @@ export default function ChatRoomPage() {
     [isIncognito, t],
   );
 
-  // Initialize messages from pendingMessages or welcome message
-  // pendingMessages가 있으면 초기 메시지로 설정, 없으면 웰컴 메시지 표시
+  // Initialize messages from API (logged-in) or pendingMessages (anonymous).
+  // Prioritize API data over pending messages to prevent race conditions:
+  // if API data arrives after the effect first runs with pending messages,
+  // we re-run and replace the pending content with the authoritative data.
   useEffect(() => {
     if (isInitialized) {
       return;
     }
 
-    const initialMessages: Message[] = [];
-
-    // Add welcome message
-    // 웰컴 메시지 추가
-    initialMessages.push({
+    const welcomeMessage: Message = {
       id: 'welcome-1',
       role: 'assistant',
       content: welcomeText,
       timestamp: new Date(),
-    });
+    };
 
-    // If we have pending messages from the initial chat, add them
-    // 초기 채팅에서 전달받은 메시지가 있으면 추가
-    if (pendingMessages) {
-      // Add user's question
-      // 사용자 질문 추가
-      initialMessages.push({
-        id: `user-initial`,
+    if (!isAnonymous && chatMessagesData) {
+      // Logged-in: API data is ready — use it as the source of truth
+      const apiMessages = convertChatMessagesToUIMessages(chatMessagesData);
+      setMessages([welcomeMessage, ...apiMessages]);
+      clearPendingMessages(); // Clear only after API data has arrived
+      setIsInitialized(true);
+    } else if (pendingMessages) {
+      // Fallback: show pending messages while API loads (or for anonymous users)
+      const pendingUserMessage: Message = {
+        id: 'user-initial',
         role: 'user',
         content: pendingMessages.question,
         timestamp: pendingMessages.timestamp,
-      });
-
-      // Add AI's answer
-      // AI 응답 추가
-      initialMessages.push({
-        id: `ai-initial`,
+      };
+      const pendingAiMessage: Message = {
+        id: 'ai-initial',
         role: 'assistant',
         content: pendingMessages.answer,
         timestamp: pendingMessages.timestamp,
-      });
-
-      // Clear pending messages after use
-      // 사용 후 pending 메시지 초기화
-      clearPendingMessages();
+      };
+      setMessages([welcomeMessage, pendingUserMessage, pendingAiMessage]);
+      // For anonymous users, clear immediately (no API data will arrive).
+      // For logged-in users, keep pending messages until API data arrives.
+      if (isAnonymous) {
+        clearPendingMessages();
+      }
+      setIsInitialized(true);
+    } else if (isAnonymous) {
+      // Anonymous with no pending messages — show welcome only
+      setMessages([welcomeMessage]);
+      setIsInitialized(true);
     }
-
-    setMessages(initialMessages);
-    setIsInitialized(true);
-  }, [isInitialized, welcomeText, pendingMessages, clearPendingMessages]);
+    // If none of the conditions match (logged-in, no API data, no pending messages),
+    // do not initialize yet — wait for the next render when chatMessagesData arrives.
+  }, [
+    isInitialized,
+    welcomeText,
+    pendingMessages,
+    clearPendingMessages,
+    isAnonymous,
+    chatMessagesData,
+  ]);
 
   // cleanup object URLs (for memory leak prevention)
-  // 메모리 누수 방지를 위한 object URL 정리
   useEffect(() => {
     return () => {
       messages.forEach((message) => {
@@ -131,82 +179,66 @@ export default function ChatRoomPage() {
     };
   }, [messages]);
 
-  const handleSend = async (
-    message: string,
-    options: { webSearch: boolean; file: File | null },
-  ) => {
-    // TODO: Implement webSearch
-    const attachments = options.file
-      ? [
-          {
-            type: 'file' as const,
-            url: URL.createObjectURL(options.file),
-            name: options.file.name,
-            size: options.file.size,
-          },
-        ]
-      : undefined;
+  const handleSend = useCallback(
+    async (message: string, options: { webSearch: boolean; file: File | null }) => {
+      // TODO: Implement webSearch
 
-    const userMessage: Message = {
-      id: `user-${Date.now()}`,
-      role: 'user',
-      content: message,
-      timestamp: new Date(),
-      attachments,
-    };
-
-    setMessages((prev) => [...prev, userMessage]);
-    setIsLoading(true);
-
-    try {
-      const res = isAnonymous
-        ? await sendAnonymousMessageAPI(chatRoomId, message)
-        : await sendMessageAPI(chatRoomId, message);
-
-      if (!isMounted) return;
-      if (!res.success || !res.data) throw new Error(res.message ?? '요청에 실패했습니다.');
-
-      const aiMessage: Message = {
-        id: `ai-${Date.now()}`,
-        role: 'assistant',
-        content: res.data.answer,
-        timestamp: new Date(),
-      };
-      setMessages((prev) => [...prev, aiMessage]);
-    } catch (error) {
-      // Only show error if component is still mounted
-      if (!isMounted) return;
-
-      // Use standardized error handling
-      const errorMessage = getErrorMessage(error);
-      toast.error(errorMessage);
-    } finally {
-      // Only update loading state if component is still mounted
-      if (isMounted) {
-        setIsLoading(false);
+      // Validate message input
+      const trimmed = message.trim();
+      if (!trimmed) {
+        toast.error(t('validation.emptyMessage'));
+        return;
       }
-    }
-  };
+      if (trimmed.length > 5000) {
+        toast.error(t('validation.messageTooLong'));
+        return;
+      }
+
+      // Validate file size
+      if (options.file && options.file.size > MAX_FILE_SIZE_BYTES) {
+        toast.error(t('validation.fileTooLarge'));
+        return;
+      }
+
+      const attachments = options.file
+        ? [
+            {
+              type: 'file' as const,
+              url: URL.createObjectURL(options.file),
+              name: options.file.name,
+              size: options.file.size,
+            },
+          ]
+        : undefined;
+
+      const userMessage: Message = {
+        id: `user-${Date.now()}`,
+        role: 'user',
+        content: trimmed,
+        timestamp: new Date(),
+        attachments,
+      };
+
+      setMessages((prev) => [...prev, userMessage]);
+      setIsLoading(true);
+
+      if (isAnonymous) {
+        sendAnonymousMessageMutation.mutate(trimmed);
+      } else {
+        sendMessageMutation.mutate(trimmed);
+      }
+    },
+    [isAnonymous, sendAnonymousMessageMutation, sendMessageMutation, t],
+  );
+
+  // Register handleSend and isLoading with the layout
+  useEffect(() => {
+    setLayoutActions({ handleSend, isLoading });
+  }, [handleSend, isLoading, setLayoutActions]);
 
   return (
-    <div className={clsx(styles.container, { [styles.ready]: isReady })}>
-      <Sidebar />
-      <div className={styles.top}>
-        <ChatHeader />
-        <IncognitoBar />
-      </div>
-
-      <div
-        className={clsx(styles.chatContainer, {
-          [styles.incognito]: isIncognito,
-        })}
-      >
-        <MessageList messages={messages} isLoading={isLoading} locale={locale as SupportedLocale} />
-      </div>
-
-      <div className={styles.bottom}>
-        <ChatInput onSend={handleSend} disabled={isLoading} />
-      </div>
+    <div className={styles.messageListWrapper}>
+      <MessageList messages={messages} isLoading={isLoading} locale={locale as SupportedLocale} />
     </div>
   );
 }

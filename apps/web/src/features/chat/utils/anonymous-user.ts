@@ -6,6 +6,12 @@ const ANONYMOUS_USER_EXPIRY_KEY = 'lunasis_anonymous_user_expiry';
 // Default expiry time: 1 day (24 hours) in milliseconds
 const DEFAULT_EXPIRY_MS = 24 * 60 * 60 * 1000;
 
+const UUID_V4_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
+function isValidUUIDv4(value: string): boolean {
+  return UUID_V4_REGEX.test(value);
+}
+
 /**
  * Get or create anonymous user ID
  * Returns existing ID if valid, otherwise generates new one
@@ -18,8 +24,8 @@ export function getAnonymousUserId(): string {
   const existingId = localStorage.getItem(ANONYMOUS_USER_KEY);
   const expiry = localStorage.getItem(ANONYMOUS_USER_EXPIRY_KEY);
 
-  // Check if existing ID is still valid
-  if (existingId && expiry) {
+  // Check if existing ID is still valid (format + expiry)
+  if (existingId && expiry && isValidUUIDv4(existingId)) {
     const expiryTime = parseInt(expiry, 10);
     if (Date.now() < expiryTime) {
       return existingId;

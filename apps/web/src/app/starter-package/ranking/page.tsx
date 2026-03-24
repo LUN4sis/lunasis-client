@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 import { closestCenter, DndContext, DragEndEvent } from '@dnd-kit/core';
 import { arrayMove, SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 
@@ -88,7 +88,7 @@ function ProductSection({
   );
 }
 
-export default function RankingPage() {
+function RankingPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const packageType = (searchParams.get('type') as PackageType) || 'pad';
@@ -136,5 +136,13 @@ export default function RankingPage() {
         </button>
       </div>
     </section>
+  );
+}
+
+export default function RankingPage() {
+  return (
+    <Suspense>
+      <RankingPageContent />
+    </Suspense>
   );
 }
