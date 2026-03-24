@@ -9,8 +9,13 @@ import { SupportedLocale } from '@repo/shared/types';
 import { getErrorMessage } from '@repo/shared/utils';
 import { toast } from '@web/components/ui/toast';
 import { MessageList, type Message } from '@web/features/chat/components/message-list';
+import { WelcomeScreen } from '@web/features/chat/components/welcome-screen';
 import { useChatLayout } from '@web/features/chat/contexts';
-import { useCreateAnonymousChatMutation, useCreateChatMutation } from '@web/features/chat/hooks';
+import {
+  useChatRoomsQuery,
+  useCreateAnonymousChatMutation,
+  useCreateChatMutation,
+} from '@web/features/chat/hooks';
 import { useChatStore } from '@web/features/chat/stores';
 import { getAnonymousUserId } from '@web/features/chat/utils';
 
@@ -23,12 +28,15 @@ export default function ChatPage() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const { setLayoutActions } = useChatLayout();
-  const [isInitialized, setIsInitialized] = useState(false);
   const isMountedRef = useRef(true);
   const hydrated = useAuthStoreHydration();
   const isLoggedIn = useAuthStore((s) => s.isLoggedIn);
+  const nickname = useAuthStore((s) => s.nickname);
   const { isIncognito, setCurrentChatId, setPendingMessages } = useChatStore();
   const isAnonymous = isIncognito || !hydrated || !isLoggedIn;
+
+  const { data: chatRooms } = useChatRoomsQuery(!isAnonymous);
+  const isFirstTime = !isAnonymous && hydrated && chatRooms !== undefined && chatRooms.length === 0;
 
   // React Query mutations
   const createChatMutation = useCreateChatMutation({
@@ -79,30 +87,17 @@ export default function ChatPage() {
   );
 
   useEffect(() => {
-    if (!isInitialized) {
-      const welcomeMessage: Message = {
-        id: 'welcome-1',
-        role: 'assistant',
-        content: welcomeText,
-        timestamp: new Date(),
-      };
-      setMessages([welcomeMessage]);
-      setIsInitialized(true);
-    } else {
-      // Update welcome message when incognito mode or hydration state changes
-      setMessages((prev) => {
-        if (prev.length === 1 && prev[0].id === 'welcome-1') {
-          return [
-            {
-              ...prev[0],
-              content: welcomeText,
-            },
-          ];
-        }
-        return prev;
-      });
+    if (!isFirstTime) {
+      setMessages([
+        {
+          id: 'welcome-1',
+          role: 'assistant',
+          content: welcomeText,
+          timestamp: new Date(),
+        },
+      ]);
     }
-  }, [isInitialized, welcomeText, hydrated]);
+  }, [isFirstTime, welcomeText]);
 
   // cleanup object URLs(for memory leak prevention)
   useEffect(() => {
@@ -162,7 +157,11 @@ export default function ChatPage() {
 
   return (
     <div className={styles.messageListWrapper}>
-      <MessageList messages={messages} isLoading={isLoading} locale={locale as SupportedLocale} />
+      {isFirstTime ? (
+        <WelcomeScreen mode="firstTime" nickname={nickname} />
+      ) : (
+        <MessageList messages={messages} isLoading={isLoading} locale={locale as SupportedLocale} />
+      )}
     </div>
   );
 }
