@@ -36,7 +36,9 @@ export default function ChatPage() {
   const isAnonymous = isIncognito || !hydrated || !isLoggedIn;
 
   const { data: chatRooms } = useChatRoomsQuery(!isAnonymous);
-  const isFirstTime = !isAnonymous && hydrated && chatRooms !== undefined && chatRooms.length === 0;
+  const isLoggedInFirstTime = !isAnonymous && chatRooms?.length === 0;
+  const isGuestFirstTime = !isIncognito && hydrated && !isLoggedIn;
+  const isFirstTime = isLoggedInFirstTime || isGuestFirstTime;
 
   // React Query mutations
   const createChatMutation = useCreateChatMutation({
