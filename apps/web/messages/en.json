@@ -43,6 +43,7 @@
       "incognitoDescription": "Your chat history won't be saved in this mode."
     },
     "welcome": {
+      "firstTime": "🌙 Hey, I'm **Luna**!\n\nI'm your AI wellness companion here to help you manage your health scientifically and comfortably. Whether you're tracking your cycle, looking for women's health clinics, or just curious about your body—I'm here for you, **{nickname}**!\n\n🩺 **Here are some questions you can ask me:**\n\n---\n\n**📍 Health Info & Clinic Finder**\n- \"Where is the nearest women's health clinic open on weekends?\"\n- \"Summarize recent patient reviews of a clinic in Gangnam, Seoul.\"\n\n**🩸 Menstrual Health & Management**\n- \"Is brown spotting before my period normal?\"\n- \"I have cramps but no period—what could it be?\"\n\n**🤖 AI-Powered Health Insights**\n- \"Can you analyze my last 3 cycles and tell me if something looks off?\"\n- \"Generate a wellness summary based on my recent symptoms.\"",
       "normal": "Welcome back!\nTell me anything when you're ready.",
       "incognito": "You are now incognito.\n\nThis chat won't appear in history and won't be kept."
     },
@@ -82,6 +83,7 @@
         "title": "Memory",
         "viewAll": "View saved memories",
         "savedTitle": "Saved Memories",
+        "description": "Luna will refer to these to provide better answers.",
         "edit": "Edit",
         "done": "Done",
         "empty": "No saved memories",
