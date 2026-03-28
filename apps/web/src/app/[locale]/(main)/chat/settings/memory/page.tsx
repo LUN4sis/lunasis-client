@@ -1,9 +1,8 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState, useTransition } from 'react';
-import { ChevronLeft, X } from 'lucide-react';
+import { X } from 'lucide-react';
 
 import { Button } from '@web/components/ui/button/button';
 import { toast } from '@web/components/ui/toast';
@@ -16,7 +15,6 @@ import styles from './memory.module.scss';
 function SavedMemoryPage() {
   const t = useTranslations('chat.settings');
   const tCommon = useTranslations('common');
-  const router = useRouter();
   const [isEditing, setIsEditing] = useState(false);
   const [isPending, startTransition] = useTransition();
 
@@ -31,7 +29,7 @@ function SavedMemoryPage() {
         toast.error(tCommon('error'));
       }
     });
-  }, [setSavedMemories, t]);
+  }, [setSavedMemories, tCommon]);
 
   const handleDelete = useCallback(
     (savedMemoryId: string) => {
@@ -51,16 +49,8 @@ function SavedMemoryPage() {
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <Button
-          variant="ghost"
-          fullWidth={false}
-          aria-label="back"
-          onClick={() => router.back()}
-          className={styles.backButton}
-        >
-          <ChevronLeft />
-        </Button>
         <h1 className={styles.title}>{t('memory.savedTitle')}</h1>
+        <p className={styles.subtitle}>{t('memory.subtitle')}</p>
         <Button
           variant="ghost"
           fullWidth={false}
@@ -74,7 +64,11 @@ function SavedMemoryPage() {
 
       <div className={styles.content}>
         {isPending && savedMemories.length === 0 ? (
-          <div className={styles.empty}>{/* loading placeholder */}</div>
+          <ul className={styles.memoryList}>
+            {[1, 2, 3].map((i) => (
+              <li key={i} className={styles.memoryCardSkeleton} />
+            ))}
+          </ul>
         ) : savedMemories.length === 0 ? (
           <p className={styles.empty}>{t('memory.empty')}</p>
         ) : (
@@ -90,7 +84,7 @@ function SavedMemoryPage() {
                     aria-label={t('memory.deleteAriaLabel')}
                     disabled={isPending}
                   >
-                    <X size={16} />
+                    <X size={6} />
                   </button>
                 )}
               </li>

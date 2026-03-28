@@ -82,6 +82,7 @@
         "title": "Memory",
         "viewAll": "View saved memories",
         "savedTitle": "Saved Memories",
+        "subtitle": "References past conversations to inform responses.",
         "edit": "Edit",
         "done": "Done",
         "empty": "No saved memories",
