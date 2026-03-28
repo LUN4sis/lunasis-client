@@ -9,7 +9,6 @@ import { SupportedLocale } from '@repo/shared/types';
 import { getErrorMessage } from '@repo/shared/utils';
 import { toast } from '@web/components/ui/toast';
 import { MessageList, type Message } from '@web/features/chat/components/message-list';
-import { WelcomeScreen } from '@web/features/chat/components/welcome-screen';
 import { useChatLayout } from '@web/features/chat/contexts';
 import {
   useChatRoomsQuery,
@@ -83,23 +82,22 @@ export default function ChatPage() {
     };
   }, []);
 
-  const welcomeText = useMemo(
-    () => (isIncognito ? t('welcome.incognito') : t('welcome.normal')),
-    [isIncognito, t],
-  );
+  const welcomeText = useMemo(() => {
+    if (isIncognito) return t('welcome.incognito');
+    if (isFirstTime) return t('welcome.firstTime', { nickname: nickname ?? '...' });
+    return t('welcome.normal');
+  }, [isIncognito, isFirstTime, nickname, t]);
 
   useEffect(() => {
-    if (!isFirstTime) {
-      setMessages([
-        {
-          id: 'welcome-1',
-          role: 'assistant',
-          content: welcomeText,
-          timestamp: new Date(),
-        },
-      ]);
-    }
-  }, [isFirstTime, welcomeText]);
+    setMessages([
+      {
+        id: 'welcome-1',
+        role: 'assistant',
+        content: welcomeText,
+        timestamp: new Date(),
+      },
+    ]);
+  }, [welcomeText]);
 
   // cleanup object URLs(for memory leak prevention)
   useEffect(() => {
@@ -159,11 +157,7 @@ export default function ChatPage() {
 
   return (
     <div className={styles.messageListWrapper}>
-      {isFirstTime ? (
-        <WelcomeScreen mode="firstTime" nickname={nickname} />
-      ) : (
-        <MessageList messages={messages} isLoading={isLoading} locale={locale as SupportedLocale} />
-      )}
+      <MessageList messages={messages} isLoading={isLoading} locale={locale as SupportedLocale} />
     </div>
   );
 }
