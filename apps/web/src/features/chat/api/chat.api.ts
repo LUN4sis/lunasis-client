@@ -11,6 +11,7 @@ import {
   SendMessageRes,
   UpdateSettingReq,
 } from '../types';
+import { getAnonymousUserId } from '../utils/anonymous-user';
 
 // get chat room list
 export async function getChatRoomsAPI(): Promise<GetChatRoomsRes> {
@@ -97,7 +98,11 @@ export async function modifyChatRoomTitleAPI(
 // anonymous chat
 export async function anonymousChatAPI(formData: { question: string }): Promise<AnonymousRes> {
   try {
-    const response = await api.post<ApiResponse<AnonymousRes>>('/chats/anonymous', formData);
+    const anonymousId = getAnonymousUserId();
+    const response = await api.post<ApiResponse<AnonymousRes>>('/chats/anonymous', {
+      anonymousId,
+      question: formData.question,
+    });
 
     if (response.success && response.data) {
       return response.data;
